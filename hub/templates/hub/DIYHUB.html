@@ -1,26 +1,61 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
+ <!DOCTYPE html>
+ <html lang="en" dir="ltr">
 
-<head>
+ <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="style.css" type="text/css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../Static/style.css" type="text/css">
+    <link rel="stylesheet" href="../Static/reset.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:800, 400|Montserrat:400, 700|Nunito+Sans:600&display=swap" rel="stylesheet">
     <title>DIY Hub</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-    <link href='https://fonts.googleapis.com/css?family=Karla' rel='stylesheet'> 
-    <link href="https://fonts.googleapis.com/css?family=Hind+Siliguri&display=swap" rel="stylesheet">
 </head>
-
 <body>
+<header>
 
     <div class="header">
-        <a href="#home" class="logo">DIY Hub</a>
-        <div class="header-right">
-            <a class="active" href="#featured">Feaured</a>
-            <a href="#community">Community</a>
-            <a href="#start-project">Start Project</a>
-        </div>
+        <a href="DIYHUB.html" id="logo">diy<strong>hub.io</strong></a>
+        <input type="text" name="textfield" placeholder="Search Parts...">
+        <img src="../Static/img_avatar.png" alt="Avatar">
     </div>
 
+</header>
+
+
+    <div class="nav">
+
+        <a href="/featured.html">
+            <h1 class="inactive">Featured</h1>
+        </a>
+        <a href="DIYHUB.html">
+            <h1 id="active">Discovery</h1>
+        </a>
+        <a href="/featured.html">
+            <h1 class="inactive">Create</h1>
+        </a>
+
+    </div>
+    <div class="selector">
+		<h2>Select Parts:</h2>
+        <form action="/components.html">
+			  <label class="container">One
+  <input type="checkbox">
+  <span class="checkmark"></span>
+</label>
+
+<label class="container">Two
+  <input type="checkbox">
+  <span class="checkmark"></span>
+</label>
+
+<label class="container">Three
+  <input type="checkbox">
+  <span class="checkmark"></span>
+</label>
+
+<label class="container">Four
+  <input type="checkbox">
+  <span class="checkmark"></span>
+</label>
+      </form>
+    </div>
 </body></html>
