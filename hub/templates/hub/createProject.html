@@ -1,48 +1,69 @@
-<!DOCTYPE html>
-<html>
-<head>
+{% extends 'hub/base.html' %}
+{% block header %}
 	<title>Create Project</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-    <link href='https://fonts.googleapis.com/css?family=Karla' rel='stylesheet'> 
-    <link href="https://fonts.googleapis.com/css?family=Hind+Siliguri&display=swap" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script type="text/javascript" src="script.js"></script>
-</head>
-<body>
+{% endblock %}
+{% block content %}
 	<div class="create-project-container">
 		<h1>Create a Project</h1>
-		<form class="create-project-form">
-			<div class="project-img-container">
-				<div class="project-img"><p>Add Picture</p></div>
-				<label for="upload-photo">Upload</label>
-				<input type="file" name="project-img-file" id="upload-photo">
-			</div>
-			<div class="project-info-fields">
-				<input type="text" name="project-name" value="Title"><br>
-				<h3>Description</h3> 
-				<div class="description"><textarea placeholder="What is your Project About?" rows="12"></textarea></div>
-				<h3>Supplies</h3>
-				<div class="supplies-container">
-					<div class="part add-part">
-						<input type="text" name="part" value="Search for a Part">
-						<i class="fa fa-search"></i>
-						<i class="fa fa-plus-circle right" onclick="addPart()" style="font-size:24px"></i>
-					</div>
-				</div>
-				<h3>Steps</h3>
-				<div class="steps-container">
-					<div class="steps"></div>
-					<button onclick="addStep()" type="button">Add Step</button>
-				</div>
-				<div class="buttons">
-				<button class="project-save">Save</button>
-				<button class="project-publish">Publish</button>
-			</div>
-			</div>
-		</form>
+        <div class="project-img-container">
+            <div class="project-img"><img id="projectImg" src="#" alt="Upload an Image"></div>
+            <label for="upload-photo">Upload</label>
+            <input type="file" name="project-img-file" id="upload-photo">
+        </div>
+        <div class="project-info-fields">
+            <input type="text" name="name"  id="projectName" placeholder="Title"><br>
+            <h3>Description</h3>
+            <div class="description"><textarea id="projectDescription" placeholder="What is your Project About?" rows="12" name="desc"></textarea></div>
+            <h3>Difficulty</h3>
+            <div class="difficulty-selection">
+                <label class="color-selector" id="green" for="one">
+                    <input type="radio" checked="checked" name="difficulty" value="1" id="one">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="color-selector" id="light-green" for="two">
+                    <input type="radio" name="difficulty" value="2" id="two">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="color-selector" id="yellow" for="three">
+                    <input type="radio" name="difficulty" value="3" id="three">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="color-selector" id="orange" for="four">
+                    <input type="radio" name="difficulty" value="4" id="four">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="color-selector" id="red" for="five">
+                    <input type="radio" name="difficulty" value="5" id="five">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+            <h3>Supplies</h3>
+            <div class="supplies-container">
+                <div class="part add-part">
+                    <input type="text" class="quantity-field" name="quantity" placeholder="Quantity" id="quantity">
+                    <input type="text" class="part-name-field" name="partsNeeded" placeholder="Search for a Part" id="part">
+                    <i class="fa fa-search"></i>
+                    <i class="fa fa-plus-circle right" onclick="addPart()" style="font-size:24px"></i>
+                </div>
+                <hr>
+                <p id="partsDefault">No Parts Added</p>
+            </div>
+            <h3>Steps</h3>
+            <div class="steps-container">
+                <div class="steps">
+                    <div class="step">
+                        <input type="text" id="stepName" name="step" placeholder="Name of Step">
+                        <div class="description">
+                            <textarea id="stepDescription" placeholder="What happens in this step?" rows="7"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="addStep()" type="button">Add Step</button>
+            </div>
+            <div class="buttons">
+                <button class="project-save" id="save">Save</button>
+                <button class="project-publish" id="publish">Publish</button>
+            </div>
+        </div>
 	</div>
-</body>
-</html>
+{% endblock %}
