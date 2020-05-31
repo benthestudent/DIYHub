@@ -75,7 +75,14 @@ body {
 .account button:hover {
 	background-color: white;
 	transition-duration: 0.2s;
+}
+.account button:hover a {
 	color: #1b262c;
+	transition-duration: 0.2s;
+}
+.account a {
+	color: #FFF;
+	text-decoration: none;
 }
 @media screen and (max-width: 1028px){
 	.header {
