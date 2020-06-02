@@ -1,9 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Project</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends 'hub/base.html' %}
+{% block header %}
+	<title>{{ projectName }}</title>
+{% endblock %}
+{% block content %}
+{{ projectName }}
+{% endblock %}

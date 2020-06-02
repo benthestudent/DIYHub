@@ -10,7 +10,8 @@ function addStep() {
 function addPart() {
 
 			if(!isNaN($('#quantity').val())) {
-				let part = "<div class=\"addedPart\"><input type=\"text\" name=\"quantity\" value=\"" + $("#quantity").val() + "\" readonly><input type=\"text\" name=\"part\" value=\"" + $("#part").val() + "\" readonly><i class=\"fa fa-pencil pencil\" id=\"editPart\" style=\"font-size:24px\"></i><i class=\"fa fa-trash-o trash right\" style=\"font-size:24px\"></i></div>";
+				// add <i class="fa fa-pencil pencil" id="editPart" style="font-size:24px"></i> for editing
+				let part = "<div class=\"addedPart\"><input type=\"text\" name=\"quantity\" value=\"" + $("#quantity").val() + "\" readonly><input type=\"text\" name=\"part\" id=\"part\" value=\"" + $("#part").val() + "\" readonly><i class=\"fa fa-trash-o trash right\" style=\"font-size:24px\"></i></div>";
 				$("#quantity").val("");
 				$("#part").val("");
 				$('#partsDefault').remove();
@@ -90,29 +91,33 @@ function getProjectData() {
 	var projectName = $("#projectName").val();
 	var projectDesc = $("#projectDescription").val();
 	var difficulty = $("input:checked").val();
-	var parts = [];
-	var steps = [];
-
+	var parts = "";
+	var steps = "";
 	$(".addedPart").each(function() {
-		part = [];
+		q = true
 		$(this).children("input").each(function() {
-			part.push(this.value);
+			if (q) {
+				parts += this.value + " x ";
+				q = false;
+			}else {
+				parts += this.value + ",";
+			}
 		});
-		parts.push(part)
-	});
 
+	});
+	parts = parts.slice(0, -1);
+	console.log(parts)
 	$(".step").each(function() {
-		step = {};
 		$(this).children("input").each(function() {
-			step.name = this.value;
+			steps += "<h2>" + this.value + "</h2>";
 		});
 		$(this).children(".description").children("textarea").each(function() {
-			step.desc = this.value;
+			steps += "<p>" + this.value + "</p>";
 		});
-		steps.push(step)
 	});
 	var input = $("#upload-photo");
 	var img = $("#projectImg").attr('src');
+	var category = $("#category").val();
 	console.log(img);
 	return {
 		"name": projectName,
@@ -120,7 +125,8 @@ function getProjectData() {
 		"difficulty": difficulty,
 		"parts": parts,
 		"steps": steps,
-		"img": img
+		"img": img,
+		"category": category
 	};
 }
 
@@ -193,7 +199,72 @@ $(document).ready(function() {
 					}
 		});
 	});
+
 	$("#upload-photo").change(function() {
 		$('#projectImg').attr('src', readURL(this));
-	})
+	});
+
+	$("#part").on("input", function (event) {
+		if(!$("#partsList").length){
+			$("#part").after(" <datalist id=\"partsList\"></datalist>");
+		}
+		$.get({
+			url: '/getParts',
+			data: {"search": $("#part").val()},
+			success: function (response) {
+				parts = JSON.parse(response)
+				$("#partsList").empty();
+				parts.forEach(function (item) {
+					$("#partsList").append('<option value="' + item.name + ' (#'+ item.id + ')" >');
+
+				})
+
+			},
+		});
+
+	});
+
+	$("#part").change(function() {
+		$("#partsList").remove();
+	});
+
+	$("#category").on("input", function (event) {
+		if(!$("#categories").length){
+			$("#category").after(" <datalist id=\"categories\"></datalist>");
+		}
+		$.get({
+			url: '/getCategories',
+			data: {"search": $("#category").val()},
+			success: function (response) {
+				parts = JSON.parse(response)
+				$("#categories").empty();
+				parts.forEach(function (item) {
+					$("#categories").append('<option value="' + item.name + ' (#'+ item.id + ')" >');
+
+				})
+
+			},
+		});
+
+	});
+
+	$("#category").change(function() {
+		$("#categories").remove();
+	});
+
+	$("#category").focus(function () {
+		$.get({
+			url: '/getCategories',
+			data: {},
+			success: function (response) {
+				cats = JSON.parse(response)
+				$("#categories").empty();
+				cats.forEach(function (item) {
+					$("#categories").append('<option value="' + item.name + ' (#'+ item.id + ' )" >');
+
+				})
+
+			},
+		});
+	});
 });

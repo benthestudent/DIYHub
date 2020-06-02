@@ -37,11 +37,17 @@
                     <span class="checkmark"></span>
                 </label>
             </div>
+            <h3>Category</h3>
+            <input type="text" id="category" name="category" list="categories" />
+            <datalist id="categories">
+                <option value="test category"/>
+            </datalist>
             <h3>Supplies</h3>
             <div class="supplies-container">
                 <div class="part add-part">
                     <input type="text" class="quantity-field" name="quantity" placeholder="Quantity" id="quantity">
-                    <input type="text" class="part-name-field" name="partsNeeded" placeholder="Search for a Part" id="part">
+                    <input type="text" list="partsList" class="part-name-field" name="partsNeeded" placeholder="Search for a Part" id="part">
+                    <datalist id="partsList"></datalist>
                     <i class="fa fa-search"></i>
                     <i class="fa fa-plus-circle right" onclick="addPart()" style="font-size:24px"></i>
                 </div>
