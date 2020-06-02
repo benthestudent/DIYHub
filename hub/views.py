@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django import forms
 from .models import Project, Parts, ProjectCategories
+from .forms import Register
+from django.contrib.auth import authenticate, login
 import base64
 import os.path
 import json
@@ -11,12 +13,28 @@ def index(request):
     return render(request, 'hub/DIYHUB.html')
 
 
-def login(request):
-    return render(request, 'hub/login.html')
+def loginAndRegister(request):
+    if request.method == 'POST':
+        if request.POST.get("email"):
+            print("Register")
+            form = Register(request.POST)
+            if form.is_valid():
+                form.save()
+                print("Account Created")
+                return HttpResponse("Registered")
+            else:
+                return HttpResponse("Registration Failed")
+        else:
+            print("Login")
+            user = authenticate(request, username=request.POST.get("username"), password=request.POST.get("password"))
+            if user is not None:
+                login(request, user)
+            else:
+                return HttpResponse("Registration Failed")
+            return HttpResponse("logged in")
 
-
-def register(request):
-    return render(request, 'hub/register.html')
+    else:
+        return render(request, 'hub/login.html')
 
 
 def profile(request):

@@ -1,35 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Log In</title>
-	<link href="../Static/login.css" rel="stylesheet">
-  </head>
-  <body>
-  	<!-- body code goes here -->
+{% extends 'hub/base.html' %}
+{% load static %}
+{% block header %}
+	 <title>Log In</title>
+	<link href="{% static 'login.css' %}" rel="stylesheet">
+{% endblock %}
+{% block content %}
 <div class="login-page">
   <div class="form">
-	  <img src="../Static/DiyHub (4).png" alt="logo">
-    <form class="register-form">
-      <input type="text" placeholder="username"/>
-      <input type="password" placeholder="password"/>
-      <input type="text" placeholder="email address"/>
-      <button>create</button>
+	  <img src="{% static 'img/logo.png' %}" alt="logo">
+    <form class="register-form" action="" method="post">
+      <input type="text" placeholder="username" name="username"/>
+      <input type="password" placeholder="password" name="password"/>
+      <input type="text" placeholder="email address" name="email"/>
+      <button type="submit">create</button>
       <p class="message">Already registered? <a href="#">Sign In</a></p>
+        {% csrf_token %}
     </form>
-    <form class="login-form">
-      <input type="text" placeholder="username"/>
-      <input type="password" placeholder="password"/>
-      <button>login</button>
+    <form class="login-form" action="" method="POST">
+      <input type="text" placeholder="username" name="username"/>
+      <input type="password" placeholder="password" name="password"/>
+      <button type="submit">login</button>
       <p class="message">Not registered? <a href="#">Create an account</a></p>
+        {% csrf_token %}
     </form>
   </div>
 </div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
-	<script src="../js/jquery-3.4.1.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../js/popper.min.js"></script> 
@@ -39,5 +37,4 @@
    $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
 });
 	  </script>
-  </body>
-</html>
+{% endblock %}
