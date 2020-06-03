@@ -1,22 +1,21 @@
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"><html><head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<link href="../Static/project.css" type="text/css" rel="stylesheet">
-		<link href="https://fonts.googleapis.com/css?family=Open+Sans:600, 400|Montserrat:400, 700|Nunito+Sans:800, 400&display=swap" rel="stylesheet">
-	<link href="../Static/reset.css" type="text/css" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-		</head><body>
-
+{% extends 'hub/base.html' %}
+{% load static %}
+{% block header %}
+	 <title>Log In</title>
+	<link href="{% static 'project.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:600, 400|Montserrat:400, 700|Nunito+Sans:800, 400&display=swap" rel="stylesheet">
+{% endblock %}
+{% block content %}
 <div class="body">
 	<div class="main">
 		<div class="information-container">
 			<div class="project-image">
-				<img src="../Static/My Post (1).png" alt="project image">
+				<img src="{% static 'img/My Post (1).png' %}" alt="project image">
 			</div>
 			<h1>Project Name</h1>
 			<div class="username">
 				<div class="username-image">
-					<img src="../Static/img_avatar.png" alt="Profile Picture">
+					<img src="{% static 'img/img_avatar.png' %}" alt="Profile Picture">
 				</div>
 			<a>username</a> 
 				<span>43 <i class="fa fa-eye"></i> 7 <i class="fa fa-thumbs-up"></i></span>
@@ -37,7 +36,7 @@
 			<div class="steps-container">
 				<h2>Step 1</h2>
 				<hr>
-				<img src="../Static/stepImage.png" alt="Step Image">
+				<img src="{% static 'img/stepImage.png' %}" alt="Step Image">
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas imperdiet nisl et gravida gravida. Donec vel eleifend velit, quis rutrum nisl. Nunc in erat neque. Ut fermentum, ante sit amet eleifend euismod, odio eros ultricies tortor, a mollis purus ligula tincidunt sapien. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In scelerisque a diam sed eleifend. Duis vel ultricies enim. Curabitur nunc dui, accumsan non urna lacinia, lobortis fringilla neque. Duis eros ex, lobortis blandit tempor in, ullamcorper imperdiet metus. Phasellus sed ullamcorper nisl. In dictum, metus in efficitur dignissim, purus dolor dapibus nibh, ac ornare tortor turpis id lorem. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sit amet justo erat. Aliquam interdum sodales nunc, at pretium diam auctor a. Praesent faucibus dui laoreet, vulputate est eget, pretium neque.</p>
 
 <p>Sed eget odio bibendum, tempor neque a, iaculis erat. Etiam eu nisi dapibus arcu venenatis luctus id eget elit. Nullam semper mi magna, at suscipit enim feugiat et. Pellentesque condimentum faucibus augue, non tincidunt tortor dictum quis. Proin cursus interdum feugiat. Fusce eleifend nec risus ut sagittis. Suspendisse potenti.</p>
@@ -59,7 +58,7 @@
 				<div>
 					<div class="profile">
 						<div class="comment-image">
-							<img src="../Static/img_avatar.png" alt="Profile Picture">
+							<img src="{% static 'img/img_avatar.png' %}" alt="Profile Picture">
 						</div>
 						<a>username</a>
 					</div>
@@ -75,7 +74,7 @@
 				<div>
 					<div class="profile">
 						<div class="comment-image">
-							<img src="../Static/img_avatar.png" alt="Profile Picture">
+							<img src="{% static 'img/img_avatar.png' %}" alt="Profile Picture">
 						</div>
 						<a>username</a>
 					</div>
@@ -89,4 +88,4 @@
 			</div>
 	</div>
 </div>
-</body></html>
+{% endblock %}

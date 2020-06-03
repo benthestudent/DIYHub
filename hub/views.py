@@ -87,13 +87,13 @@ def createProject(request):
 
 def project(request, slug):
     context = {"projectName": slug}
-    #get comments
-    thisProject = None #get project
-    comments = Comment.objects.get(project=thisProject)
-    comments = []
-    for comment in comments:
-        comments.append({"user": comment.user.username, "body": comment.body})
-    context = {"projectName": slug, "comments": comments}
+    # #get comments
+    # thisProject = None #get project
+    # comments = Comment.objects.get(project=thisProject)
+    # comments = []
+    # for comment in comments:
+    #     comments.append({"user": comment.user.username, "body": comment.body})
+    # context = {"projectName": slug, "comments": comments}
     return render(request, 'hub/project.html', context)
 
 
