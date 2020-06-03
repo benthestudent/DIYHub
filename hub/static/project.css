@@ -1,0 +1,230 @@
+@charset "utf-8";
+/* CSS Document */
+body {
+	background-color: #1b262c;
+	color: white;
+}
+.main {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	
+}
+
+
+.information-container h1 {
+	font-family: Montserrat;
+	text-align: center;
+	font-size: 21pt;
+	font-weight: bold;
+	padding: 30px 0px;
+}
+
+.username {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding-bottom: 20px;
+}
+
+
+.username span {
+	font-family: "Open Sans";
+	margin-left: 10px;
+}
+
+.username a  {
+	font-family: "Open Sans";
+	margin-left: 10px;
+}
+
+.username-image img {
+	border-radius: 50%;
+	width: 50px;
+}
+.project-image {
+	height: 500px;
+	display: flex;
+	overflow: hidden;
+}
+.project-image img {
+	margin: 0 auto;
+	width: 90%;
+	object-fit: cover;
+	cursor: default;
+}
+.project-image img:hover {
+	width: 91%;
+	transition-duration: 0.4s;
+}
+.information-container p{
+	font-family: "Open Sans";
+	padding: 10px 5%;
+	padding-bottom: 20px;
+	line-height: 30px;
+}
+.supplies {
+	margin-bottom: 20px;
+	align-self: flex-start;
+	margin-left: 5%;
+	
+}
+.supplies h2 {
+	font-family: Montserrat, sans-serif;
+	font-weight: bold;
+	font-size: 16pt;
+}
+
+.supplies span {
+	font-family: "Open Sans", sans-serif;
+	padding: 10px;
+}
+
+.supplies button {
+	padding: 5px 10px;
+	background-color: transparent;
+	border: 2px solid white;
+	color: white;
+	font-family: "Open Sans", sans-serif;
+	cursor: pointer;
+	border-radius: 2px;
+}
+
+.supplies button:hover {
+	background-color: #FFF;
+	color: #1b262c;
+	transition-duration: 0.2s;
+}
+
+.supplies li {
+	margin: 10px 0;
+}
+
+.steps-container {
+	width: 90%;
+	background-color: white;
+	color: #1b262c;
+	justify-content: center;
+	margin: 0 auto;
+	padding: 10px;
+	margin-bottom: 10px;
+}
+
+.steps-container h2 {
+	font-family: montserrat, sans-serif;
+	padding: 10px 0;
+	font-size: 14pt;
+	font-weight: bold;
+	width: 100%;
+}
+
+.steps-container p {
+	font-family: "Open Sans";
+	padding: 10px 5%;
+	padding-bottom: 20px;
+	line-height: 30px;
+}
+
+.steps-container img {
+	width: 100%;
+	object-fit: cover;
+	
+}
+
+.upvote-tag {
+	display: inline-flex;
+	width: 91%;
+	justify-content: center;
+	padding: 10px 0;
+}
+.tag {
+	flex-basis: 100%;
+}
+.tag p {
+	font-family: "Open Sans", sans-serif;
+	margin-right: 10px;
+	font-weight: 600;
+	
+}
+.tag a {
+	color: #04C2D6;
+	text-decoration: none;
+	cursor: pointer;
+}
+.upvote-tag button {
+	margin-left: 10px;
+	padding: 5px 10px;
+	border-radius: 2px;
+	border: 2px solid white;
+	background-color: transparent;
+	color: white;
+	font-family: "Open Sans", sans-serif;
+	cursor: pointer;
+}
+
+.upvote-tag button:hover {
+	background-color: #037F8C;
+	border-color: #037F8C;
+	transition-duration: 0.2s;
+}
+
+.comments {
+	width: 100%;
+}
+.comments h1 {
+	font-family: Montserrat;
+	font-weight: bold;
+	margin-left: 10px;
+}
+.comment-container {
+	width: 90%;
+	margin: 0 auto;
+	padding: 20px 0;
+}
+
+.comment-image img {
+	border-radius: 50%;
+	width: 30px;
+}
+
+.profile {
+	display: inline-flex;
+	align-items: center;
+	padding-bottom: 10px;
+}
+
+.profile a {
+	font-family: Montserrat;
+	font-size: 11pt;
+	padding: 0 7px;
+	
+}
+
+.comment-container p {
+	font-family: "Open Sans", sans-serif;
+	font-size: 12pt;
+	line-height: 24px;
+	margin-bottom: 10px;
+}
+
+.comment-upvote button {
+	border-radius: 2px;
+	border: 1px solid white;
+	background-color: transparent;
+	color: white;
+	font-family: "Open Sans", sans-serif;
+	cursor: pointer;
+	padding: 3px 6px;
+}
+
+.comment-upvote button:hover {
+	background-color: #037F8C;
+	border-color: #037F8C;
+	transition-duration: 0.2s;
+}
+
+
+
+
+
