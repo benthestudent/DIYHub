@@ -1,20 +1,7 @@
 from django import forms
-from .models import Project
+from .models import Project, Comment
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-
-class createproject(forms.ModelForm):
-    img = forms.ImageField()
-    class Meta:
-        model = Project
-        fields = '__all__'
-
-# class LoginForm(forms.ModelForm):
-#     username = forms.CharField()
-#     password = forms.CharField()
-#     class Meta:
-#         model = User
-#         fields = ['username', 'password']
 
 class Register(forms.Form):
     username = forms.CharField()

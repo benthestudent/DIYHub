@@ -267,4 +267,80 @@ $(document).ready(function() {
 			},
 		});
 	});
+
+
+	//Login and Register Form validation
+	$('#register-username').on('input', function() {
+		var input=$(this);
+		var is_name=input.val();
+		if(is_name && is_name.length >= 3){
+			input.removeClass("invalid").addClass("valid")
+		}
+		else{
+			input.addClass("invalid").removeClass("valid")
+		}
+	});
+
+	$('#register-email').on('input', function() {
+		var input=$(this);
+		var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+		var is_email=re.test(input.val());
+		if(is_email){
+			input.removeClass("invalid").addClass("valid")
+		}
+		else{
+			input.addClass("invalid").removeClass("valid")
+		}
+	});
+
+	$('#register-password').on('input', function() {
+		var input=$(this);
+		var password=input.val();
+		var special_chars = ['.','!','#','$','%','&','*','+','/','=','?','^','_','`','{','|','}','~']
+		if(password && password.length >= 6 && special_chars.some(v => password.includes(v))){
+			input.removeClass("invalid").addClass("valid")
+		}
+		else{
+			input.addClass("invalid").removeClass("valid")
+		}
+	});
+
+	$("#create-account-button").click(function () {
+		if ($("#register-username").hasClass("valid") && $("#register-password").hasClass("valid") && $("#register-email").hasClass("valid") && $("#register-username").val() && $("#register-password").val() && $("#register-email").val()) {
+			$(this).closest("form").submit();
+		}else{
+			$(".validation-error").removeClass("invisible");
+		}
+	});
+
+	$("#add-comment").click(function () {
+		var body = $(this).prev("input").val();
+		var data = {"body": body}
+		var comment = "<div class=\"comment\">" +
+			"<div class=\"ccc\">" +
+			"<div class=\"username-container\">" +
+			"<div class=\"profile-icon-container\">" +
+			"<img class=\"profile-icon\" src=\"jugloo.JPG\">" +
+			"</div>" +
+			"<a href=\"\">username</a>" +
+			"</div>" +
+			"<p>" + body + "</p>" +
+			"</div>" +
+			"<div class=\"comment-buttons\">" +
+			"<button class=\"upvote-button\">Upvote</button>" +
+			"<button class=\"reply-button\">Reply</button>" +
+			"</div>" +
+			"</div>"
+		$.ajax({
+					url: '/addComment',
+					data: data,
+					type: 'POST',
+					success: function(response) {
+						$(".comments").append(comment);
+					},
+					error: function(response) {
+						console.log("error");
+					}
+		});
+	})
 });

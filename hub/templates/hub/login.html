@@ -9,21 +9,28 @@
   <div class="form">
 	  <img src="{% static 'img/logo.png' %}" alt="logo">
     <form class="register-form" action="" method="post">
-      <input type="text" placeholder="username" name="username"/>
-      <input type="password" placeholder="password" name="password"/>
-      <input type="text" placeholder="email address" name="email"/>
-      <button type="submit">create</button>
+      <input type="text" placeholder="username" name="username" id="register-username" class="valid"/>
+      <input type="password" placeholder="password" name="password" id="register-password" class="valid"/>
+      <input type="text" placeholder="email address" name="email" id="register-email" class="valid"/>
+      <button type="button" id="create-account-button">create</button>
       <p class="message">Already registered? <a href="#">Sign In</a></p>
         {% csrf_token %}
     </form>
     <form class="login-form" action="" method="POST">
-      <input type="text" placeholder="username" name="username"/>
-      <input type="password" placeholder="password" name="password"/>
+      <input type="text" placeholder="username" name="username" class="valid"/>
+      <input type="password" placeholder="password" name="password" class="valid"/>
       <button type="submit">login</button>
       <p class="message">Not registered? <a href="#">Create an account</a></p>
         {% csrf_token %}
     </form>
   </div>
+<div class="validation-error invisible">
+        Please Enter Valid Information.
+    <ul>
+        <li>Usernames must be greater than 3 characters.</li>
+        <li>Passwords must be longer than 6 characters and contain a special character.</li>
+    </ul>
+    </div>
 </div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 

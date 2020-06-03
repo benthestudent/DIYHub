@@ -1,12 +1,8 @@
-from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render
-from django import forms
-from .models import Project, Parts, ProjectCategories
+from .models import Project, Parts, ProjectCategories, Comment
 from .forms import Register
-from django.contrib.auth import authenticate, login
-import base64
-import os.path
+from django.contrib.auth import authenticate, login, logout
 import json
 
 def index(request):
@@ -35,6 +31,10 @@ def loginAndRegister(request):
 
     else:
         return render(request, 'hub/login.html')
+
+def logout(request):
+    logout(request)
+    return HttpResponse(True)
 
 
 def profile(request):
@@ -87,6 +87,13 @@ def createProject(request):
 
 def project(request, slug):
     context = {"projectName": slug}
+    #get comments
+    thisProject = None #get project
+    comments = Comment.objects.get(project=thisProject)
+    comments = []
+    for comment in comments:
+        comments.append({"user": comment.user.username, "body": comment.body})
+    context = {"projectName": slug, "comments": comments}
     return render(request, 'hub/project.html', context)
 
 
@@ -126,3 +133,13 @@ def getCategories(request):
                 categories.append({"id": part.id, "name": part.name})
             print(categories)
     return HttpResponse(json.dumps(categories))
+
+def addComment(request):
+    if request.method == "POST":
+        form = Comment()
+        #form.userID =
+        form.body = request.POST.get("body")
+        form.save()
+        userID = None
+        comment = {"user": userID,"body": request.POST.get("body")}
+        return HttpResponse(comment)

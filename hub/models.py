@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from jsonfield import JSONField
+from django.contrib.auth.models import User
 from datetime import datetime
 
 class PartCategories(models.Model):
@@ -29,20 +30,20 @@ class Project(models.Model):
     dateCreated = models.DateTimeField(default=datetime.now, blank=True)
     views = models.IntegerField(default=0)
 
-class User(models.Model):
-    username = models.TextField()
-    password = models.TextField()
-    email = models.TextField()
-    #phone = models.IntegerField()
-    #profilePicture = models.TextField()
-    #bio = models.TextField()
-    #parts = ArrayField(models.TextField(), blank=True)
-    #projects = ArrayField(models.TextField(), blank=True)
-    #savedProjects = ArrayField(models.TextField(), blank=True)
+# class User(models.Model):
+#     username = models.TextField()
+#     password = models.TextField()
+#     email = models.TextField()
+#     #phone = models.IntegerField()
+#     #profilePicture = models.TextField()
+#     #bio = models.TextField()
+#     #parts = ArrayField(models.TextField(), blank=True)
+#     #projects = ArrayField(models.TextField(), blank=True)
+#     #savedProjects = ArrayField(models.TextField(), blank=True)
 
 class Comment(models.Model):
-    title = models.TextField()
     body = models.TextField()
+    user = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
     upvotes = models.IntegerField(default=0)
     project = models.ManyToManyField(Project)
 
