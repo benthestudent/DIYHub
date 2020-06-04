@@ -7,6 +7,7 @@ urlpatterns = [
     path('login', views.loginAndRegister, name='loginAndRegister'),
     path('getCategories', views.getCategories, name='getCategories'),
     path('project/<slug:slug>/', views.project, name='project'),
+    path('upvote', views.upvote, name='upvote'),
     path('addComment', views.addComment, name='addComment'),
     path('logout', views.logout, name='logout')
 ]

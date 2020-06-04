@@ -183,6 +183,10 @@ body {
 	padding: 20px 0;
 }
 
+.comments-container{
+	min-height: 15vh;
+}
+
 .comment-image img {
 	border-radius: 50%;
 	width: 30px;
@@ -224,7 +228,24 @@ body {
 	transition-duration: 0.2s;
 }
 
+.comment-upvote i {
+  margin-right: 5px;
+}
 
+.comment-creator textarea {
+	padding: 1%;
+	color: white;
+	background-color: black;
+	border: solid white 1px;
+	width: 100%;
+	margin-bottom: 1%;
+	font-family: "Open Sans", sans-serif;
+	font-size: 12pt;
+	line-height: 24px;
+	resize: none;
+}
 
-
-
+.reply {
+	width: 80%;
+	margin-left: 8%;
+}

@@ -1,9 +1,14 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from .models import Project, Parts, ProjectCategories, Comment
+from .models import Project, Parts, ProjectCategories, Comment, Upvote
 from .forms import Register
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.staticfiles.storage import staticfiles_storage
 import json
+import base64
+import os
+import operator
+
 
 def index(request):
     return render(request, 'hub/DIYHUB.html')
@@ -32,6 +37,7 @@ def loginAndRegister(request):
     else:
         return render(request, 'hub/login.html')
 
+
 def logout(request):
     logout(request)
     return HttpResponse(True)
@@ -42,20 +48,21 @@ def profile(request):
 
 
 def createProject(request):
-    if request.method == 'POST':
+    if request.method == 'POST' and request.user.is_authenticated:
         url = request.POST.get("name").replace(" ", "-")
         imgData = request.POST.get('img').replace("data:image/jpeg;base64,", "")
-        imgURL = url + ".png"
+        projectPath = "hub/static/projects/" + url
+        os.makedirs(projectPath)
+        imgURL = projectPath + "/" + "project-image.png"
         print(imgURL)
-        # with open(imgURL, "wb") as f:
-        #     f.write(base64.b64decode(imgData))
+        with open(imgURL, "wb") as f:
+            f.write(base64.b64decode(imgData))
         partIDs = []
         parts = request.POST.get("parts").split(",")
         print("parts: " + str(parts))
         for part in parts:
             partObj = None
             partName = part.split(" x ")[1]
-            partName = partName.split(" (#")[0]
             try:
                 partObj = Parts.objects.get(name__exact=partName)
             except Parts.DoesNotExist:
@@ -63,7 +70,7 @@ def createProject(request):
                 print("Does Not Exist")
             if partObj:
                 partIDs.append(partObj.id)
-        print("partIDs: "+ str(partIDs))
+        print("partIDs: " + str(partIDs))
         form = Project()
         form.name = request.POST.get("name")
         form.desc = request.POST.get("desc")
@@ -71,8 +78,8 @@ def createProject(request):
         form.url = url
         form.steps = str(request.POST.get("steps"))
         form.parts = str(request.POST.get("parts"))
-        form.imgPath = str(imgURL)
-        category = request.POST.get("category").split(" (#")[0]
+        form.imgPath = imgURL[imgURL.find("projects/"):]
+        category = request.POST.get("category")
         cat = None
         try:
             cat = ProjectCategories.objects.get(name__exact=category)
@@ -82,18 +89,67 @@ def createProject(request):
         form.category = cat
         form.partIDs = partIDs
         form.save()
+        form.author.add(request.user)
+        form.save()
     return render(request, 'hub/createProject.html')
 
 
 def project(request, slug):
-    context = {"projectName": slug}
-    # #get comments
-    # thisProject = None #get project
-    # comments = Comment.objects.get(project=thisProject)
-    # comments = []
-    # for comment in comments:
-    #     comments.append({"user": comment.user.username, "body": comment.body})
-    # context = {"projectName": slug, "comments": comments}
+    projectName = slug.replace("-", " ")
+    project = None
+    try:
+        project = Project.objects.get(name__exact=projectName)
+    except Project.DoesNotExist:
+        return HttpResponse("No Account Found")
+    project.views += 1
+    project.save()
+    parts = project.parts.split(",")
+    partsArray = []
+    for part in parts:
+        partsArray.append(part)
+    category = project.category
+    category = category.name
+
+    context = {"projectName": projectName,
+               "projectID": project.id,
+               "desc": project.desc,
+               "imgPath": project.imgPath,
+               "difficulty": project.difficulty,
+               "steps": project.steps,
+               "parts": partsArray,
+               "category": category,
+               "upvotes": project.upvotes,
+               "views": project.views,
+               "dateCreated": project.dateCreated,
+               "author": project.author.get().username
+               }
+    # get comments
+    commentArray = []
+    comments = Comment.objects.filter(project=project)
+    for comment in comments:
+        upvoted = True if Upvote.objects.filter(comment=comment).first() else False
+        replies = Comment.objects.filter(commentParent=comment)
+        repliesArray = []
+        for reply in replies:
+            replyUpvoted = True if Upvote.objects.filter(comment=reply).first() else False
+            repliesArray.append({"user": reply.user.username, "body": reply.body, "upvotes": reply.upvotes, "commentID": reply.id,
+             "upvoted": replyUpvoted})
+        commentArray.append(
+            {"user": comment.user.username, "body": comment.body, "upvotes": comment.upvotes, "commentID": comment.id, "upvoted": upvoted, "replies": repliesArray})
+    commentArray.sort(key=operator.itemgetter('upvotes'), reverse=True)
+    context['comments'] = commentArray
+    print(context['comments'])
+    # check if the user has upvoted the post
+    context['upvoted'] = False
+    if request.user.is_authenticated:
+        try:
+            Upvote.objects.get(user=request.user, project=project)
+            context['upvoted'] = True
+        except Upvote.DoesNotExist:
+            context['upvoted'] = False
+        except Upvote.MultipleObjectsReturned:
+            print("Error: multiple upvotes from user on one project")
+            context['upvoted'] = True
     return render(request, 'hub/project.html', context)
 
 
@@ -127,19 +183,75 @@ def getCategories(request):
         else:
             result = None
     else:
-            print("selected")
-            result = ProjectCategories.objects.all()
-            for part in result:
-                categories.append({"id": part.id, "name": part.name})
-            print(categories)
+        print("selected")
+        result = ProjectCategories.objects.all()
+        for part in result:
+            categories.append({"id": part.id, "name": part.name})
+        print(categories)
     return HttpResponse(json.dumps(categories))
+
 
 def addComment(request):
     if request.method == "POST":
-        form = Comment()
-        #form.userID =
-        form.body = request.POST.get("body")
-        form.save()
-        userID = None
-        comment = {"user": userID,"body": request.POST.get("body")}
-        return HttpResponse(comment)
+        if request.user.is_authenticated:
+            form = Comment()
+            form.userID = request.user.id
+            form.body = request.POST.get("body")
+            form.save()
+            if request.POST.get("type") == "comment":
+                try:
+                    form.commentParent.add(Comment.objects.get(id=request.POST.get("elementID")))
+                except Project.DoesNotExist:
+                    print("Comment not found")
+            elif request.POST.get("type") == "project":
+                try:
+                    form.project.add(Project.objects.get(id=request.POST.get("elementID")))
+                except Project.DoesNotExist:
+                    print("Project not found")
+            form.save()
+            userID = None
+            comment = {"user": request.user.username, "body": request.POST.get("body"),
+                       "staticPath": staticfiles_storage.url("projects/"), "commentID": form.id}
+            return HttpResponse(json.dumps(comment))
+
+
+def upvote(request):
+    type = request.POST.get("type")
+    elementID = request.POST.get("elementID")
+    operation = request.POST.get("operation")
+    if not request.user.is_authenticated:
+        return HttpResponse("Not Authenticated User")
+    if operation == "downvote":
+        downvote = Upvote.objects.filter(user=request.user).first().delete()
+        element = Comment.objects.filter(id=elementID).first() if (type == "comment") else Project.objects.filter(id=elementID).first()
+        print(element)
+        if element:
+            element.upvotes -= 1
+            element.save()
+        return HttpResponse("downvoted")
+    upvote = Upvote()
+    if type == "comment":
+        comment = Comment.objects.filter(id=elementID).first()
+        if not comment:
+            return HttpResponse("No Such Comment")
+        else:
+            upvote.save()
+            upvote.comment.add(comment.id)
+            comment.upvotes += 1
+            comment.save()
+
+    elif type == "project":
+        project = Project.objects.filter(id=elementID).first()
+        if not project:
+            return HttpResponse("No Such Project")
+        else:
+            upvote.save()
+            upvote.project.add(project.id)
+            project.upvotes += 1
+            project.save()
+    else:
+        return HttpResponse("Not a Valid Type")
+    upvote.user.add(request.user)
+    upvote.save()
+    print("upvoted")
+    return HttpResponse("upvoted")

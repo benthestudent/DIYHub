@@ -106,14 +106,18 @@ function getProjectData() {
 
 	});
 	parts = parts.slice(0, -1);
-	console.log(parts)
+	console.log(parts);
 	$(".step").each(function() {
+		steps += "<div class=\"steps-container\">";
 		$(this).children("input").each(function() {
 			steps += "<h2>" + this.value + "</h2>";
 		});
+		steps += "<hr>";
+		// <img src="{% static 'img/stepImage.png' %}" alt="Step Image">
 		$(this).children(".description").children("textarea").each(function() {
 			steps += "<p>" + this.value + "</p>";
 		});
+		steps += "</div>";
 	});
 	var input = $("#upload-photo");
 	var img = $("#projectImg").attr('src');
@@ -215,7 +219,7 @@ $(document).ready(function() {
 				parts = JSON.parse(response)
 				$("#partsList").empty();
 				parts.forEach(function (item) {
-					$("#partsList").append('<option value="' + item.name + ' (#'+ item.id + ')" >');
+					$("#partsList").append('<option value="' + item.name + '" >');
 
 				})
 
@@ -239,7 +243,7 @@ $(document).ready(function() {
 				parts = JSON.parse(response)
 				$("#categories").empty();
 				parts.forEach(function (item) {
-					$("#categories").append('<option value="' + item.name + ' (#'+ item.id + ')" >');
+					$("#categories").append('<option value="' + item.name + '" >');
 
 				})
 
@@ -312,35 +316,4 @@ $(document).ready(function() {
 			$(".validation-error").removeClass("invisible");
 		}
 	});
-
-	$("#add-comment").click(function () {
-		var body = $(this).prev("input").val();
-		var data = {"body": body}
-		var comment = "<div class=\"comment\">" +
-			"<div class=\"ccc\">" +
-			"<div class=\"username-container\">" +
-			"<div class=\"profile-icon-container\">" +
-			"<img class=\"profile-icon\" src=\"jugloo.JPG\">" +
-			"</div>" +
-			"<a href=\"\">username</a>" +
-			"</div>" +
-			"<p>" + body + "</p>" +
-			"</div>" +
-			"<div class=\"comment-buttons\">" +
-			"<button class=\"upvote-button\">Upvote</button>" +
-			"<button class=\"reply-button\">Reply</button>" +
-			"</div>" +
-			"</div>"
-		$.ajax({
-					url: '/addComment',
-					data: data,
-					type: 'POST',
-					success: function(response) {
-						$(".comments").append(comment);
-					},
-					error: function(response) {
-						console.log("error");
-					}
-		});
-	})
 });

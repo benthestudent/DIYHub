@@ -17,10 +17,10 @@ class Parts(models.Model):
 
 class Project(models.Model):
     imgPath = models.TextField(null=True)
-    name = models.TextField()
+    name = models.TextField(unique=True)
     desc = models.TextField()
     difficulty = models.IntegerField(default=0)
-    url = models.TextField(null=True)
+    url = models.TextField(null=True, unique=True)
     steps = models.TextField(null=True)
     parts = models.TextField(null=True)
     partIDs = ArrayField(models.IntegerField(), null=True)
@@ -28,6 +28,7 @@ class Project(models.Model):
     #partsNeeded = ArrayField(ArrayField(models.TextField(max_length=50, null=True, blank=True), null=True), null=True)
     upvotes = models.IntegerField(default=0)
     dateCreated = models.DateTimeField(default=datetime.now, blank=True)
+    author = models.ManyToManyField(User)
     views = models.IntegerField(default=0)
 
 # class User(models.Model):
@@ -45,5 +46,11 @@ class Comment(models.Model):
     body = models.TextField()
     user = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
     upvotes = models.IntegerField(default=0)
-    project = models.ManyToManyField(Project)
+    project = models.ManyToManyField(Project, blank=True)
+    commentParent = models.ManyToManyField("Comment", blank=True)
+
+class Upvote(models.Model):
+    user = models.ManyToManyField(User)
+    project = models.ManyToManyField(Project, blank=True)
+    comment = models.ManyToManyField(Comment, blank=True)
 
