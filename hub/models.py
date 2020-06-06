@@ -96,7 +96,6 @@ class Project(models.Model):
     partIDs = ArrayField(models.IntegerField(), null=True)
     category = models.ForeignKey(ProjectCategories, default=1, on_delete=models.CASCADE)
     # partsNeeded = ArrayField(ArrayField(models.TextField(max_length=50, null=True, blank=True), null=True), null=True)
-    upvotes = models.IntegerField(default=0)
     dateCreated = models.DateTimeField(default=datetime.now, blank=True)
     author = models.ManyToManyField(User)
     views = models.IntegerField(default=0)
@@ -108,7 +107,6 @@ class Project(models.Model):
 class Comment(models.Model):
     body = models.TextField()
     user = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
-    upvotes = models.IntegerField(default=0)
     project = models.ManyToManyField(Project, blank=True)
     commentParent = models.ManyToManyField("Comment", blank=True)
 

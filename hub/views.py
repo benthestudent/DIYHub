@@ -33,7 +33,7 @@ def loginAndRegister(request):
                 login(request, user)
             else:
                 return HttpResponse("Registration Failed")
-            return redirect("/profile/")
+            return redirect("/profile")
 
     else:
         return render(request, 'hub/login.html')
@@ -150,8 +150,9 @@ def project(request, slug):
         project = Project.objects.get(name__exact=projectName)
     except Project.DoesNotExist:
         return HttpResponse("No Account Found")
-    project.views += 1
-    project.save()
+    if not project.author.all().first() == request.user:
+        project.views += 1
+        project.save()
     parts = project.parts.split(",")
     partsArray = []
     for part in parts:
@@ -167,9 +168,9 @@ def project(request, slug):
                "steps": project.steps,
                "parts": partsArray,
                "category": category,
-               "upvotes": project.upvotes,
+               "upvotes": Upvote.objects.filter(project=project).count(),
                "views": project.views,
-               "dateCreated": project.dateCreated,
+               "dateCreated": project.dateCreated.strftime('%D %I:%M %p'),
                "author": project.author.get().username
                }
     # get comments
@@ -271,12 +272,11 @@ def upvote(request):
     if not request.user.is_authenticated:
         return HttpResponse("Not Authenticated User")
     if operation == "downvote":
-        downvote = Upvote.objects.filter(user=request.user).first().delete()
         element = Comment.objects.filter(id=elementID).first() if (type == "comment") else Project.objects.filter(id=elementID).first()
         print(element)
-        if element:
-            element.upvotes -= 1
-            element.save()
+        vote = Upvote.objects.filter(user=request.user, comment=element).first() if (type == "comment") else Upvote.objects.filter(user=request.user, project=element).first()
+        if vote:
+            vote.delete()
         return HttpResponse("downvoted")
     upvote = Upvote()
     if type == "comment":
@@ -296,8 +296,6 @@ def upvote(request):
         else:
             upvote.save()
             upvote.project.add(project.id)
-            project.upvotes += 1
-            project.save()
     else:
         return HttpResponse("Not a Valid Type")
     upvote.user.add(request.user)

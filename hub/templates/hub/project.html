@@ -18,7 +18,7 @@
 				<div class="username-image">
 					<img src="{% static 'img/img_avatar.png' %}" alt="Profile Picture">
 				</div>
-			<a>username</a> 
+			<a>{{ author }}</a>
 				<span>{{ views }} <i class="fa fa-eye"></i> <span id="projectUpvoteCounter">{{ upvotes }}</span> <i class="fa fa-thumbs-up"></i></span>
 		</div>
 				<p>{{ desc }}</p>
@@ -37,7 +37,7 @@
 		</div>
 		<div class="upvote-tag">
 			<div class="tag">
-				<p>Posted 6/1/2020 12:00 PM by <a>{{ author }}</a> in <a>{{ category }}</a></p>
+				<p>Posted {{ dateCreated }} by <a>{{ author }}</a> in <a>{{ category }}</a></p>
 			</div>
 
             {% if upvoted %}
