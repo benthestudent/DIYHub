@@ -1,6 +1,5 @@
 from django import forms
-from .models import Project, Comment
-from django.contrib.auth.models import User
+from .models import Project, Comment, User
 from django.core.exceptions import ValidationError
 
 class Register(forms.Form):
@@ -28,8 +27,8 @@ class Register(forms.Form):
 
     def save(self, commit=True):
         user = User.objects.create_user(
-            self.cleaned_data['username'],
             self.cleaned_data['email'],
+            self.cleaned_data['username'],
             self.cleaned_data['password']
         )
         return user

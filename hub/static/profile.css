@@ -98,6 +98,43 @@ main {
 	padding-bottom: 0;
 	margin: 10px 0;
 }
+
+#Account p {
+	font-family: "Open Sans";
+	font-size: 15pt;
+	margin: 10px 0;
+}
+
+#Account input[type="text"] {
+	font-family: "Open Sans";
+	font-size: 15pt;
+	margin: 10px 0;
+	padding: 7px 10px 7px 10px;
+	margin-left: 10px;
+}
+
+#Account input[type="password"] {
+	font-family: "Open Sans";
+	font-size: 15pt;
+	margin: 10px 0;
+	padding: 7px 10px 7px 10px;
+	margin-left: 10px;
+}
+
+#Account input[type="password"]:focus {
+	outline: none;
+}
+
+
+#Account textarea {
+	vertical-align: center;
+	font-family: "Open Sans";
+	font-size: 15pt;
+	margin: 10px 0;
+	padding: 10px 10px 10px 10px;
+	width: 90%;
+}
+
 #Account strong {
 	font-size: 17pt;
 	font-weight: bold;
@@ -113,6 +150,26 @@ main {
 	background: none;
 	border: none;
 	justify-content: baseline;
+}
+
+#createProject {
+	font-family: "Open Sans", sans-serif;
+	width: 10vw;
+	height: 10vh;
+	font-size: 15pt;
+	background-color: #037F8C;
+	color: white;
+	border-radius: 3px;
+	padding: 10px 11px;
+	border: none;
+	justify-content: baseline;
+	margin: auto;
+}
+
+#createProject:hover {
+	background-color: white;
+	border: 2px solid #037F8C;
+	color: #037F8C;
 }
 
 #Account button:hover {
@@ -136,6 +193,29 @@ main {
 	background-color: white;
 	border: 2px solid #037F8C;
 	color: #037F8C;
+}
+
+#Account #saveProfile {
+	font-family: "Open Sans", sans-serif;
+	width: 20vw;
+	font-size: 15pt;
+	background-color: #35e283;
+	color: white;
+	border-radius: 3px;
+	margin-top: 10px;
+}
+
+#Account #saveProfile:hover {
+	background-color: white;
+	border: 2px solid #35e283;
+	color: #35e283;
+}
+
+#Upvoted-Projects h4 {
+	font-family: "Open Sans", sans-serif;
+	font-size: 15pt;
+	color: black;
+	margin: auto;
 }
 
 .grid {
@@ -314,4 +394,34 @@ main {
 	filter: blur(3px);
 }
 
+.invalid {
+  border: solid red 1px;
+}
 
+.valid {
+  border: solid black 1px;
+}
+
+.validation-error {
+  width: 360px;
+  padding: 5%;
+  margin: auto;
+  background-color: #E8E5E5;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.successMessage {
+	background-color: #25973c;
+	width: 100%;
+	height: 6vh;
+	border-radius: 10px;
+	color: white;
+	font-family: "Open Sans";
+	font-size: 15pt;
+	text-align: center;
+}
+
+.successMessage h3 {
+	margin-top: 2vh;
+}

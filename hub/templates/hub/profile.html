@@ -1,311 +1,120 @@
-<!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-	<link href="../Static/profile.css" type="text/css" rel="stylesheet">
-	<link href="../Static/reset.css" type="text/css" rel="stylesheet">
+{% extends 'hub/base.html' %}
+{% load static %}
+{% block header %}
+    <meta charset="utf-8">
+	<link href="{% static 'profile.css' %}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/profile.js' %}"></script>
 	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<title>Profile</title>
-</head>
+    <title>Profile</title>
+{% endblock %}
+{% block content %}
+    {% if message %}
+        <div class="successMessage"><h3>{{ message }}</h3></div>
+    {% endif %}
+    <script type="text/javascript">
+        {% if message %}
+            $(document).ready(function () {
+                setTimeout(function () {
+                    $(".successMessage").fadeOut(500);
+                }, 5000);
+            });
 
-<body>
+        {% endif %}
+    </script>
+
 	<main>
 	<div class="info-container">
 		<div class="image-and-name">
-	<img src="../Static/img_avatar.png" alt="Profile Picture">
-		<h1>elijahl_95</h1>
+	<img src="{% static 'img/img_avatar.png' %}" alt="Profile Picture">
+		<h1>{{ user.username }}</h1>
 		</div>
 			<button class="tablink" onclick="openPage('Account', this, 'white')" id="defaultOpen">Account</button>
 		<button class="tablink" onclick="openPage('Projects', this, 'white')">Projects</button>
 			<button class="tablink" onclick="openPage('Upvoted-Projects', this, 'white')">Upvoted Projects</button>
 	</div>
 	<div id="Account" class="tabcontent">
-		<h3><strong>Email:</strong> elijah.kane.1972@gmail.com <button><i class="fa fa-edit"></i></button></h3>
-		<h3><strong>Username:</strong> elijahl_95 <button><i class="fa fa-edit"></i></button></h3>
-		<button id="change-password">Change Password</button>
+        <form method="post" action="">
+            <h3><strong>Email:</strong> <span id="email">{{ user.email }}</span> <button id="edit" type="button"><i class="fa fa-edit"></i></button></h3>
+            <h3><strong>First Name:</strong>
+                {% if user.firstn is None %}
+                    <input name="fname" id="fname" type="text">
+                {% else %}
+                    <span id="fname">{{ user.firstn }}</span> <button id="edit" type="button"><i class="fa fa-edit"></i></button>
+                {% endif %}
+            </h3>
+            <h3><strong>Last Name:</strong>
+                {% if user.lastn is None %}
+                    <input name="lname" id="lname" type="text">
+                {% else %}
+                    <span id="lname">{{ user.lastn }}</span> <button id="edit" type="button"><i class="fa fa-edit"></i></button>
+                {% endif %}
+            </h3>
+            <h3><strong>Phone Number:</strong>
+                {% if user.phone is None %}
+                    <input name="phone" id="phone" type="text">
+                {% else %}
+                    <span id="phone">{{ user.phone }}</span> <button id="edit" type="button"><i class="fa fa-edit"></i></button>
+                {% endif %}
+            </h3>
+            <h3><strong>Bio:</strong>
+                {% if user.bio is None %}
+                    <br><textarea name="bio" id="bio" rows="3"></textarea><br>
+                {% else %}
+                    <button id="edit" type="button"><i class="fa fa-edit"></i></button></h3><p><span id="bio">{{ user.bio }}</span></p>
+                {% endif %}
+            <button type="button" id="change-password" name="changePassword">Change Password</button>
+            {% if user.firstn is None or user.lastn is None or user.bio is None or user.phone is None %}
+            <br><button id="saveProfile">Save</button>
+            {% endif %}
+        {% csrf_token %}
+        </form>
 </div>
 
 <div id="Projects" class="tabcontent">
-  <div class="grid">
-  
-  <div class="module">
+
+  {% if projects %}
+      <div class="grid">
+  {% for project in projects %}
+      <a href="project/{{ project.url }}">
+      <div class="module">
 	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
+          <img src="{% static '' %}{{ project.imgPath }}" alt="ProjectImage">
+          <div class="overlay">
+              <h1>{{ project.name }}</h1>
+              <p>{{ project.desc }}</p>
+          </div>
 	  </div>
-		</div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-		
-</div>
+    </div>
+      </a>
+  {% endfor %}
+      </div>
+  {% else %}
+      <button id="createProject">Create Project</button>
+  {% endif %}
+
 </div>
 
 <div id="Upvoted-Projects" class="tabcontent">
-  <div class="grid-upvoted">
-  
-  <div class="module-upvoted">
+    {% if upvotedProjects %}
+      <div class="grid-upvoted">
+  {% for project in upvotedProjects %}
+      <a href="project/{{ project.url }}">
+      <div class="module-upvoted">
 	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
+          <img src="{% static '' %}{{ project.imgPath }}" alt="ProjectImage">
+          <div class="overlay">
+              <h1>{{ project.name }}</h1>
+              <p>{{ project.desc }}</p>
+          </div>
 	  </div>
-		</div>
-  <div class="module-upvoted">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module-upvoted">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module-upvoted">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module-upvoted">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module-upvoted">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module-upvoted">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module-upvoted">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module-upvoted">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module-upvoted">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module-upvoted">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module-upvoted">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module-upvoted">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module-upvoted">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module-upvoted">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
+    </div>
+      </a>
+  {% endfor %}
+      </div>
+  {% else %}
+      <h4>No Upvoted Projects</h4>
+  {% endif %}
 		
 </div>
 
@@ -337,5 +146,4 @@ document.getElementById("defaultOpen").click();
 	</script>
 	</main>
 	
-</body>
-</html>
+{% endblock %}

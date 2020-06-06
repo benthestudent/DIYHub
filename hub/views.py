@@ -1,9 +1,10 @@
 from django.http import HttpResponse
-from django.shortcuts import render
-from .models import Project, Parts, ProjectCategories, Comment, Upvote
+from django.shortcuts import render, redirect
+from .models import Project, Parts, ProjectCategories, Comment, Upvote, User
 from .forms import Register
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.staticfiles.storage import staticfiles_storage
+from django.contrib.auth.hashers import check_password
 import json
 import base64
 import os
@@ -16,7 +17,7 @@ def index(request):
 
 def loginAndRegister(request):
     if request.method == 'POST':
-        if request.POST.get("email"):
+        if request.POST.get("username"):
             print("Register")
             form = Register(request.POST)
             if form.is_valid():
@@ -27,12 +28,12 @@ def loginAndRegister(request):
                 return HttpResponse("Registration Failed")
         else:
             print("Login")
-            user = authenticate(request, username=request.POST.get("username"), password=request.POST.get("password"))
+            user = authenticate(request, username=request.POST.get("email"), password=request.POST.get("password"))
             if user is not None:
                 login(request, user)
             else:
                 return HttpResponse("Registration Failed")
-            return HttpResponse("logged in")
+            return redirect("/profile/")
 
     else:
         return render(request, 'hub/login.html')
@@ -44,7 +45,55 @@ def logout(request):
 
 
 def profile(request):
-    return render(request, 'hub/profile.html')
+    user = {}
+    upvotedProjectsArray = []
+    projectsArray = []
+    message = ""
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            user = request.user
+            if request.POST.get("oldPassword") and request.POST.get("newPassword") and request.POST.get("newPassword1"):
+                if check_password(request.POST.get("oldPassword"), user.password) and request.POST.get("newPassword") == request.POST.get("newPassword1"):
+                    user.set_password(request.POST.get("newPassword"))
+                    user.save()
+                    message = "Password Saved"
+                    print("Password Saved")
+                else:
+                    print("error saving new password")
+            else:
+                if request.POST.get("email"):
+                    user.email = request.POST.get("email")
+                if request.POST.get("fname"):
+                    user.firstn = request.POST.get("fname")
+                if request.POST.get("lname"):
+                    user.lastn = request.POST.get("lname")
+                if request.POST.get("phone"):
+                    user.phone = request.POST.get("phone")
+                if request.POST.get("bio"):
+                    user.bio = request.POST.get("bio")
+                user.save()
+        user = {
+            "email": request.user.email,
+            "username": request.user.username,
+            "firstn": request.user.firstn,
+            "lastn": request.user.lastn,
+            "phone": request.user.phone,
+            "bio": request.user.bio
+        }
+        projects = Project.objects.filter(author=request.user)
+
+        if projects:
+            for project in projects:
+                projectsArray.append({"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url})
+        upvotes = Upvote.objects.filter(user=request.user, comment=None)
+
+        if upvotes:
+            for upvote in upvotes:
+                project = upvote.project.all().first()
+                upvotedProjectsArray.append(
+                   {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url})
+    context = {"user": user, "projects": projectsArray, "upvotedProjects": upvotedProjectsArray, "message": message}
+    return render(request, 'hub/profile.html', context)
 
 
 def createProject(request):
