@@ -4,7 +4,7 @@
 body {
 	margin: 0;
 	height: 100%;
-	background-color: #FFF;
+	background-color: #1b262c;
 }
 .header {
 	margin: 0;
@@ -15,6 +15,10 @@ body {
 	align-items: center;
 	align-content: space-around;
 }
+.header img {
+	height: 70px;
+	border-radius: 50%;
+}
 .header h1, strong {
 	font-family: "Montserrat", sans-serif;
 	padding: 15px 20px;
@@ -22,6 +26,7 @@ body {
 	color: #FFFFFF;
 	display: inline-flex;
 	justify-content: flex-start;
+	padding-left: 5px;
 }
 .header h1 strong {
 	font-weight: 700;
@@ -43,13 +48,7 @@ body {
 	filter: blur(0px);
 	transition-duration: 0.3s;
 }
-.navigation ul {
-	display: inline-flex;
-	align-items: center;
-	padding: 10px;
-	flex-wrap: wrap;
-}
-.navigation li {
+.navigation, ul, li {
 	display: inline-flex;
 	align-items: center;
 	padding: 10px;
@@ -90,7 +89,7 @@ body {
 	color: #FFF;
 	text-decoration: none;
 }
-@media screen and (max-width: 1028px){
+@media screen and (max-width: 1033px){
 	.header {
 		flex-direction: column;
 	}
@@ -119,14 +118,14 @@ body {
 	height: 550px;
 }
 .selector label {
-	font-family: Montserrat, sans-serif;
+	font-family: "Open Sans", sans-serif;
 	font-weight: 100;
 	font-style: normal;
 	font-size: 12pt;
 	padding: 0;
 }
 .selector h2 {
-	font-family: Montserrat;
+	font-family: "Montserrat", sans-serif;
 	font-weight: 700;
 	font-size: 21pt;
 	padding: 10px 0;
@@ -306,17 +305,42 @@ body {
 	.grid {
 		width: 100%;
 		padding: 0 50px;
-
+		
 	}
 }
 
-#myInput {
+#searchbar { 
   width: 100%; /* Full-width */
   font-size: 13px; /* Increase font-size */
   padding: 12px 20px 12px 20px; /* Add some padding */
   border: 1px solid #ddd; /* Add a grey border */
   margin-bottom: 12px; /* Add some space below the input */
 }
+
+#expand {
+  height: 0px;
+  overflow: hidden;
+  transition: height 0.5s;
+	margin: 10px 0;
+	padding-left: 10%;
+}
+
+#toggle:checked ~ #expand {
+  height: 150px;
+	overflow: auto;
+}
+
+#toggle {
+	display: none;
+}
+
+label.category-label {
+	font-family: Montserrat;
+	font-weight: bold;
+	padding: 10px;
+	cursor: pointer;
+}
+
 
 /* BEN'S ADDITIONS */
 
