@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-{#	<link rel="stylesheet" href="{% static 'style.css' %}" type="text/css">#}
-    <link rel="stylesheet" href="{% static 'reset.css' %}" type="text/css">
+<!--{#	<link rel="stylesheet" href="{% static 'style.css' %}" type="text/css">#}
+    <link rel="stylesheet" href="{% static 'reset.css' %}" type="text/css">-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-    <link href='https://fonts.googleapis.com/css?family=Karla' rel='stylesheet'>
-    <link href="https://fonts.googleapis.com/css?family=Hind+Siliguri&display=swap" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="../Static/createProject.css" rel="stylesheet" type="text/css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <script href="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/project.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'style.css' %}" type="text/css">
+	<link rel="stylesheet" href="../Static/createProject.css" type="text/css">
+<!--    <link rel="stylesheet" href="{% static 'style.css' %}" type="text/css">-->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:700, 400|Montserrat:400, 700|Nunito+Sans:800, 400&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="../Static/reset.css" type="text/css">
 	<title>Create Project</title>
 </head>
 <body>
@@ -19,7 +20,8 @@
 		<h1>Create a Project</h1>
         <div class="project-img-container">
             <div class="project-img"><img id="projectImg" src="#" alt="Upload an Image"></div>
-            <label for="upload-photo">Upload</label>
+            <label for="upload-photo">Upload<br>
+            </label>
             <input type="file" name="project-img-file" id="upload-photo">
         </div>
         <div class="project-info-fields">
