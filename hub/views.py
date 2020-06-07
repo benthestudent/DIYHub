@@ -1,8 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .models import Project, Parts, ProjectCategories, Comment, Upvote, User
+from .models import Project, Parts, ProjectCategories, Comment, Upvote, User, PartCategories
 from .forms import Register
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login
+from django.contrib.auth import logout as lgout
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.contrib.auth.hashers import check_password
 import json
@@ -12,7 +13,24 @@ import operator
 
 
 def index(request):
-    return render(request, 'hub/DIYHUB.html')
+    projects = Project.objects.all()
+    projectsArray = []
+    account = request.user.username if request.user.is_authenticated else None
+    if projects:
+        for project in projects:
+            projectsArray.append(
+                {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url})
+    categoryArray = []
+    categories = PartCategories.objects.all()
+    if categories:
+        for category in categories:
+            partsArray = []
+            parts = Parts.objects.filter(category=category)
+            for part in parts:
+                partsArray.append({"name": part.name, "url": part.url})
+            categoryArray.append({"name": category.name, "parts": partsArray})
+    context = {"projects": projectsArray, "categories": categoryArray, "account": account}
+    return render(request, 'hub/DIYHUB.html', context)
 
 
 def loginAndRegister(request):
@@ -40,11 +58,12 @@ def loginAndRegister(request):
 
 
 def logout(request):
-    logout(request)
-    return HttpResponse(True)
+    lgout(request)
+    return redirect("/")
 
 
 def profile(request):
+    account = request.user.username if request.user.is_authenticated else None
     user = {}
     upvotedProjectsArray = []
     projectsArray = []
@@ -92,11 +111,12 @@ def profile(request):
                 project = upvote.project.all().first()
                 upvotedProjectsArray.append(
                    {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url})
-    context = {"user": user, "projects": projectsArray, "upvotedProjects": upvotedProjectsArray, "message": message}
+    context = {"user": user, "projects": projectsArray, "upvotedProjects": upvotedProjectsArray, "message": message, "account": account}
     return render(request, 'hub/profile.html', context)
 
 
 def createProject(request):
+    account = request.user.username if request.user.is_authenticated else None
     if request.method == 'POST' and request.user.is_authenticated:
         url = request.POST.get("name").replace(" ", "-")
         imgData = request.POST.get('img').replace("data:image/jpeg;base64,", "")
@@ -140,10 +160,12 @@ def createProject(request):
         form.save()
         form.author.add(request.user)
         form.save()
-    return render(request, 'hub/createProject.html')
+    context = {"account": account}
+    return render(request, 'hub/createProject.html', context)
 
 
 def project(request, slug):
+    account = request.user.username if request.user.is_authenticated else None
     projectName = slug.replace("-", " ")
     project = None
     try:
@@ -171,7 +193,8 @@ def project(request, slug):
                "upvotes": Upvote.objects.filter(project=project).count(),
                "views": project.views,
                "dateCreated": project.dateCreated.strftime('%D %I:%M %p'),
-               "author": project.author.get().username
+               "author": project.author.get().username,
+               "account": account
                }
     # get comments
     commentArray = []

@@ -165,6 +165,15 @@ function readURL(input) {
 }
 
 $(document).ready(function() {
+	$(".toggle").click(function() {
+		console.log("toggled");
+    if(this.checked) {
+    	console.log("checked")
+        $(this).parent().parent().find(".partContainer").removeClass("notExpanded").addClass("expand");
+    }else {
+    	$(this).parent().parent().find(".partContainer").removeClass("expand").addClass("notExpanded");
+	}
+});
 	$("#save").click(function() {
 		var csrftoken = getCookie('csrftoken');
 		var data = getProjectData();
