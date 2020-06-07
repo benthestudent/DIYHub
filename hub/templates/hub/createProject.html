@@ -1,15 +1,19 @@
 {% extends 'hub/base.html' %}
 {% load static %}
 {% block header %}
-    <link rel="stylesheet" href="{% static 'style.css' %}" type="text/css">
-	<title>Create Project</title>
+    <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'createProject.css' %}" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:700, 400|Montserrat:400, 700|Nunito+Sans:800, 400&display=swap" rel="stylesheet">
+    <title>Create Project</title>
 {% endblock %}
 {% block content %}
 	<div class="create-project-container">
 		<h1>Create a Project</h1>
         <div class="project-img-container">
             <div class="project-img"><img id="projectImg" src="#" alt="Upload an Image"></div>
-            <label for="upload-photo">Upload</label>
+            <label for="upload-photo">Upload<br>
+            </label>
             <input type="file" name="project-img-file" id="upload-photo">
         </div>
         <div class="project-info-fields">
