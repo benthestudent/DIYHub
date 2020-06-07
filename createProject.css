@@ -1,0 +1,31 @@
+* {
+	box-sizing: border-box;
+}
+body {
+	margin: 0;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	background-color: #1b262c;
+}
+/* BEN'S ADDITIONS */
+
+/*create project page */
+
+.create-project-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 85%;
+	background-color: white;
+	color: #1b262c;
+	margin: 5% 0;
+}
+
+.create-project-container h1 {
+	font-family: Montserrat, sans-serif;
+	font-size: 20pt;
+	padding: 10px 0;
+}
