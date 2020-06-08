@@ -48,7 +48,7 @@
           <img src="{% static '' %}{{ project.imgPath }}" alt="ProjectImage">
           <div class="overlay">
               <h1>{{ project.name }}</h1>
-              <p>{{ project.desc }}</p>
+              <p>{{ project.desc | safe }}</p>
           </div>
 	  </div>
     </div>

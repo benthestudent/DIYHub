@@ -18,17 +18,39 @@
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:700, 400|Montserrat:400, 700|Nunito+Sans:800, 400&display=swap" rel="stylesheet">
 </head>
 <body>
+
+{% if message %}
+        <div class="successMessage"><h3>{{ message }}</h3></div>
+    {% endif %}
+    <script type="text/javascript">
+        {% if message %}
+            $(document).ready(function () {
+                setTimeout(function () {
+                    $(".successMessage").fadeOut(500);
+                }, 5000);
+            });
+
+        {% endif %}
+    </script>
+
 <div class="header">
 <img id="logo" src="{% static 'img/DiyHub (2).png' %}" alt="Logo">
   <a href="{% url 'index' %}"><h1>diy<strong>hub.io</strong></h1></a>
 
 		<nav class="navigation">
   <ul>
-    <li><a href="{% url 'index' %}"><span class="active">Search</span></a></li>
-    <li><a href="{% url 'createProject' %}"><span class="inactive">Create</span></a></li>
-    <li><a href="" class="inactive"><span>Discover</span></a></li>
+    <li><a href="{% url 'index' %}"><span id="search" class="inactive">Search</span></a></li>
+    <li><a href="{% url 'createProject' %}"><span id="create" class="inactive">Create</span></a></li>
+    <li><a href="" ><span id="discover" class="inactive">Discover</span></a></li>
   </ul>
 	</nav>
+    <script>
+        {% if page %}
+            $(document).ready(function () {
+                $("#{{ page }}").addClass("active").removeClass("inactive");
+            });
+        {% endif %}
+    </script>
 	<div class="account">
         {% if account %}
             <a href="{% url 'profile' %}">
@@ -42,7 +64,7 @@
             <button id="log-out"><a href="{% url 'logout' %}">Log Out</a></button>
         {% else %}
             <button id="log-in"><a href="{% url 'loginAndRegister' %}">Log In</a></button>
-		    <button id="sign-up"><a href="{% url 'loginAndRegister' %}">Sign Up</a></button>
+		    <button id="sign-up"><a href="{% url 'loginAndRegister' %}/signup">Sign Up</a></button>
         {% endif %}
 	</div>
 </div>

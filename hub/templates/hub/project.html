@@ -21,7 +21,7 @@
 			<a>{{ author }}</a>
 				<span>{{ views }} <i class="fa fa-eye"></i> <span id="projectUpvoteCounter">{{ upvotes }}</span> <i class="fa fa-thumbs-up"></i></span>
 		</div>
-				<p>{{ desc }}</p>
+				<p>{{ desc | safe }}</p>
 		</div>
 		<div class="supplies">
 			<h2>Supplies Needed:</h2>

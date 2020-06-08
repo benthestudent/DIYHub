@@ -110,7 +110,11 @@ button {
 
 .description {
     margin-top: 1%;
+    height: 25vh;
+    margin-bottom: 7%;
+    text-align: left;
 }
+
 
 .description h3 {
 	margin-bottom: 3%;
@@ -201,8 +205,8 @@ button {
   border-radius: 5px;
   border: solid #989898;
   padding: 1%;
-  text-align: center;
   margin-bottom: 2%;
+    text-align: center;
 }
 
 .steps-container button {
@@ -214,6 +218,7 @@ button {
   border-radius: 5px;
   margin-top: 1%;
 }
+
 
 .steps-container button:hover{
   background-color: #BFBFBF;
@@ -267,9 +272,8 @@ button {
   border: solid #575757 1px;
   border-radius: 5px;
     margin-bottom: 1%;
-    text-align: center;
-
 }
+
 
 .edit-step {
     margin-right: 1%;
@@ -350,4 +354,3 @@ button {
 .buttons {
 	display: flex;
 }
-

@@ -13,6 +13,7 @@ import operator
 
 
 def index(request):
+    page = "search"
     projects = Project.objects.all()
     projectsArray = []
     account = request.user.username if request.user.is_authenticated else None
@@ -26,14 +27,16 @@ def index(request):
         for category in categories:
             partsArray = []
             parts = Parts.objects.filter(category=category)
-            for part in parts:
-                partsArray.append({"name": part.name, "url": part.url})
+            if parts:
+                for part in parts:
+                    partsArray.append({"name": part.name, "url": part.url})
             categoryArray.append({"name": category.name, "parts": partsArray})
-    context = {"projects": projectsArray, "categories": categoryArray, "account": account}
+    context = {"projects": projectsArray, "categories": categoryArray, "account": account, "page": page}
     return render(request, 'hub/DIYHUB.html', context)
 
 
-def loginAndRegister(request):
+def loginAndRegister(request, slug="login"):
+    context = {}
     if request.method == 'POST':
         if request.POST.get("username"):
             print("Register")
@@ -41,20 +44,27 @@ def loginAndRegister(request):
             if form.is_valid():
                 form.save()
                 print("Account Created")
-                return HttpResponse("Registered")
+                user = authenticate(request, username=request.POST.get("email"), password=request.POST.get("password"))
+                if user is not None:
+                    login(request, user)
+                else:
+                    context['message'] = "Login Failed"
+                return redirect("/profile")
             else:
-                return HttpResponse("Registration Failed")
+                context['message'] = "Registration Failed"
         else:
             print("Login")
             user = authenticate(request, username=request.POST.get("email"), password=request.POST.get("password"))
             if user is not None:
                 login(request, user)
             else:
-                return HttpResponse("Registration Failed")
+                context['message'] = "Login Failed"
             return redirect("/profile")
 
     else:
-        return render(request, 'hub/login.html')
+        signup = True if slug == "signup" else None
+        context = {"operation": signup}
+        return render(request, 'hub/login.html', context)
 
 
 def logout(request):
@@ -111,11 +121,14 @@ def profile(request):
                 project = upvote.project.all().first()
                 upvotedProjectsArray.append(
                    {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url})
+    else:
+        return redirect("/login")
     context = {"user": user, "projects": projectsArray, "upvotedProjects": upvotedProjectsArray, "message": message, "account": account}
     return render(request, 'hub/profile.html', context)
 
 
 def createProject(request):
+    page = "create"
     account = request.user.username if request.user.is_authenticated else None
     if request.method == 'POST' and request.user.is_authenticated:
         url = request.POST.get("name").replace(" ", "-")
@@ -160,7 +173,7 @@ def createProject(request):
         form.save()
         form.author.add(request.user)
         form.save()
-    context = {"account": account}
+    context = {"account": account, "page": page}
     return render(request, 'hub/createProject.html', context)
 
 
@@ -171,7 +184,7 @@ def project(request, slug):
     try:
         project = Project.objects.get(name__exact=projectName)
     except Project.DoesNotExist:
-        return HttpResponse("No Account Found")
+        return HttpResponse("No Project Found")
     if not project.author.all().first() == request.user:
         project.views += 1
         project.save()

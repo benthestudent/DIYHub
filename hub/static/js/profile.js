@@ -25,6 +25,16 @@ $(document).ready(function () {
         $(this).remove();
  });
 
+ $(document).on("click", "#editBio", function () {
+        let name = "bio"
+        let value = $("#bio").html()
+        $("#bio").html("<textarea name=" + name + " id=" + name + " rows=\"3\">" + value + "</textarea><br>");
+        if($("#saveProfile").length === 0) {
+            $(this).parent().parent().append("<br><button id=\"saveProfile\">Save</button>");
+        }
+        $(this).remove();
+ });
+
 // $(document).on("input", "#newPassword1", function () {
 //         $("#change-password").attr("type", "submit");
 // })
