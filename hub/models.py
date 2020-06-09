@@ -99,7 +99,10 @@ class Project(models.Model):
     dateCreated = models.DateTimeField(default=datetime.now, blank=True)
     author = models.ManyToManyField(User)
     views = models.IntegerField(default=0)
+    upvotes = models.IntegerField(default=0)
 
+    def updateUpvotes(self):
+        self.upvotes = len(self.upvote_set.all())
 
 
 
@@ -109,9 +112,21 @@ class Comment(models.Model):
     user = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
     project = models.ManyToManyField(Project, blank=True)
     commentParent = models.ManyToManyField("Comment", blank=True)
+    upvotes = models.IntegerField(default=0)
+
+    def updateUpvotes(self):
+        self.upvotes = len(self.upvote_set.all())
 
 
 class Upvote(models.Model):
     user = models.ManyToManyField(User)
     project = models.ManyToManyField(Project, blank=True)
     comment = models.ManyToManyField(Comment, blank=True)
+    dateCreated = models.DateTimeField(auto_now_add=True)
+
+class Rule(models.Model):
+    projects = models.ManyToManyField(Project, blank=True)
+    dateCreated = models.DateTimeField(auto_now_add=True)
+    confidence = models.FloatField(default=0)
+    support = models.FloatField(default=0)
+    lift = models.FloatField(default=0)

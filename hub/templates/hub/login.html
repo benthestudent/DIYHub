@@ -42,7 +42,12 @@
 	<script src="../js/bootstrap-4.4.1.js"></script>
 	  <script>
 	  $('.message a').click(function(){
-   $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
-});
+            $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+        });
+      {% if operation %}
+            $(document).ready(function () {
+                $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+          });
+      {% endif %}
 	  </script>
 {% endblock %}

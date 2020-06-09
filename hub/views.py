@@ -1,8 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .models import Project, Parts, ProjectCategories, Comment, Upvote, User
+from .models import Project, Parts, ProjectCategories, Comment, Upvote, User, PartCategories
 from .forms import Register
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login
+from django.contrib.auth import logout as lgout
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.contrib.auth.hashers import check_password
 import json
@@ -12,10 +13,30 @@ import operator
 
 
 def index(request):
-    return render(request, 'hub/DIYHUB.html')
+    page = "search"
+    projects = Project.objects.all()
+    projectsArray = []
+    account = request.user.username if request.user.is_authenticated else None
+    if projects:
+        for project in projects:
+            projectsArray.append(
+                {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url})
+    categoryArray = []
+    categories = PartCategories.objects.all()
+    if categories:
+        for category in categories:
+            partsArray = []
+            parts = Parts.objects.filter(category=category)
+            if parts:
+                for part in parts:
+                    partsArray.append({"name": part.name, "url": part.url})
+            categoryArray.append({"name": category.name, "parts": partsArray})
+    context = {"projects": projectsArray, "categories": categoryArray, "account": account, "page": page}
+    return render(request, 'hub/DIYHUB.html', context)
 
 
-def loginAndRegister(request):
+def loginAndRegister(request, slug="login"):
+    context = {}
     if request.method == 'POST':
         if request.POST.get("username"):
             print("Register")
@@ -23,29 +44,38 @@ def loginAndRegister(request):
             if form.is_valid():
                 form.save()
                 print("Account Created")
-                return HttpResponse("Registered")
+                user = authenticate(request, username=request.POST.get("email"), password=request.POST.get("password"))
+                if user is not None:
+                    login(request, user)
+                else:
+                    context['message'] = "Login Failed"
+                return redirect("/profile")
             else:
-                return HttpResponse("Registration Failed")
+                context['message'] = "Registration Failed"
         else:
             print("Login")
             user = authenticate(request, username=request.POST.get("email"), password=request.POST.get("password"))
             if user is not None:
                 login(request, user)
             else:
-                return HttpResponse("Registration Failed")
+                context['message'] = "Login Failed"
             return redirect("/profile")
 
     else:
-        return render(request, 'hub/login.html')
+        signup = True if slug == "signup" else None
+        context = {"operation": signup}
+        return render(request, 'hub/login.html', context)
 
 
 def logout(request):
-    logout(request)
-    return HttpResponse(True)
+    lgout(request)
+    return redirect("/")
 
 
-def profile(request):
-    user = {}
+def profile(request, username=None):
+    account = request.user.username if request.user.is_authenticated else None
+    user = request.user if request.user.is_authenticated else None
+    user = User.objects.filter(username=username).first() if username is not None else user
     upvotedProjectsArray = []
     projectsArray = []
     message = ""
@@ -72,31 +102,35 @@ def profile(request):
                 if request.POST.get("bio"):
                     user.bio = request.POST.get("bio")
                 user.save()
-        user = {
-            "email": request.user.email,
-            "username": request.user.username,
-            "firstn": request.user.firstn,
-            "lastn": request.user.lastn,
-            "phone": request.user.phone,
-            "bio": request.user.bio
+        userObj = {
+            "email": user.email,
+            "username": user.username,
+            "firstn": user.firstn,
+            "lastn": user.lastn,
+            "phone": user.phone,
+            "bio": user.bio
         }
-        projects = Project.objects.filter(author=request.user)
+        projects = Project.objects.filter(author=user)
 
         if projects:
             for project in projects:
                 projectsArray.append({"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url})
-        upvotes = Upvote.objects.filter(user=request.user, comment=None)
+        upvotes = Upvote.objects.filter(user=user, comment=None)
 
         if upvotes:
             for upvote in upvotes:
                 project = upvote.project.all().first()
                 upvotedProjectsArray.append(
                    {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url})
-    context = {"user": user, "projects": projectsArray, "upvotedProjects": upvotedProjectsArray, "message": message}
+    else:
+        return redirect("/login")
+    context = {"user": userObj, "projects": projectsArray, "upvotedProjects": upvotedProjectsArray, "message": message, "account": account}
     return render(request, 'hub/profile.html', context)
 
 
 def createProject(request):
+    page = "create"
+    account = request.user.username if request.user.is_authenticated else None
     if request.method == 'POST' and request.user.is_authenticated:
         url = request.POST.get("name").replace(" ", "-")
         imgData = request.POST.get('img').replace("data:image/jpeg;base64,", "")
@@ -140,16 +174,18 @@ def createProject(request):
         form.save()
         form.author.add(request.user)
         form.save()
-    return render(request, 'hub/createProject.html')
+    context = {"account": account, "page": page}
+    return render(request, 'hub/createProject.html', context)
 
 
 def project(request, slug):
+    account = request.user.username if request.user.is_authenticated else None
     projectName = slug.replace("-", " ")
     project = None
     try:
         project = Project.objects.get(name__exact=projectName)
     except Project.DoesNotExist:
-        return HttpResponse("No Account Found")
+        return HttpResponse("No Project Found")
     if not project.author.all().first() == request.user:
         project.views += 1
         project.save()
@@ -171,7 +207,8 @@ def project(request, slug):
                "upvotes": Upvote.objects.filter(project=project).count(),
                "views": project.views,
                "dateCreated": project.dateCreated.strftime('%D %I:%M %p'),
-               "author": project.author.get().username
+               "author": project.author.get().username,
+               "account": account
                }
     # get comments
     commentArray = []
@@ -270,13 +307,15 @@ def upvote(request):
     elementID = request.POST.get("elementID")
     operation = request.POST.get("operation")
     if not request.user.is_authenticated:
-        return HttpResponse("Not Authenticated User")
+        return redirect("/login")
     if operation == "downvote":
         element = Comment.objects.filter(id=elementID).first() if (type == "comment") else Project.objects.filter(id=elementID).first()
         print(element)
         vote = Upvote.objects.filter(user=request.user, comment=element).first() if (type == "comment") else Upvote.objects.filter(user=request.user, project=element).first()
         if vote:
             vote.delete()
+            element.updateUpvotes()
+            element.save()
         return HttpResponse("downvoted")
     upvote = Upvote()
     if type == "comment":
@@ -286,7 +325,7 @@ def upvote(request):
         else:
             upvote.save()
             upvote.comment.add(comment.id)
-            comment.upvotes += 1
+            comment.updateUpvotes()
             comment.save()
 
     elif type == "project":
@@ -296,9 +335,38 @@ def upvote(request):
         else:
             upvote.save()
             upvote.project.add(project.id)
+            upvote.save()
+            project.updateUpvotes()
+            project.save()
     else:
         return HttpResponse("Not a Valid Type")
     upvote.user.add(request.user)
     upvote.save()
     print("upvoted")
     return HttpResponse("upvoted")
+
+def filterProjects(request, filter="popular", num_of_results=25, page=1, category=None):
+    startOfResults = (page - 1) * num_of_results
+    projects = None
+    category = ProjectCategories.objects.filter(name=category).first()
+    projectsArray = []
+    # return 25 projects based on number of upvotes
+    if filter == "most_liked":
+        if category:
+            projects = Project.objects.order_by("-upvotes").filter(category=category)[startOfResults:startOfResults+num_of_results]
+        else:
+            projects = Project.objects.order_by("-upvotes")[startOfResults:startOfResults+num_of_results]
+
+    if filter == "popular":
+        if category:
+            projects = Project.objects.order_by("-views").filter(category=category)[
+                       startOfResults:startOfResults + num_of_results]
+        else:
+            projects = Project.objects.order_by("-views")[startOfResults:startOfResults + num_of_results]
+
+    if projects:
+        for project in projects:
+            projectsArray.append(
+                {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url})
+    projects = {"projects": projectsArray}
+    return HttpResponse(json.dumps(projects))

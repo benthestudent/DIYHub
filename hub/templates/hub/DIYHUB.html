@@ -1,220 +1,61 @@
- <!DOCTYPE html>
- <html lang="en" dir="ltr">
-
- <head>
+{% extends 'hub/base.html' %}
+{% load static %}
+{% block header %}
     <meta charset="utf-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../Static/style.css" type="text/css">
-    <link rel="stylesheet" href="../Static/reset.css" type="text/css">
+    <link rel="stylesheet" href="{% static 'style.css' %}" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:700, 400|Montserrat:400, 700|Nunito+Sans:800, 400&display=swap" rel="stylesheet">
-	 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>DIY Hub</title>
-	 <link href="../Static/diyhub__2__UHr_icon.ico" rel="icon" type="image/x-icon" />
- </head>
-<body>
-<div class="header">
-<img src="../Static/DiyHub (2).png" alt="Logo">
-  <h1>diy<strong>hub.io</strong></h1>
-	
-		<nav class="navigation">
-  <ul>
-    <li><a href="#"><span class="inactive">Featured</span></a></li>
-    <li><a href="#" id="active"><span>Discovery</span></a></li>
-    <li><a href="createProject.html"><span class="inactive">Create</span></a></li>
-  </ul>
-	</nav>
-	<div class="account">
-		<button id="log-in"><a href="login.html">Log In</a></button>
-		<button id="sign-up"><a href="login.html">Sign Up</a></button>
-	</div>
-</div>
+{% endblock %}
+{% block content %}
     <div class="selector">
 	  <h2>Select Parts:</h2>
 		 
         <form action="/components.html">
 			<input type="text" id="searchbar" placeholder="Search for parts..">
 			<div class="items-container">
-				<section class="categories">
-  						<input id="toggle" type="checkbox">
-					<label for="toggle" class="category-label">Category <i class="fa fa-caret-down"></i></label>
-					<div id="expand">
-			  <ul>
-        <li>
-            <label for="one" class="container">One
-                <input id="one" type="checkbox" name="">
-  <span class="checkmark"></span>
-            </label>
-        </li>
-        <li>
-            <label for="two" class="container">Two 
-                <input id="two" type="checkbox" name="">
-  <span class="checkmark"></span>
-            </label>
-        </li>
-				 
-				  <li>
-            <label for="three" class="container">Three
-                <input id="three" type="checkbox" name="">
-  <span class="checkmark"></span>
-            </label>
-        </li>
-				   
-				  <li>
-            <label for="four" class="container">Four
-                <input id="four" type="checkbox" name="">
-  <span class="checkmark"></span>
-            </label>
-        </li>
-				   
-    </ul>
-					</div>
-				</section>
+                {% for category in categories %}
+                    <div class="category">
+                        <label class="category-label"><input class="toggle" type="checkbox">{{ category.name }} <i class="fa fa-caret-down"></i></label>
+                        <div class="partContainer notExpanded">
+                            <ul>
+                                {% for part in category.parts %}
+                                <li>
+                                    <label for="one" class="container">{{ part.name }}
+                                        <input id="one" type="checkbox" name="">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+				    </div>
+                {% endfor %}
 			</div>
       </form>
 </div>
 	
 	
 	
-	
-	<div class="grid">
+
   
-  <div class="module">
+  {% if projects %}
+      <div class="grid">
+  {% for project in projects %}
+      <a href="project/{{ project.url }}">
+      <div class="module">
 	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
+          <img src="{% static '' %}{{ project.imgPath }}" alt="ProjectImage">
+          <div class="overlay">
+              <h1>{{ project.name }}</h1>
+              <p>{{ project.desc | safe }}</p>
+          </div>
 	  </div>
-		</div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-		
-</div>
+    </div>
+      </a>
+  {% endfor %}
+      </div>
+    {% endif %}
 	
 	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -227,11 +68,14 @@
       var $self = $(this);
       if(!exp.test($self.text())) {
         $self.parent().hide();
+        $self.parent().parent().parent().removeClass("expand").addClass("notExpanded");
+
       } else {
+          $self.parent().parent().parent().removeClass("notExpanded").addClass("expand");
         $self.parent().show();
       }
     });
   });
 })(jQuery);
 	</script>
-</body></html>
+{% endblock %}

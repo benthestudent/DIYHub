@@ -89,7 +89,7 @@ $(document).on("click", "i.remove-step", function() {
 
 function getProjectData() {
 	var projectName = $("#projectName").val();
-	var projectDesc = $("#projectDescription").val();
+	var projectDesc = $("#descEditor").children("div").html()
 	var difficulty = $("input:checked").val();
 	var parts = "";
 	var steps = "";
@@ -114,9 +114,8 @@ function getProjectData() {
 		});
 		steps += "<hr>";
 		// <img src="{% static 'img/stepImage.png' %}" alt="Step Image">
-		$(this).children(".description").children("textarea").each(function() {
-			steps += "<p>" + this.value + "</p>";
-		});
+		stepDesc = $(this).children(".description").children("#stepEditor").children("div").html()
+		steps += "<div class='stepDesc'>" + stepDesc + "</div>"
 		steps += "</div>";
 	});
 	var input = $("#upload-photo");
@@ -165,6 +164,15 @@ function readURL(input) {
 }
 
 $(document).ready(function() {
+	$(".toggle").click(function() {
+		console.log("toggled");
+    if(this.checked) {
+    	console.log("checked")
+        $(this).parent().parent().find(".partContainer").removeClass("notExpanded").addClass("expand");
+    }else {
+    	$(this).parent().parent().find(".partContainer").removeClass("expand").addClass("notExpanded");
+	}
+});
 	$("#save").click(function() {
 		var csrftoken = getCookie('csrftoken');
 		var data = getProjectData();
@@ -317,3 +325,4 @@ $(document).ready(function() {
 		}
 	});
 });
+

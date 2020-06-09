@@ -9,19 +9,7 @@
     <title>Profile</title>
 {% endblock %}
 {% block content %}
-    {% if message %}
-        <div class="successMessage"><h3>{{ message }}</h3></div>
-    {% endif %}
-    <script type="text/javascript">
-        {% if message %}
-            $(document).ready(function () {
-                setTimeout(function () {
-                    $(".successMessage").fadeOut(500);
-                }, 5000);
-            });
 
-        {% endif %}
-    </script>
 
 	<main>
 	<div class="info-container">
@@ -61,7 +49,7 @@
                 {% if user.bio is None %}
                     <br><textarea name="bio" id="bio" rows="3"></textarea><br>
                 {% else %}
-                    <button id="edit" type="button"><i class="fa fa-edit"></i></button></h3><p><span id="bio">{{ user.bio }}</span></p>
+                    <button id="editBio" type="button"><i class="fa fa-edit"></i></button></h3><p><span id="bio">{{ user.bio }}</span></p>
                 {% endif %}
             <button type="button" id="change-password" name="changePassword">Change Password</button>
             {% if user.firstn is None or user.lastn is None or user.bio is None or user.phone is None %}
@@ -82,7 +70,7 @@
           <img src="{% static '' %}{{ project.imgPath }}" alt="ProjectImage">
           <div class="overlay">
               <h1>{{ project.name }}</h1>
-              <p>{{ project.desc }}</p>
+              <p>{{ project.desc | safe }}</p>
           </div>
 	  </div>
     </div>
