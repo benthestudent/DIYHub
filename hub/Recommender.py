@@ -1,4 +1,5 @@
 import apyori as apriori
+from .models import User, Upvote, Project, Rule
 
 class Recommender:
     def __init__(self, users, max_upvotes=20, order="confidence"):  #user = {user(id), upvote_set}
@@ -19,7 +20,7 @@ class Recommender:
         self.rules = self.formatRules(self.rules)
 
     def getUpvotedProjectsFromUser(self, user):
-        upvotes = user.upvote_set.all()
+        upvotes = user.upvote_set.filter(comment=None).all()
         formattedProjects = []
         for i in range(1, self.MAX_UPVOTES_PER_USER):
             if i <= len(upvotes):
@@ -37,7 +38,17 @@ class Recommender:
         return list(zip(lhs, rhs, supports, confidences, lifts))
 
     def saveRules(self):
-        pass
+        for rule in self.rules:
+            ruleObj = Rule()
+            ruleObj.save()
+            project1 = Project.objects.filter(name=rule[0]).first()
+            project2 = Project.objects.filter(name=rule[1]).first()
+            ruleObj.projects.add(project1)
+            ruleObj.projects.add(project2)
+            ruleObj.support = rule[2]
+            ruleObj.confidence = rule[3]
+            ruleObj.lift = rule[4]
+            ruleObj.save()
 
     def getRecommendations(self, user, num=25):
         recommendations = []
