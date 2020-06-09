@@ -11,5 +11,11 @@ urlpatterns = [
     path('upvote', views.upvote, name='upvote'),
     path('addComment', views.addComment, name='addComment'),
     path('logout', views.logout, name='logout'),
-    path('profile', views.profile, name='profile')
+    path('profile', views.profile, name='profile'),
+    path('profile/<slug:username>', views.profile, name='profile'),
+    path('filterProjects', views.filterProjects, name='filterProjects'),
+    path('filterProjects/<slug:filter>', views.filterProjects, name='filterProjects'),
+    path('filterProjects/<slug:filter>/<int:num_of_results>', views.filterProjects, name='filterProjects'),
+    path('filterProjects/<slug:filter>/<int:num_of_results>/<int:page>', views.filterProjects, name='filterProjects'),
+    path('filterProjects/<slug:filter>/<int:num_of_results>/<int:page>/<slug:category>', views.filterProjects, name='filterProjects')
 ]

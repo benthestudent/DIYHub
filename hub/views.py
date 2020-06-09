@@ -72,9 +72,10 @@ def logout(request):
     return redirect("/")
 
 
-def profile(request):
+def profile(request, username=None):
     account = request.user.username if request.user.is_authenticated else None
-    user = {}
+    user = request.user if request.user.is_authenticated else None
+    user = User.objects.filter(username=username).first() if username is not None else user
     upvotedProjectsArray = []
     projectsArray = []
     message = ""
@@ -101,20 +102,20 @@ def profile(request):
                 if request.POST.get("bio"):
                     user.bio = request.POST.get("bio")
                 user.save()
-        user = {
-            "email": request.user.email,
-            "username": request.user.username,
-            "firstn": request.user.firstn,
-            "lastn": request.user.lastn,
-            "phone": request.user.phone,
-            "bio": request.user.bio
+        userObj = {
+            "email": user.email,
+            "username": user.username,
+            "firstn": user.firstn,
+            "lastn": user.lastn,
+            "phone": user.phone,
+            "bio": user.bio
         }
-        projects = Project.objects.filter(author=request.user)
+        projects = Project.objects.filter(author=user)
 
         if projects:
             for project in projects:
                 projectsArray.append({"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url})
-        upvotes = Upvote.objects.filter(user=request.user, comment=None)
+        upvotes = Upvote.objects.filter(user=user, comment=None)
 
         if upvotes:
             for upvote in upvotes:
@@ -123,7 +124,7 @@ def profile(request):
                    {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url})
     else:
         return redirect("/login")
-    context = {"user": user, "projects": projectsArray, "upvotedProjects": upvotedProjectsArray, "message": message, "account": account}
+    context = {"user": userObj, "projects": projectsArray, "upvotedProjects": upvotedProjectsArray, "message": message, "account": account}
     return render(request, 'hub/profile.html', context)
 
 
@@ -306,13 +307,15 @@ def upvote(request):
     elementID = request.POST.get("elementID")
     operation = request.POST.get("operation")
     if not request.user.is_authenticated:
-        return HttpResponse("Not Authenticated User")
+        return redirect("/login")
     if operation == "downvote":
         element = Comment.objects.filter(id=elementID).first() if (type == "comment") else Project.objects.filter(id=elementID).first()
         print(element)
         vote = Upvote.objects.filter(user=request.user, comment=element).first() if (type == "comment") else Upvote.objects.filter(user=request.user, project=element).first()
         if vote:
             vote.delete()
+            element.updateUpvotes()
+            element.save()
         return HttpResponse("downvoted")
     upvote = Upvote()
     if type == "comment":
@@ -322,7 +325,7 @@ def upvote(request):
         else:
             upvote.save()
             upvote.comment.add(comment.id)
-            comment.upvotes += 1
+            comment.updateUpvotes()
             comment.save()
 
     elif type == "project":
@@ -332,9 +335,38 @@ def upvote(request):
         else:
             upvote.save()
             upvote.project.add(project.id)
+            upvote.save()
+            project.updateUpvotes()
+            project.save()
     else:
         return HttpResponse("Not a Valid Type")
     upvote.user.add(request.user)
     upvote.save()
     print("upvoted")
     return HttpResponse("upvoted")
+
+def filterProjects(request, filter="popular", num_of_results=25, page=1, category=None):
+    startOfResults = (page - 1) * num_of_results
+    projects = None
+    category = ProjectCategories.objects.filter(name=category).first()
+    projectsArray = []
+    # return 25 projects based on number of upvotes
+    if filter == "most_liked":
+        if category:
+            projects = Project.objects.order_by("-upvotes").filter(category=category)[startOfResults:startOfResults+num_of_results]
+        else:
+            projects = Project.objects.order_by("-upvotes")[startOfResults:startOfResults+num_of_results]
+
+    if filter == "popular":
+        if category:
+            projects = Project.objects.order_by("-views").filter(category=category)[
+                       startOfResults:startOfResults + num_of_results]
+        else:
+            projects = Project.objects.order_by("-views")[startOfResults:startOfResults + num_of_results]
+
+    if projects:
+        for project in projects:
+            projectsArray.append(
+                {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url})
+    projects = {"projects": projectsArray}
+    return HttpResponse(json.dumps(projects))
