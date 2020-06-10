@@ -1,0 +1,32 @@
+{% extends 'hub/base.html' %}
+{% load static %}
+{% block header %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'info.css' %}" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Inria+Serif|Montserrat|Playfair+Display|Raleway&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:700, 400|Montserrat:400, 700|Nunito+Sans:800, 400&display=swap" rel="stylesheet">
+    <title>About Us</title>
+{% endblock %}
+{% block content %}
+    <div class="info-container">
+        <div class="person">
+            <div class="img-container">
+            <img src="{% static 'img/elijah.jpg' %}">
+            </div>
+            <h1>Elijah Lopez</h1>
+            <h3>Front-End Developer</h3>
+            <hr>
+            <p>I am a little boy with the hands of a man. Come find me; slurp me up; and GARGLE MEEEEEEEEEEE. Sometimes when I hear Barack Obama's voice, I pee a little. When I hear Bernie's voice, I PEE A LOT. OOPS SLIP AND SLIDE BUT DON'T SLIP, LITTLE GIRL. I'lL MakE yoU SMALLER than my left foot. STOMP STOMP WAMP WAMP. Get out of my swamp, MISHAPEN HORSEY. </p>
+        </div>
+        <div class="person">
+            <div class="img-container">
+            <img src="{% static 'img/ben.jpg' %}">
+            </div>
+            <h1>Ben Phillips</h1>
+            <h3>Back-End Developer</h3>
+            <hr>
+            <p>Since the age of ten, I have dreamed of being an experienced engineer bringing countless ideas to fruition with my extensive programming knowledge. At a young age, I plugged myself into the world of electronics, researching programming languages, reading books on the subject, nodding through convoluted conversations with my electrical engineer uncle, and learning the fundamentals of computer science; but my cravings for knowledge remain unsatisfied. Over the last few years, I have taught myself various skills from web development to Object-Oriented Python programming through experimentation and freelance work. In addition to learning at home, I have attended multiple computer science and programming classes, including one taught entirely in German. I traveled to Germany as a foreign exchange student in my junior year of high school; there, I lived with a host family and attended a German high school for roughly ten months. Now, I speak fluent German and conversational Spanish, which I am currently learning to pursue my other interests in culture and language. My work as a freelance developer has revealed to me my passion for learning new skills and finding creative solutions to problems with computer science, a passion I am determined to pursue further to satisfy my desire for knowledge.</p>
+        </div>
+    </div>
+{% endblock %}

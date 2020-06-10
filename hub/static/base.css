@@ -1,0 +1,157 @@
+* {
+	box-sizing: border-box;
+}
+body {
+	margin: 0;
+	height: 100%;
+	background-color: #1b262c;
+}
+.header {
+	margin: 0;
+	background-color: #1b262c;
+	display: flex;
+	position: relative;
+	width: 100%;
+	align-items: center;
+	align-content: space-around;
+}
+#logo {
+	height: 70px;
+	border-radius: 50%;
+}
+.header h1 {
+	font-family: "Montserrat", sans-serif;
+	font-size: 31pt;
+	color: #FFFFFF;
+	display: inline-flex;
+	justify-content: flex-start;
+	padding-left: 5px;
+}
+
+.header strong {
+	font-family: "Montserrat", sans-serif;
+	font-size: 31pt;
+	color: #FFFFFF;
+	display: inline-flex;
+	justify-content: flex-start;
+	padding-left: 5px;
+}
+
+.header h1 strong {
+	font-weight: 700;
+}
+.navigation ul {
+	align-items: center;
+}
+.navigation {
+	flex-grow: 2;
+	justify-content: center;
+}
+/*.navigation #active {*/
+/*	margin: 0 20px;*/
+/*}*/
+.inactive {
+	filter: blur(2px);
+}
+.inactive:hover {
+	filter: blur(0px);
+	transition-duration: 0.3s;
+}
+.navigation, ul, li {
+	display: inline-flex;
+	align-items: center;
+	padding: 10px;
+	flex-wrap: wrap;
+}
+.navigation a {
+	text-decoration: none;
+	color: #FFFFFF;
+	font-family: "Open Sans";
+	font-size: 35pt;
+}
+.account {
+	display: inline-flex;
+	justify-content: flex-end;
+	margin-right: 5px;
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+.account button {
+	background-color: transparent;
+	border: 1px solid white;
+	color: white;
+	padding: 10px 15px;
+	font-family: montserrat;
+	border-radius: 2px;
+	margin: 2px;
+	flex-wrap: nowrap;
+}
+.account button:hover {
+	background-color: white;
+	transition-duration: 0.2s;
+}
+.account button:hover a {
+	color: #1b262c;
+	transition-duration: 0.2s;
+}
+.account a {
+	color: #FFF;
+	text-decoration: none;
+}
+@media screen and (max-width: 1033px){
+	.header {
+		flex-direction: column;
+	}
+}
+@media screen and (max-width: 630px){
+	.navigation ul {
+		flex-direction: column;
+	}
+	.navigation #active {
+		margin: 15px 0;
+	}
+}
+
+.profile {
+	display: inline-flex;
+	align-items: center;
+	padding: 10px 15px;
+	font-family: montserrat;
+}
+
+.profile-image img {
+	margin-left: 5px;
+	border-radius: 50%;
+	width: 30px;
+	vertical-align: middle;
+}
+
+.header a {
+	text-decoration: none;
+}
+
+.successMessage {
+	background-color: #25973c;
+	width: 100%;
+	height: 6vh;
+	border-radius: 10px;
+	color: white;
+	font-family: "Open Sans";
+	font-size: 15pt;
+	text-align: center;
+}
+
+.footer {
+	width: 45%;
+	margin: auto;
+	text-align: center;
+	margin-top: 2%;
+}
+
+.footer a {
+	color: white;
+	font-family: 'Raleway', sans-serif;
+	font-size: 11pt;
+	text-decoration: none;
+	padding: 5%;
+}

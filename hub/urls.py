@@ -17,5 +17,7 @@ urlpatterns = [
     path('filterProjects/<slug:filter>', views.filterProjects, name='filterProjects'),
     path('filterProjects/<slug:filter>/<int:num_of_results>', views.filterProjects, name='filterProjects'),
     path('filterProjects/<slug:filter>/<int:num_of_results>/<int:page>', views.filterProjects, name='filterProjects'),
-    path('filterProjects/<slug:filter>/<int:num_of_results>/<int:page>/<slug:category>', views.filterProjects, name='filterProjects')
+    path('filterProjects/<slug:filter>/<int:num_of_results>/<int:page>/<slug:category>', views.filterProjects, name='filterProjects'),
+    path('contact', views.contact, name='contact'),
+    path('about', views.about, name='about')
 ]

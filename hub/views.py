@@ -370,3 +370,9 @@ def filterProjects(request, filter="popular", num_of_results=25, page=1, categor
                 {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url})
     projects = {"projects": projectsArray}
     return HttpResponse(json.dumps(projects))
+
+def contact(request):
+    return render(request, 'hub/contact.html')
+
+def about(request):
+    return render(request, 'hub/about.html')
