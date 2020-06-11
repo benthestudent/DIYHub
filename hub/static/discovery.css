@@ -1,4 +1,6 @@
-
+* {
+	box-sizing: border-box;
+}
 body {
 	background-color: #1b262c;
 	display: flex;
@@ -104,11 +106,9 @@ body {
 	display: inline-flex;
 	align-items: center;
 	overflow-x: hidden;
-	padding-top: 10px;
-	padding-bottom: 10px;
 	padding-right: 0;
 	border-radius: 2px;
-	
+	padding: 10px 20px;
 	
 }
 
