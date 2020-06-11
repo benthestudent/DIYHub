@@ -57,7 +57,7 @@ button {
 .project-img-container img {
     max-width: 100%;
     max-height: 100%;
-	display: none;
+
 }
 
 #upload-photo {
@@ -68,7 +68,7 @@ button {
 
 .project-img {
   width: 70%;
-  height: 70vh;
+  /*height: 70vh;*/
   border-radius: 5px;
   border: solid #989898;
   margin: auto;
@@ -110,6 +110,9 @@ button {
 
 .description {
     margin-top: 1%;
+    height: 25vh;
+    margin-bottom: 7%;
+    text-align: left;
 }
 
 .description h3 {

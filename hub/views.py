@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout as lgout
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.contrib.auth.hashers import check_password
+from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 import json
 import base64
 import os
@@ -367,7 +368,7 @@ def filterProjects(request, filter="popular", num_of_results=25, page=1, categor
     if projects:
         for project in projects:
             projectsArray.append(
-                {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url})
+                {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url, "difficulty": project.difficulty})
     projects = {"projects": projectsArray}
     return HttpResponse(json.dumps(projects))
 
@@ -376,3 +377,20 @@ def contact(request):
 
 def about(request):
     return render(request, 'hub/about.html')
+
+def getProjectsByParts(request):
+    projectsArray = []
+    parts = request.GET.get("parts")
+    if parts:
+        partQueryString = ""
+        for part in parts:
+            partQueryString += " " + part
+        query = SearchQuery(partQueryString)
+        vector = SearchVector('parts')
+        projectResults = Project.objects.annotate(rank=SearchRank(vector, query)).order_by('-rank')
+        if projectResults:
+            for project in projectResults:
+                projectsArray.append(
+                    {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url, "difficulty": project.difficulty})
+        projects = {"projects": projectsArray}
+    return HttpResponse(json.dumps(projects))

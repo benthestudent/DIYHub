@@ -92,7 +92,7 @@ class Project(models.Model):
     difficulty = models.IntegerField(default=0)
     url = models.TextField(null=True, unique=True)
     steps = models.TextField(null=True)
-    parts = models.TextField(null=True)
+    parts = models.CharField(max_length=250, null=True)
     partIDs = ArrayField(models.IntegerField(), null=True)
     category = models.ForeignKey(ProjectCategories, default=1, on_delete=models.CASCADE)
     # partsNeeded = ArrayField(ArrayField(models.TextField(max_length=50, null=True, blank=True), null=True), null=True)
