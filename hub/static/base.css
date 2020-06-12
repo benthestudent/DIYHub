@@ -26,6 +26,7 @@ body {
 	display: inline-flex;
 	justify-content: flex-start;
 	padding-left: 5px;
+	font-weight: 500;
 }
 
 .header strong {
@@ -57,12 +58,26 @@ body {
 	filter: blur(0px);
 	transition-duration: 0.3s;
 }
-.navigation, ul, li {
+.navigation {
 	display: inline-flex;
 	align-items: center;
 	padding: 10px;
 	flex-wrap: wrap;
 }
+
+.navigation ul {
+	display: inline-flex;
+	align-items: center;
+	padding: 10px;
+	flex-wrap: wrap;
+}
+.navigation li {
+	display: inline-flex;
+	align-items: center;
+	padding: 10px;
+	flex-wrap: wrap;
+}
+
 .navigation a {
 	text-decoration: none;
 	color: #FFFFFF;

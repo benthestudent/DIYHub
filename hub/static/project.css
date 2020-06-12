@@ -249,3 +249,8 @@ body {
 	width: 80%;
 	margin-left: 8%;
 }
+
+.stepDesc ul {
+	list-style-type: circle;
+	list-style: initial;
+}

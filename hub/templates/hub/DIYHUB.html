@@ -17,12 +17,11 @@
                 {% for category in categories %}
                     <div class="category">
                         <label class="category-label"><input class="toggle" type="checkbox">{{ category.name }} <i class="fa fa-caret-down"></i></label>
-                        <div class="partContainer notExpanded">
+                        <div class="partContainer expand">
                             <ul>
                                 {% for part in category.parts %}
                                 <li>
-                                    <label for="one" class="container">{{ part.name }}
-                                        <input id="one" type="checkbox" name="">
+                                    <label class="container">{{ part.name }}<input type="checkbox" name="">
                                         <span class="checkmark"></span>
                                     </label>
                                 </li>
@@ -81,11 +80,16 @@
     $(".items-container li label").each(function() {
       var $self = $(this);
       if(!exp.test($self.text())) {
-        $self.parent().hide();
-        $self.parent().parent().parent().removeClass("expand").addClass("notExpanded");
+        if($self.find("input")[0].checked){
+            $self.parent().show();
+        }else {
+            $self.parent().hide();
+        }
+
+        //$self.parent().parent().parent().removeClass("expand").addClass("notExpanded");
 
       } else {
-          $self.parent().parent().parent().removeClass("notExpanded").addClass("expand");
+          //$self.parent().parent().parent().removeClass("notExpanded").addClass("expand");
         $self.parent().show();
         //add part to array which will be sent to "/getProjects"
       }

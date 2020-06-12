@@ -380,19 +380,22 @@ def about(request):
 
 def getProjectsByParts(request):
     projectsArray = []
-    parts = request.GET.get("parts")
-    if parts:
-        partQueryString = ""
-        for part in parts:
-            partQueryString += " " + part
-        query = SearchQuery(partQueryString)
-        vector = SearchVector('parts')
-        projectResults = Project.objects.annotate(rank=SearchRank(vector, query)).order_by('-rank')
-        if projectResults:
-            for project in projectResults:
-                projectsArray.append(
-                    {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url, "difficulty": project.difficulty})
-        projects = {"projects": projectsArray}
+    projects = {}
+    if request.method == "POST":
+        parts = request.POST.get("parts")
+        parts = parts.split(",")
+        if parts:
+            partQueryString = ""
+            for part in parts:
+                partQueryString += " " + part
+            query = SearchQuery(partQueryString)
+            vector = SearchVector('parts')
+            projectResults = Project.objects.annotate(rank=SearchRank(vector, query)).order_by('-rank')
+            if projectResults:
+                for project in projectResults:
+                    projectsArray.append(
+                        {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url, "difficulty": project.difficulty})
+            projects = {"projects": projectsArray}
     return HttpResponse(json.dumps(projects))
 
 def discovery(request):

@@ -169,10 +169,6 @@ button {
     color: #CD3429;
 }
 
-.supplies-container .right{
-  vertical-align: center;
-  margin-top: .5%;
-}
 
 .part {
   padding: 1%;
@@ -195,7 +191,8 @@ button {
 }
 
 .right {
-  float: right;
+  vertical-align: middle;
+    margin-left: 1%;
 }
 
 .steps-container {
