@@ -7,10 +7,12 @@ from django.contrib.auth import logout as lgout
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.contrib.auth.hashers import check_password
 from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
+from django.core.mail import send_mail
 import json
 import base64
 import os
 import operator
+import datetime
 
 
 def index(request):
@@ -366,6 +368,20 @@ def filterProjects(request, filter="popular", num_of_results=25, page=1, categor
 def contact(request):
     account = request.user.username if request.user.is_authenticated else None
     context = {"account": account}
+    if request.method == "POST":
+        firstname = request.POST.get("firstname")
+        lastname = request.POST.get("lastname")
+        country = request.POST.get("country")
+        subject = request.POST.get("subject")
+        message = "From: " + firstname + " " + lastname + "\n"
+        message += "Country: " + country + "\n"
+        message += subject
+        now = datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+        fromEmail = 'diyhub@benphillips.site'
+        toEmail = 'benthefreelancer@gmail.com'
+        send_mail('Contact Form Message: ' + now, message, fromEmail, [toEmail], fail_silently=False)
+        context["message"] = "Message Sent"
+        return render(request, 'hub/contact.html', context)
     return render(request, 'hub/contact.html', context)
 
 def about(request):

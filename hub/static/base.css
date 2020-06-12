@@ -161,6 +161,10 @@ body {
 	text-align: center;
 }
 
+.successMessage h3 {
+	margin-top: 2%;
+}
+
 .footer {
 	width: 45%;
 	margin: auto;

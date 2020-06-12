@@ -253,4 +253,5 @@ body {
 .stepDesc ul {
 	list-style-type: circle;
 	list-style: initial;
+	font-family: "Open Sans", sans-serif;
 }
