@@ -1,162 +1,49 @@
-<!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-<title>discovery</title>
-<link href="../Static/reset.css" rel="stylesheet" type="text/css">
-<link href="../Static/discovery.css" rel="stylesheet" type="text/css">
-<link href="https://fonts.googleapis.com/css?family=Open+Sans:700, 400|Montserrat:400, 700|Nunito+Sans:800, 400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
-
-<body>
-	
-	<div class="grid">
-  <div class="sort-bar">
+{% extends 'hub/base.html' %}
+{% load static %}
+{% block header %}
+    <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="{% static 'discovery.css' %}" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="{% static 'js/filter.js' %}"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:700, 400|Montserrat:400, 700|Nunito+Sans:800, 400&display=swap" rel="stylesheet">
+    <title>discovery</title>
+{% endblock %}
+{% block content %}
+    {% if projects %}
+      <div class="grid">
+      <div class="sort-bar">
 		<i class="fa fa-filter"></i>
-	  <button><i class="fa fa-heart"></i><i class="fa fa-sort"></i></button>
-	  <button><i class="fa fa-eye"></i><i class="fa fa-sort"></i></button>
+	  <button id="popularSort"><i class="fa fa-heart"></i><i class="fa fa-sort"></i></button>
+	  <button id="likedSort"><i class="fa fa-eye"></i><i class="fa fa-sort"></i></button>
 		</div>
-  <div class="module">
+  {% for project in projects %}
+      <a href="project/{{ project.url }}">
+      <div class="module">
 	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay" style="background-color: #FE2F2F">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-	  </div>
-		</div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/stepImage.png" alt="ProjectImage">
-	  <div class="overlay" style="background-color: #FE7F2F">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay" style="background-color: #969600">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay" style="background-color: #0AC000">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay" style="background-color: #006E14">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay"  style="">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay"  style="">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay"  style="">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay"  style="">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay"  style="">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
+          <img src="{% static '' %}{{ project.imgPath }}" alt="ProjectImage">
+          {% if project.difficulty %}
+              {% if project.difficulty == 1 %}
+                <div class="overlay" style="background-color: #14aa30">
+              {% elif project.difficulty == 2 %}
+                <div class="overlay" style="background-color: #43d540">
+              {% elif project.difficulty == 3 %}
+                <div class="overlay" style="background-color: #b8b82e">
+              {% elif project.difficulty == 4 %}
+                <div class="overlay" style="background-color: #FE7F2F">
+              {% elif project.difficulty == 5 %}
+                  <div class="overlay" style="background-color: #FE2F2F">
+              {% endif %}
+          {% else %}
+              <div class="overlay">
+          {% endif %}
 
-	  <div class="overlay"  style="">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay"  style="">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay"  style="">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay"  style="">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-  <div class="module">
-	  <div class="container-grid">
-	  <img src="../Static/ProjectImage.png" alt="ProjectImage">
-	  <div class="overlay"  style="">
-		  <h1>Header</h1>
-		  <p>This is a project description. This paragraph tag will display what the project is about.</p>
-		  </div>
-		</div>
-		  </div>
-</div>
-	
-	
-	
-	
-</body>
-</html>
+              <h1>{{ project.name }}</h1>
+              <p>{{ project.desc | safe }}</p>
+          </div>
+	  </div>
+    </div>
+      </a>
+  {% endfor %}
+      </div>
+    {% endif %}
+{% endblock %}

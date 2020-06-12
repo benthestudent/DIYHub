@@ -164,6 +164,8 @@ body {
   text-align: left;
   font-family: "Montserrat", sans-serif;
   padding: 45px 50px;
+	position: relative;
+	bottom: 0;
 }
 
 .footer-distributed .footer-left p {

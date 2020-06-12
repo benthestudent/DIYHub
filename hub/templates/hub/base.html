@@ -2,20 +2,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    {% block header %}
-    {% endblock %}
     <link rel="stylesheet" href="{% static 'reset.css' %}" type="text/css">
 <link rel="stylesheet" href="{% static 'base.css' %}" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-    <link href='https://fonts.googleapis.com/css?family=Karla' rel='stylesheet'> 
+    <link href='https://fonts.googleapis.com/css?family=Karla' rel='stylesheet'>
     <link href="https://fonts.googleapis.com/css?family=Hind+Siliguri&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/project.js' %}"></script>
 <link href="{% static 'img/diyhub__2__UHr_icon.ico' %}" rel="icon" type="image/x-icon" />
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:700, 400|Montserrat:400, 700|Nunito+Sans:800, 400&display=swap" rel="stylesheet">
+    {% block header %}
+    {% endblock %}
 </head>
 <body>
 
@@ -41,7 +41,7 @@
   <ul>
     <li><a href="{% url 'index' %}"><span id="search" class="inactive">Search</span></a></li>
     <li><a href="{% url 'createProject' %}"><span id="create" class="inactive">Create</span></a></li>
-    <li><a href="" ><span id="discover" class="inactive">Discover</span></a></li>
+    <li><a href="{% url 'discovery' %}" ><span id="discover" class="inactive">Discover</span></a></li>
   </ul>
 	</nav>
     <script>

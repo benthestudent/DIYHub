@@ -21,7 +21,7 @@ def index(request):
     if projects:
         for project in projects:
             projectsArray.append(
-                {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url})
+                {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url, "difficulty": project.difficulty})
     categoryArray = []
     categories = PartCategories.objects.all()
     if categories:
@@ -394,3 +394,15 @@ def getProjectsByParts(request):
                     {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url, "difficulty": project.difficulty})
         projects = {"projects": projectsArray}
     return HttpResponse(json.dumps(projects))
+
+def discovery(request):
+    page = "discover"
+    projects = Project.objects.all()
+    projectsArray = []
+    account = request.user.username if request.user.is_authenticated else None
+    if projects:
+        for project in projects:
+            projectsArray.append(
+                {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url, "difficulty": project.difficulty})
+    context = {"projects": projectsArray, "account": account, "page": page}
+    return render(request, 'hub/discovery.html', context)
