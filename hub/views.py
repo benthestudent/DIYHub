@@ -18,10 +18,7 @@ def index(request):
     projects = Project.objects.all()
     projectsArray = []
     account = request.user.username if request.user.is_authenticated else None
-    if projects:
-        for project in projects:
-            projectsArray.append(
-                {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url, "difficulty": project.difficulty})
+    projectsArray = getProjectsFromQuery(projects)
     categoryArray = []
     categories = PartCategories.objects.all()
     if categories:
@@ -113,9 +110,7 @@ def profile(request, username=None):
         }
         projects = Project.objects.filter(author=user)
 
-        if projects:
-            for project in projects:
-                projectsArray.append({"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url})
+        projectsArray = getProjectsFromQuery(projects)
         upvotes = Upvote.objects.filter(user=user, comment=None)
 
         if upvotes:
@@ -365,18 +360,18 @@ def filterProjects(request, filter="popular", num_of_results=25, page=1, categor
         else:
             projects = Project.objects.order_by("-views")[startOfResults:startOfResults + num_of_results]
 
-    if projects:
-        for project in projects:
-            projectsArray.append(
-                {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url, "difficulty": project.difficulty})
-    projects = {"projects": projectsArray}
+    projects = {"projects": getProjectsFromQuery(projects)}
     return HttpResponse(json.dumps(projects))
 
 def contact(request):
-    return render(request, 'hub/contact.html')
+    account = request.user.username if request.user.is_authenticated else None
+    context = {"account": account}
+    return render(request, 'hub/contact.html', context)
 
 def about(request):
-    return render(request, 'hub/about.html')
+    account = request.user.username if request.user.is_authenticated else None
+    context = {"account": account}
+    return render(request, 'hub/about.html', context)
 
 def getProjectsByParts(request):
     projectsArray = []
@@ -391,11 +386,7 @@ def getProjectsByParts(request):
             query = SearchQuery(partQueryString)
             vector = SearchVector('parts')
             projectResults = Project.objects.annotate(rank=SearchRank(vector, query)).order_by('-rank')
-            if projectResults:
-                for project in projectResults:
-                    projectsArray.append(
-                        {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url, "difficulty": project.difficulty})
-            projects = {"projects": projectsArray}
+            projects = {"projects": getProjectsFromQuery(projectResults)}
     return HttpResponse(json.dumps(projects))
 
 def discovery(request):
@@ -403,9 +394,22 @@ def discovery(request):
     projects = Project.objects.all()
     projectsArray = []
     account = request.user.username if request.user.is_authenticated else None
-    if projects:
-        for project in projects:
-            projectsArray.append(
-                {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url, "difficulty": project.difficulty})
+    projectsArray = getProjectsFromQuery(projects)
     context = {"projects": projectsArray, "account": account, "page": page}
     return render(request, 'hub/discovery.html', context)
+
+def getProjectsFromQuery(projects):
+    projectsArray = []
+    if projects:
+        for project in projects:
+            desc = removeElements(project.desc, ["<h1>", "</h1>", "<strong>", "</strong>", "<em>", "</em>", "<u>", "</u>", "<ul>", "</ul>", "<li>", "</li>"])
+            projectsArray.append(
+                {"name": project.name, "desc": desc, "imgPath": project.imgPath, "url": project.url,
+                 "difficulty": project.difficulty})
+
+    return projectsArray
+
+def removeElements(initial, elements):
+    for element in elements:
+        initial = initial.replace(element, "")
+    return initial

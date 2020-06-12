@@ -35,7 +35,7 @@
 
 <div class="header">
 <img id="logo" src="{% static 'img/DiyHub (2).png' %}" alt="Logo">
-  <a href="{% url 'index' %}"><h1>diy<strong>hub.io</strong></h1></a>
+  <a href="{% url 'index' %}"><h1>diy<strong>hub.io</strong></h1> beta</a>
 
 		<nav class="navigation">
   <ul>
@@ -85,15 +85,15 @@
             <div class="footer-left">
 
                 <p class="footer-links">
-                    <a class="link-1" href="#">Search</a>
+                    <a class="link-1" href="{% url 'index' %}">Search</a>
 
-                    <a href="#">Discover</a>
+                    <a href="{% url 'discovery' %}">Discover</a>
 
-                    <a href="#">Create</a>
+                    <a href="{% url 'createProject' %}">Create</a>
 
-                    <a href="#">About</a>
+                    <a href="{% url 'about' %}">About</a>
 
-                    <a href="#">Contact</a>
+                    <a href="{% url 'contact' %}">Contact</a>
                 </p>
 
                 <p>diyhub.io &copy; 2020</p>

@@ -41,6 +41,11 @@ body {
 .header h1 strong {
 	font-weight: 700;
 }
+.header a {
+	text-decoration: none;
+	color: white;
+	font-family: "Montserrat", sans-serif;
+}
 .navigation ul {
 	align-items: center;
 }
