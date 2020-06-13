@@ -352,3 +352,39 @@ label.category-label {
 	width: 100%;
 }
 
+.sort-bar {
+	position: absolute;
+	z-index: 1;
+	width: 100%;
+	background-color: white;
+	display: inline-flex;
+	align-items: center;
+	overflow-x: hidden;
+	padding-right: 0;
+	border-radius: 2px;
+	padding: 10px 20px;
+	font-family: "Montserrat", sans-serif;
+
+}
+
+.sort-bar select {
+	margin-left: 1%;
+}
+
+.sort-bar button {
+	margin-left: 10px;
+	padding: 5px;
+	border: none;
+	background: none;
+}
+
+.sort-bar i {
+	margin-right: 5px;
+}
+
+.sort-bar button:hover {
+	border-radius: 2px;
+	background-color: #B5B5B5;
+	cursor: pointer;
+	transition-duration: 0.2s;
+}

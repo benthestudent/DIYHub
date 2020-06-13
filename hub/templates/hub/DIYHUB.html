@@ -40,6 +40,18 @@
   
   {% if projects %}
       <div class="grid">
+{#      <div class="sort-bar">#}
+{#		<i class="fa fa-filter"></i>#}
+{#	    <button id="likedSort"><i class="fa fa-heart"></i><i class="fa fa-sort"></i></button>#}
+{#	    <button id="popularSort"><i class="fa fa-eye"></i><i class="fa fa-sort"></i></button>#}
+{#        Results per Page: <select id="resultsPerPage" name="resultsPerPage">#}
+{#          <option value="1">1</option>#}
+{#            <option value="10">10</option>#}
+{#            <option value="25">25</option>#}
+{#            <option value="50">50</option>#}
+{#            <option value="100">100</option>#}
+{#        </select>#}
+{#      </div>#}
   {% for project in projects %}
       <a href="project/{{ project.url }}">
       <div class="module">

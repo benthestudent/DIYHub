@@ -21,5 +21,7 @@ urlpatterns = [
     path('filterProjects/<slug:filter>/<int:num_of_results>/<int:page>/<slug:category>', views.filterProjects, name='filterProjects'),
     path('contact', views.contact, name='contact'),
     path('about', views.about, name='about'),
-    path('getProjects', views.getProjectsByParts, name='getProjects')
+    path('getProjects', views.getProjectsByParts, name='getProjects'),
+    path('forgotPassword', views.forgotPassword, name='forgotPassword'),
+    path('resetPassword', views.resetPassword, name='resetPassword')
 ]

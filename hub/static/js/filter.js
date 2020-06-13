@@ -1,11 +1,18 @@
+var sortMethod = "popular";
 $(document).ready(function() {
     $("#popularSort").click(function () {
         $(".grid a").remove();
+        sortMethod = "popular";
         filterProjects("popular");
     });
     $("#likedSort").click(function () {
         $(".grid a").remove();
+        sortMethod = "most_liked";
         filterProjects("most_liked");
+    });
+    $("#resultsPerPage").change(function () {
+        $(".grid a").remove();
+        filterProjects(sortMethod, $(this).val());
     });
 });
 

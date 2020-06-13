@@ -109,7 +109,12 @@ body {
 	padding-right: 0;
 	border-radius: 2px;
 	padding: 10px 20px;
+	font-family: "Montserrat", sans-serif;
 	
+}
+
+.sort-bar select {
+	margin-left: 1%;
 }
 
 .sort-bar button {

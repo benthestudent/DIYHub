@@ -429,3 +429,28 @@ def removeElements(initial, elements):
     for element in elements:
         initial = initial.replace(element, "")
     return initial
+
+def forgotPassword(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+        if email:
+            user = User.objects.filter(email=email).first()
+            if user:
+                print("send mail to reset")
+                #send mail to user so they can reset password
+            else:
+                print("Not a recognized email")
+                context = {"message": "Email not recognized"}
+                return render(request, "hub/forgotPassword.html", context)
+    return render(request, 'hub/forgotPassword.html')
+
+
+def resetPassword(request):
+    if request.method == "POST":
+        user = User() #get user
+        if request.POST.get("newPassword") == request.POST.get("newPassword2"):
+            user.set_password(request.POST.get("newPassword"))
+            user.save()
+            login(request, user)
+            return redirect("/index")
+    return render(request, 'hub/resetPassword.html')
