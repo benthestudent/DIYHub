@@ -1,4 +1,3 @@
-
 function addStep() {
 			let step = "<div class=\"step add-step\"><input type=\"text\" name=\"step\" value=\"" + $("#stepName").val() + "\" readonly><div class=\"description\"><textarea rows=\"7\" readonly>" + $("#stepDescription").val() + "</textarea></div><i class=\"fa fa-pencil edit-step\" id=\"editStep\" style=\"font-size:24px\"></i><i class=\"fa fa-trash-o remove-step\" style=\"font-size:24px\"></i></div>";
 			$(".steps").prepend(step);
@@ -87,6 +86,19 @@ $(document).on("click", "i.remove-step", function() {
 		$(this).parent().remove();
 });
 
+// comment, reply, and upvote functions
+$(document).on("click", "#comment", function () {
+	createComment(this, type="project");
+});
+
+$(document).on("click", "#replyButton", function () {
+	createComment(this, type="comment");
+});
+
+$(document).on("click", "#commentUpvote", function () {
+	vote(this, "comment");
+});
+
 function getProjectData() {
 	var projectName = $("#projectName").val();
 	var projectDesc = $("#descEditor").children("div").html()
@@ -164,8 +176,8 @@ function readURL(input) {
 }
 
 function refreshProjects(projects) {
-	$(".grid a").remove();
-    //console.log(projects["projects"]);
+
+    console.log(projects["projects"]);
     for(i = 0; i < projects["projects"].length; i++){
         var color;
         var styles;
@@ -202,19 +214,114 @@ function refreshProjects(projects) {
             "      </a>";
         console.log(element);
         $(".grid").append(element);
+
     }
+    if (projects["almostProjects"].length > 0){
+        	$(".grid").append("<h2 class='divider'>Projects you can almost make:</h2>");
+        	refreshProjects({"projects": projects["almostProjects"]});
+		}
 }
 
+
+function vote(element, type){
+		var operation = "upvote"
+		if ($(element).html() === "Upvoted"){
+			operation = "downvote"
+		}
+		var elementID;
+		if (type === "comment"){
+			elementID = $(element).parent().find("data").val();
+			let votes = $(element).parent().find("#commentUpvoteCounter").html();
+			if (operation === "downvote"){$(element).parent().find("#commentUpvoteCounter").html(--votes);}
+			if (operation === "upvote"){$(element).parent().find("#commentUpvoteCounter").html(++votes);}
+		}else if (type === "project"){
+			elementID = $("meta[name='projectID']").attr("content");
+			let votes = $("#projectUpvoteCounter").html();
+			if (operation === "downvote"){$("#projectUpvoteCounter").html(--votes);}
+			if (operation === "upvote"){$("#projectUpvoteCounter").html(++votes);}
+		}
+		var csrftoken = getCookie('csrftoken');
+		$.ajaxSetup({
+    		headers: { "X-CSRFToken": getCookie("csrftoken") }
+		});
+		data = {"elementID": elementID, "type": type, "operation": operation};
+		$.ajax({
+			url: '/upvote',
+			data: data,
+			type: 'POST',
+			success: function(response) {
+				console.log("success");
+				console.log(response);
+				if (response === "upvoted"){
+					$(element).html("Upvoted");
+					$(element).css("background-color", "#037F8C");
+					$(element).css("border-color", "#037F8C");
+				}else if (response === "downvoted"){
+					$(element).html("Upvote");
+					$(element).css("background-color", "transparent");
+					$(element).css("border-color", "white");
+				}
+
+			},
+			error: function(response) {
+				console.log("error");
+			}
+		});
+}
+
+
+function createComment(element, type){
+	var body = $(element).parent().parent().find("textarea").val();
+	var elementID;
+	if (type === "comment"){
+			elementID = $(element).parent().parent().parent().prev(".comment-upvote").find("data").val();
+			console.log(elementID);
+	}else if (type === "project"){
+			elementID = $("meta[name='projectID']").attr("content");
+	}
+	console.log(body);
+	var data = {"body": body, "elementID": elementID, "type": type}
+	$(element).parent().parent().remove();
+	var csrftoken = getCookie('csrftoken');
+	$.ajaxSetup({
+		headers: { "X-CSRFToken": getCookie("csrftoken") }
+	});
+	$.ajax({
+				url: '/addComment',
+				data: data,
+				type: 'POST',
+				success: function(response) {
+					location.reload();
+				},
+				error: function(response) {
+					console.log("error");
+				}
+	});
+}
+
+
 $(document).ready(function() {
+	//comments and upvotes
+	 $("#commentInput").on('input', function () {
+        console.log("input");
+        $(this).prop('style').cssText = 'height:auto;';
+        $(this).prop('style').cssText = 'height:' + $(this).prop('scrollHeight') + 'px';
+    });
+
+	$("#projectUpvote").click(function () {
+		vote(this, "project");
+	});
+
+
 	$(".toggle").click(function() {
 		console.log("toggled");
-    if(this.checked) {
-    	console.log("checked")
-        $(this).parent().parent().find(".partContainer").removeClass("notExpanded").addClass("expand");
-    }else {
-    	$(this).parent().parent().find(".partContainer").removeClass("expand").addClass("notExpanded");
-	}
-});
+		if(this.checked) {
+			console.log("checked")
+			$(this).parent().parent().find(".partContainer").removeClass("notExpanded").addClass("expand");
+		}else {
+			$(this).parent().parent().find(".partContainer").removeClass("expand").addClass("notExpanded");
+		}
+	});
 	$("#save").click(function() {
 		var csrftoken = getCookie('csrftoken');
 		var data = getProjectData();
@@ -387,6 +494,8 @@ $(document).ready(function() {
 			type: 'POST',
 			success: function(response) {
 				console.log(response);
+				$(".grid a").remove();
+				$(".grid h2").remove();
 				refreshProjects(JSON.parse(response));
 			},
 			error: function(response) {
@@ -394,7 +503,5 @@ $(document).ready(function() {
 			}
 		});
 	});
-
-
 });
 

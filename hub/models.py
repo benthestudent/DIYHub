@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from jsonfield import JSONField
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from datetime import datetime
 
@@ -92,7 +91,8 @@ class Project(models.Model):
     difficulty = models.IntegerField(default=0)
     url = models.TextField(null=True, unique=True)
     steps = models.TextField(null=True)
-    parts = models.CharField(max_length=250, null=True)
+    parts = models.CharField(max_length=250, null=True) #with quantities
+    partNames = ArrayField(models.CharField(max_length=200), null=True)
     partIDs = ArrayField(models.IntegerField(), null=True)
     category = models.ForeignKey(ProjectCategories, default=1, on_delete=models.CASCADE)
     # partsNeeded = ArrayField(ArrayField(models.TextField(max_length=50, null=True, blank=True), null=True), null=True)

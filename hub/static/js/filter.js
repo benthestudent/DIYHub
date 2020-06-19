@@ -3,12 +3,14 @@ $(document).ready(function() {
     $("#popularSort").click(function () {
         $(".grid a").remove();
         sortMethod = "popular";
-        filterProjects("popular");
+        resultsPerPage = $("#resultsPerPage").val();
+        filterProjects("popular", resultsPerPage);
     });
     $("#likedSort").click(function () {
         $(".grid a").remove();
         sortMethod = "most_liked";
-        filterProjects("most_liked");
+        resultsPerPage = $("#resultsPerPage").val();
+        filterProjects("most_liked", resultsPerPage);
     });
     $("#resultsPerPage").change(function () {
         $(".grid a").remove();

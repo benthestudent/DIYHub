@@ -1,6 +1,10 @@
 * {
 	box-sizing: border-box;
 }
+html {
+	min-height: 100%;
+	position: relative;
+}
 body {
 	margin: 0;
 	height: 100%;
@@ -188,7 +192,6 @@ body {
   text-align: left;
   font-family: "Montserrat", sans-serif;
   padding: 45px 50px;
-	position: relative;
 	bottom: 0;
 }
 

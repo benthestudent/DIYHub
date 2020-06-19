@@ -106,7 +106,7 @@ body {
 	background-color: #D3D3D3;
 	display: inline-block;
 	padding: 10px;
-	position: relative;
+	/*position: relative; idk if this is important*/
 	overflow: auto;
 	margin: 0;
 	-webkit-box-sizing: border-box;
@@ -228,6 +228,11 @@ body {
 	border-radius: 2px;
 	object-fit: contain;
 	overflow: hidden;
+}
+.divider {
+	width: 100%;
+	color: white;
+	font-size: 22px;
 }
 /* If Grid is supported, remove the margin we set for the fallback */
 @supports (display: grid) {

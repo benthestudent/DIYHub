@@ -401,8 +401,13 @@ def getProjectsByParts(request):
                 partQueryString += " " + part
             query = SearchQuery(partQueryString)
             vector = SearchVector('parts')
-            projectResults = Project.objects.annotate(rank=SearchRank(vector, query)).order_by('-rank')
-            projects = {"projects": getProjectsFromQuery(projectResults)}
+            projectResults = Project.objects.annotate(rank=SearchRank(vector, query)).order_by('-rank').exclude(partNames__contained_by=parts)
+            projects["almostProjects"] = getProjectsFromQuery(projectResults)
+            projectResults = Project.objects.filter(partNames__contained_by=parts)
+            print(parts)
+
+            projects["projects"] = getProjectsFromQuery(projectResults)
+            print(projects)
     return HttpResponse(json.dumps(projects))
 
 def discovery(request):

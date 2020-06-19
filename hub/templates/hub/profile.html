@@ -64,7 +64,12 @@
   {% if projects %}
       <div class="grid">
   {% for project in projects %}
-      <a href="project/{{ project.url }}">
+      {% if "https" in project.url %}
+          <a href="{{ project.url }}">
+      {% else %}
+        <a href="project/{{ project.url }}">
+      {% endif %}
+
       <div class="module">
 	  <div class="container-grid">
           <img src="{% static '' %}{{ project.imgPath }}" alt="ProjectImage">
