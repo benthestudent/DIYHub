@@ -19,7 +19,7 @@
 <body>
 
 {% if message %}
-        <div class="successMessage"><h3>{{ message }}</h3></div>
+        <div style="background-color: {{ message.color }}" class="successMessage"><h3 >{{ message.text }}</h3></div>
     {% endif %}
     <script type="text/javascript">
         {% if message %}

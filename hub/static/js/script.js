@@ -354,9 +354,16 @@ $(document).ready(function() {
 					type: 'POST',
 					success: function(response) {
 						console.log(response.text);
+						if (response.text.indexOf("//www.") !== -1){
+							document.location.href = "/" + response.text;
+						}
+						else {
+							window.location.href = response.text;
+						}
 					},
 					error: function(response) {
 						console.log("error");
+						alert("Could not Publish. Error saving project. Please contact site administrator, using contact page.");
 					}
 		});
 	});
@@ -397,9 +404,9 @@ $(document).ready(function() {
 			url: '/getCategories',
 			data: {"search": $("#category").val()},
 			success: function (response) {
-				parts = JSON.parse(response)
+				cats = JSON.parse(response)
 				$("#categories").empty();
-				parts.forEach(function (item) {
+				cats.forEach(function (item) {
 					$("#categories").append('<option value="' + item.name + '" >');
 
 				})
@@ -421,7 +428,7 @@ $(document).ready(function() {
 				cats = JSON.parse(response)
 				$("#categories").empty();
 				cats.forEach(function (item) {
-					$("#categories").append('<option value="' + item.name + ' (#'+ item.id + ' )" >');
+					$("#categories").append('<option value="' + item.name + '" >');
 
 				})
 

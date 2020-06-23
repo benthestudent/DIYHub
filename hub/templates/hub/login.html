@@ -9,7 +9,7 @@
 <div class="login-page">
   <div class="form">
 	  <img src="{% static 'img/logo.png' %}" alt="logo">
-    <form class="register-form" action="" method="post">
+    <form class="register-form" action="{% url 'loginAndRegister' %}" method="post">
       <input type="text" placeholder="username" name="username" id="register-username" class="valid"/>
       <input type="password" placeholder="password" name="password" id="register-password" class="valid"/>
       <input type="text" placeholder="email address" name="email" id="register-email" class="valid"/>
@@ -17,7 +17,7 @@
       <p class="message">Already registered? <a href="#">Sign In</a></p>
         {% csrf_token %}
     </form>
-    <form class="login-form" action="" method="POST">
+    <form class="login-form" action="{% url 'loginAndRegister' %}" method="POST">
       <input type="text" placeholder="email" name="email" class="valid"/>
       <input type="password" placeholder="password" name="password" class="valid"/>
       <button type="submit">login</button>

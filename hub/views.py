@@ -25,15 +25,24 @@ def index(request):
     categories = PartCategories.objects.all()
     if categories:
         for category in categories:
-            partsArray = []
-            parts = Parts.objects.filter(category=category)
-            if parts:
-                for part in parts:
-                    partsArray.append({"name": part.name, "url": part.url})
-            categoryArray.append({"name": category.name, "parts": partsArray})
+            if category.id != 0: # category 0 will be unset category, meaning part must be reviewed
+                partsArray = []
+                parts = Parts.objects.filter(category=category)
+                if parts:
+                    for part in parts:
+                        partsArray.append({"name": part.name, "url": part.url})
+                categoryArray.append({"name": category.name, "parts": partsArray})
     context = {"projects": projectsArray, "categories": categoryArray, "account": account, "page": page}
     return render(request, 'hub/DIYHUB.html', context)
 
+def createPart(name, cat=0):
+    part = Parts()
+    part.name = name
+    cat = PartCategories.objects.filter(id=cat)
+    if cat:
+        part.category = cat
+    part.save()
+    return part
 
 def loginAndRegister(request, slug="login"):
     context = {}
@@ -48,18 +57,19 @@ def loginAndRegister(request, slug="login"):
                 if user is not None:
                     login(request, user)
                 else:
-                    context['message'] = "Login Failed"
+                    context['message'] = {"text": "Login Failed", "color": "red"}
                 return redirect("/profile")
             else:
-                context['message'] = "Registration Failed"
+                context['message'] = {"text": "Registration Failed", "color": "red"}
         else:
             print("Login")
             user = authenticate(request, username=request.POST.get("email"), password=request.POST.get("password"))
             if user is not None:
                 login(request, user)
+                return redirect("/profile")
             else:
-                context['message'] = "Login Failed"
-            return redirect("/profile")
+                context['message'] = {"text": "Login Failed", "color": "red"}
+        return render(request, 'hub/login.html', context)
 
     else:
         signup = True if slug == "signup" else None
@@ -78,7 +88,7 @@ def profile(request, username=None):
     user = User.objects.filter(username=username).first() if username is not None else user
     upvotedProjectsArray = []
     projectsArray = []
-    message = ""
+    message = {}
     if request.user.is_authenticated:
         if request.method == "POST":
             user = request.user
@@ -86,9 +96,10 @@ def profile(request, username=None):
                 if check_password(request.POST.get("oldPassword"), user.password) and request.POST.get("newPassword") == request.POST.get("newPassword1"):
                     user.set_password(request.POST.get("newPassword"))
                     user.save()
-                    message = "Password Saved"
+                    message = {"text": "Password Saved", "color": "green"}
                     print("Password Saved")
                 else:
+                    message = {"text": "Password Change Failed. Old Password is incorrect or new passwords do not match", "color": "red"}
                     print("error saving new password")
             else:
                 if request.POST.get("email"):
@@ -129,6 +140,7 @@ def profile(request, username=None):
 def createProject(request):
     page = "create"
     account = request.user.username if request.user.is_authenticated else None
+    context = {"account": account, "page": page}
     if request.method == 'POST' and request.user.is_authenticated:
         url = request.POST.get("name").replace(" ", "-")
         imgData = request.POST.get('img').replace("data:image/jpeg;base64,", "")
@@ -148,7 +160,8 @@ def createProject(request):
                 partObj = Parts.objects.get(name__exact=partName)
             except Parts.DoesNotExist:
                 partObj = None
-                print("Does Not Exist")
+                print("Does Not Exist. Creating Part")
+                partObj = createPart(partName) # create part if not found
             if partObj:
                 partIDs.append(partObj.id)
         print("partIDs: " + str(partIDs))
@@ -172,7 +185,7 @@ def createProject(request):
         form.save()
         form.author.add(request.user)
         form.save()
-    context = {"account": account, "page": page}
+        return HttpResponse(url)
     return render(request, 'hub/createProject.html', context)
 
 
@@ -183,7 +196,11 @@ def project(request, slug):
     try:
         project = Project.objects.get(name__exact=projectName)
     except Project.DoesNotExist:
-        return HttpResponse("No Project Found")
+        page = "create"
+        account = request.user.username if request.user.is_authenticated else None
+        context = {"account": account, "page": page}
+        context["message"] = {"text": "We can find this project, would you like to create one?", "color": "red"}
+        return render(request, "hub/createProject.html", context)
     if not project.author.all().first() == request.user:
         project.views += 1
         project.save()
@@ -298,6 +315,7 @@ def addComment(request):
             comment = {"user": request.user.username, "body": request.POST.get("body"),
                        "staticPath": staticfiles_storage.url("projects/"), "commentID": form.id}
             return HttpResponse(json.dumps(comment))
+        return redirect("loginAndRegister") #CHECK# we need to make it so it redirects back
 
 
 def upvote(request):
@@ -380,7 +398,7 @@ def contact(request):
         fromEmail = 'diyhub@benphillips.site'
         toEmail = 'benthefreelancer@gmail.com'
         send_mail('Contact Form Message: ' + now, message, fromEmail, [toEmail], fail_silently=False)
-        context["message"] = "Message Sent"
+        context["message"] = {"text": "Message Sent", "color": "green"}
         return render(request, 'hub/contact.html', context)
     return render(request, 'hub/contact.html', context)
 
@@ -445,7 +463,7 @@ def forgotPassword(request):
                 #send mail to user so they can reset password
             else:
                 print("Not a recognized email")
-                context = {"message": "Email not recognized"}
+                context = {"message": {"text": "Email not recognized", "color": "red"}}
                 return render(request, "hub/forgotPassword.html", context)
     return render(request, 'hub/forgotPassword.html')
 
