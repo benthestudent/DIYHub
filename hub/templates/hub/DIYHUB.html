@@ -79,6 +79,7 @@
           {% endif %}
               <h1>{{ project.name }}</h1>
               <p>{{ project.desc | safe }}</p>
+                <span>{{ project.views }} <i class="fa fa-eye"></i> <span id="projectUpvoteCounter">{{ project.upvotes }}</span> <i class="fa fa-thumbs-up"></i></span>
           </div>
 	  </div>
     </div>

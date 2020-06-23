@@ -426,7 +426,7 @@ def getProjectsFromQuery(projects):
             desc = removeElements(project.desc, ["<h1>", "</h1>", "<strong>", "</strong>", "<em>", "</em>", "<u>", "</u>", "<ul>", "</ul>", "<li>", "</li>"])
             projectsArray.append(
                 {"name": project.name, "desc": desc, "imgPath": project.imgPath, "url": project.url,
-                 "difficulty": project.difficulty})
+                 "difficulty": project.difficulty, "upvotes": Upvote.objects.filter(project=project).count(), "views": project.views})
 
     return projectsArray
 

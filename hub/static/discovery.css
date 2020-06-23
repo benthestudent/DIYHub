@@ -89,6 +89,14 @@ body {
 	color: white;
 }
 
+.overlay span {
+	font-family: "nunito sans";
+	text-align: center;
+	padding: 5px;
+	padding-top: 5px;
+	color: white;
+}
+
 .module:hover .overlay {
   opacity: .75;
 }
