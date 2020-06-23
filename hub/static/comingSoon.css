@@ -1,0 +1,409 @@
+* {
+	box-sizing: border-box;
+}
+body {
+	margin: 0;
+	height: 100%;
+	background-color: #1b262c;
+}
+.header {
+	margin: 0;
+	background-color: #1b262c;
+	display: flex;
+	position: relative;
+	width: 100%;
+	align-items: center;
+	align-content: space-around;
+}
+#logo {
+	height: 70px;
+	border-radius: 50%;
+}
+.header h1, strong {
+	font-family: "Montserrat", sans-serif;
+	font-size: 31pt;
+	color: #FFFFFF;
+	display: inline-flex;
+	justify-content: flex-start;
+	padding-left: 5px;
+}
+.header h1 strong {
+	font-weight: 700;
+}
+.navigation ul {
+	align-items: center;
+}
+.navigation {
+	flex-grow: 2;
+	justify-content: center;
+}
+/*.navigation #active {*/
+/*	margin: 0 20px;*/
+/*}*/
+.inactive {
+	filter: blur(2px);
+}
+.inactive:hover {
+	filter: blur(0px);
+	transition-duration: 0.3s;
+}
+.navigation, ul, li {
+	display: inline-flex;
+	align-items: center;
+	padding: 10px;
+	flex-wrap: wrap;
+}
+.navigation a {
+	text-decoration: none;
+	color: #FFFFFF;
+	font-family: "Open Sans";
+	font-size: 35pt;
+}
+.account {
+	display: inline-flex;
+	justify-content: flex-end;
+	margin-right: 5px;
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+.account button {
+	background-color: transparent;
+	border: 1px solid white;
+	color: white;
+	padding: 10px 15px;
+	font-family: montserrat;
+	border-radius: 2px;
+	margin: 2px;
+	flex-wrap: nowrap;
+}
+.account button:hover {
+	background-color: white;
+	transition-duration: 0.2s;
+}
+.account button:hover a {
+	color: #1b262c;
+	transition-duration: 0.2s;
+}
+.account a {
+	color: #FFF;
+	text-decoration: none;
+}
+@media screen and (max-width: 1033px){
+	.header {
+		flex-direction: column;
+	}
+}
+@media screen and (max-width: 800px){
+	.navigation ul {
+		flex-direction: column;
+	}
+	.navigation #active {
+		margin: 15px 0;
+	}
+}
+/* __________________________ */
+.selector {
+	background-color: #D3D3D3;
+	display: inline-block;
+	padding: 10px;
+	/*position: relative; idk if this is important*/
+	overflow: auto;
+	margin: 0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	width: 20%;
+	z-index: 1;
+	height: 100vh;
+}
+.selector label {
+	font-family: "Open Sans", sans-serif;
+	font-weight: 100;
+	font-style: normal;
+	font-size: 12pt;
+	padding: 0;
+}
+.selector h2 {
+	font-family: "Montserrat", sans-serif;
+	font-weight: 700;
+	font-size: 21pt;
+	padding: 10px 0;
+}
+.grid {
+	/* Grid Fallback */
+	display: inline-block;
+	flex-wrap: wrap;
+	padding: 0;
+	position: relative;
+	float: right;
+	width: 79.5%;
+	max-height: 100vh;
+	overflow: auto;
+	/* Supports Grid */
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	grid-auto-rows: minmax(150px, auto);
+	grid-gap: 7px;
+}
+.container {
+	display: flex;
+	position: relative;
+	padding-left: 25px;
+	margin-bottom: 10px;
+	cursor: pointer;
+	font-size: 22px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+	position: relative;
+	opacity: 0;
+	cursor: pointer;
+	height: 0;
+	width: 0;
+}
+/* Create a custom checkbox */
+.checkmark {
+	position: relative;
+	height: 20px;
+	width: 20px;
+	background-color: #eee;
+	margin-left: 10px;
+}
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+	background-color: #ccc;
+}
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+	background-color: #2196F3;
+}
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+	content: "";
+	position: absolute;
+	display: none;
+}
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+	display: flex;
+}
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+	left: 6px;
+	top: 2px;
+	width: 5px;
+	height: 10px;
+	border: solid white;
+	border-width: 0 3px 3px 0;
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+.items-container ul {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+.items-container li {
+	text-align: left;
+}
+.module {
+	/* Demo-Specific Styles */
+	background: black;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	height: 300px;
+	/* Flex Fallback */
+	margin-left: 5px;
+	margin-right: 5px;
+	flex: 1 1 300px;
+	border-radius: 2px;
+	object-fit: contain;
+	overflow: hidden;
+}
+.divider {
+	width: 100%;
+	color: white;
+	font-size: 22px;
+}
+/* If Grid is supported, remove the margin we set for the fallback */
+@supports (display: grid) {
+	.module {
+		margin: 0;
+	}
+}
+
+.module img {
+	width: 100%;
+}
+
+.container-grid {
+	position: relative;
+  width: 100%;
+}
+
+.overlay {
+   position: absolute;
+	display: flex;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  transition: .3s ease;
+  background-color: #564D4D;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	cursor: pointer;
+}
+.overlay h1 {
+	color: white;
+	font-family: "nunito sans";
+	font-weight: bold;
+	font-size: 20pt;
+}
+
+.overlay p {
+	font-family: "nunito sans";
+	text-align: center;
+	padding: 5px;
+	padding-top: 10px;
+	color: white;
+}
+
+.module:hover .overlay {
+  opacity: .75;
+}
+
+.module:hover img {
+	filter: blur(3px);
+}
+
+@media screen and (max-width: 800px) {
+	.selector {
+		width: 50%;
+	}
+	.grid {
+		width: 50%;
+	}
+}
+
+@media screen and (max-width: 450px) {
+	.selector {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		max-height: 300px;
+		align-self: center;
+	}
+	.grid {
+		width: 100%;
+		padding: 0 50px;
+		
+	}
+}
+
+#searchbar { 
+  width: 100%; /* Full-width */
+  font-size: 13px; /* Increase font-size */
+  padding: 12px 20px 12px 20px; /* Add some padding */
+  border: 1px solid #ddd; /* Add a grey border */
+  margin-bottom: 12px; /* Add some space below the input */
+}
+
+.notExpanded {
+  display: none;
+	margin: 10px 0;
+}
+
+/*#toggle:checked ~ #partContainer {*/
+/*  height: 150px;*/
+/*	overflow: auto;*/
+/*}*/
+
+.expand {
+	overflow: auto;
+	transition: height 0.5s;
+	padding-left: 10%;
+}
+
+.toggle {
+	display: none;
+}
+
+label.category-label {
+	font-family: Montserrat;
+	font-weight: bold;
+	padding: 15px;
+	cursor: pointer;
+}
+
+.category {
+	margin-bottom: 15px;
+}
+
+.buttons {
+	display: inline-block;
+	width: 100%;
+}
+
+.sort-bar {
+	position: absolute;
+	z-index: 1;
+	width: 100%;
+	background-color: white;
+	display: inline-flex;
+	align-items: center;
+	overflow-x: hidden;
+	padding-right: 0;
+	border-radius: 2px;
+	padding: 10px 20px;
+	font-family: "Montserrat", sans-serif;
+
+}
+
+.sort-bar select {
+	margin-left: 1%;
+}
+
+.sort-bar button {
+	margin-left: 10px;
+	padding: 5px;
+	border: none;
+	background: none;
+}
+
+.sort-bar i {
+	margin-right: 5px;
+}
+
+.sort-bar button:hover {
+	border-radius: 2px;
+	background-color: #B5B5B5;
+	cursor: pointer;
+	transition-duration: 0.2s;
+}
+
+.info-container {
+	color: white;
+	text-align: center;
+	margin: auto;
+	width: 60%;
+	font-family: "Montserrat", sans-serif;
+	margin-top: 10%;
+}
+
+.info-container img{
+	width:60%;
+	border-radius: 25px;
+}

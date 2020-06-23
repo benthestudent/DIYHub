@@ -459,3 +459,6 @@ def resetPassword(request):
             login(request, user)
             return redirect("/index")
     return render(request, 'hub/resetPassword.html')
+
+def comingSoon(request):
+    return render(request, 'hub/comingSoon.html')
