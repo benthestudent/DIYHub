@@ -35,10 +35,10 @@ def index(request):
     context = {"projects": projectsArray, "categories": categoryArray, "account": account, "page": page}
     return render(request, 'hub/DIYHUB.html', context)
 
-def createPart(name, cat=0):
+def createPart(name, cat=1):
     part = Parts()
     part.name = name
-    cat = PartCategories.objects.filter(id=cat)
+    cat = PartCategories.objects.filter(id=cat).first()
     if cat:
         part.category = cat
     part.save()
@@ -142,7 +142,10 @@ def createProject(request):
     account = request.user.username if request.user.is_authenticated else None
     context = {"account": account, "page": page}
     if request.method == 'POST' and request.user.is_authenticated:
-        url = request.POST.get("name").replace(" ", "-")
+        url = request.POST.get("name")
+        if url:
+            url = url.replace(" ", "-")
+            url = "dev/" + url #CHECK# ONLY FOR DEV PROJECTS
         imgData = request.POST.get('img').replace("data:image/jpeg;base64,", "")
         projectPath = "hub/static/projects/" + url
         os.makedirs(projectPath)
@@ -154,6 +157,7 @@ def createProject(request):
         partIDs = []
         parts = request.POST.get("parts").split(",")
         print("parts: " + str(parts))
+        partNames = []
         for part in parts:
             partObj = None
             partName = part.split(" x ")[1]
@@ -165,6 +169,7 @@ def createProject(request):
                 partObj = createPart(partName) # create part if not found
             if partObj:
                 partIDs.append(partObj.id)
+                partNames.append(partName)
         print("partIDs: " + str(partIDs))
         form = Project()
         form.name = request.POST.get("name")
@@ -175,6 +180,7 @@ def createProject(request):
         form.parts = str(request.POST.get("parts"))
         form.imgPath = imgURL[imgURL.find("projects/"):]
         form.published = int(published)
+        form.partNames = partNames
         category = request.POST.get("category")
         cat = None
         try:

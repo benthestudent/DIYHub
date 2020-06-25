@@ -134,7 +134,7 @@ function getProjectData() {
 		});
 		steps += "<hr>";
 		// <img src="{% static 'img/stepImage.png' %}" alt="Step Image">
-		stepDesc = $(this).children(".description").children("#stepEditor").children("div").html()
+		stepDesc = $(this).find(".description").children("div").children("div").html();
 		steps += "<div class='stepDesc'>" + stepDesc + "</div>"
 		steps += "</div>";
 	});
@@ -254,7 +254,7 @@ function vote(element, type){
 		});
 		data = {"elementID": elementID, "type": type, "operation": operation};
 		$.ajax({
-			url: '/upvote',
+			url: '/dev/upvote',
 			data: data,
 			type: 'POST',
 			success: function(response) {
@@ -295,7 +295,7 @@ function createComment(element, type){
 		headers: { "X-CSRFToken": getCookie("csrftoken") }
 	});
 	$.ajax({
-				url: '/addComment',
+				url: '/dev/addComment',
 				data: data,
 				type: 'POST',
 				success: function(response) {
@@ -339,7 +339,7 @@ $(document).ready(function() {
 		});
 		console.log(JSON.stringify(data))
 		$.ajax({
-					url: '/create',
+					url: '/dev/create',
 					data: data,
 					type: 'POST',
 					success: function(response) {
@@ -359,16 +359,16 @@ $(document).ready(function() {
 		});
 		console.log(JSON.stringify(data))
 		$.ajax({
-					url: '/create',
+					url: '/dev/create',
 					data: data,
 					type: 'POST',
 					success: function(response) {
-						console.log(response.text);
-						if (response.text.indexOf("//www.") !== -1){
-							document.location.href = "/" + response.text;
+						console.log(response);
+						if (response.indexOf("//www.") !== -1){
+							document.location.href = "/" + response;
 						}
 						else {
-							window.location.href = response.text;
+							window.location.href = response;
 						}
 					},
 					error: function(response) {
@@ -508,7 +508,7 @@ $(document).ready(function() {
 			headers: { "X-CSRFToken": getCookie("csrftoken") }
 		});
 		$.ajax({
-			url: '/getProjects',
+			url: '/dev/getProjects',
 			data: data,
 			type: 'POST',
 			success: function(response) {
