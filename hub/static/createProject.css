@@ -279,11 +279,7 @@ button {
   width: 100%;
 }
 
-.color-selector input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-}
+
 
 .difficulty-selection {
     margin: auto;
@@ -304,6 +300,7 @@ button {
 	align-items: center;
 	margin-bottom: 2%;
 }
+
 .color-selector input {
     position: absolute;
     opacity: 0;

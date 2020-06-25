@@ -1279,9 +1279,13 @@ input:focus, select:focus, textarea:focus, button:focus {
   -moz-transition: all 0.5s ease-out;
   transition: all 0.5s ease-out;
   margin: auto;
-  position: absolute;
-  top: 0;
+
+}
+
+.center {
+    position: absolute;
   left: 0;
+  top: 0;
   bottom: 0;
   right: 0;
 }
@@ -1369,20 +1373,6 @@ input:focus, select:focus, textarea:focus, button:focus {
   right: 0;
 }
 
-.drop .cont {
-  width: 500px;
-  height: 170px;
-  color: white;
-  -webkit-transition: all 0.5s ease-out;
-  -moz-transition: all 0.5s ease-out;
-  transition: all 0.5s ease-out;
-  margin: auto;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-}
 
 .drop .cont i {
   font-size: 40px;
@@ -1774,3 +1764,178 @@ p.hero-subtitle {
   background-color: transparent;
 }
 
+.color-selector {
+    cursor: pointer;
+    width: 20%;
+    height: 10vh;
+    border-radius: 5px;
+	margin: 0 .75%;
+	justify-content: center;
+	align-content: center;
+	align-items: center;
+	margin-bottom: 2%;
+}
+
+.color-selector input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.color-selector input:checked ~ .checkmark:after {
+  display: inline-block;
+}
+
+/* Style the indicator (dot/circle) */
+.color-selector .checkmark:after {
+    width: 100%;
+    height: 96%;
+	border-radius: 10px;
+}
+
+#green {
+    background-color: #2BFF52;
+}
+
+#light-green {
+    background-color: #96FF90;
+
+}
+
+#yellow {
+    background-color: #FFFF44;
+
+}
+
+#orange {
+    background-color: #FE7F2F;
+
+}
+
+#red {
+    background-color: #FE2F2F;
+}
+
+.color-selector:hover {
+    -webkit-box-shadow: inset -4px 0px 78px -24px rgba(0,0,0,0.75);
+	-moz-box-shadow: inset -4px 0px 78px -24px rgba(0,0,0,0.75);
+	box-shadow: inset -4px 0px 78px -24px rgba(0,0,0,0.75);
+}
+
+#category{
+  width: 100%;
+  padding: 1%;
+  border: solid 1px #989898;
+  border-radius: 3px;
+	font-size: 12pt;
+	margin: 2% 0;
+
+}
+
+.description {
+    margin-top: 1%;
+    height: 25vh;
+    margin-bottom: 7%;
+    text-align: left;
+}
+
+.addedPart {
+    padding: 1%;
+    margin-top: 1%;
+    border: solid #575757 1px;
+    border-radius: 5px;
+    margin-bottom: 1%;
+}
+
+.trash {
+    color: #CD3429;
+}
+
+.supplies-container i {
+    cursor: pointer;
+  color: black;
+}
+
+.step {
+  width: 100%;
+  margin: auto;
+  text-align: center;
+}
+
+.add-step input[type='text'] {
+  margin:auto;
+  width: 70%;
+  font-family: Montserrat, sans-serif;
+  margin-bottom: 2%;
+  font-weight: bold;
+  color: black;
+  padding: 0.75rem 1rem;
+}
+
+.steps {
+  width: 100%;
+}
+
+.add-step {
+  margin-bottom: 2%;
+}
+.steps i {
+  cursor: pointer;
+}
+
+.remove-step {
+    color: #CD3429;
+}
+
+.save-step {
+    color: #2BFF52;
+}
+
+.step-buttons {
+  margin-top: 4%;
+}
+
+#projectImg {
+  max-width: 60%;
+  max-height: 60%;
+  margin: auto;
+  margin-top: 2%;
+  margin-bottom: 2%;
+  border-radius: 20px;
+}
+
+.invisible {
+  display: none;
+}
+
+.slide-text {
+  font-size: 18px;
+  font-family: Montserrat, sans-serif;
+  color: black;
+  font-weight: 700;
+  margin: 0;
+}
+
+#save:hover {
+  color: #4CAF50;
+	background-color: transparent;
+	border: solid 2px #4CAF50;
+	transition-duration: 0.2s;
+	cursor: pointer;
+}
+
+#publish:hover {
+  color: #4CAF50;
+	background-color: transparent;
+	border: solid 2px #4CAF50;
+	transition-duration: 0.2s;
+	cursor: pointer;
+
+}

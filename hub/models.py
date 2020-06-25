@@ -100,7 +100,7 @@ class Project(models.Model):
     author = models.ManyToManyField(User)
     views = models.IntegerField(default=0)
     upvotes = models.IntegerField(default=0)
-
+    published = models.IntegerField(default=0)
     def updateUpvotes(self):
         self.upvotes = len(self.upvote_set.all())
 

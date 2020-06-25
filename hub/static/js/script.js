@@ -1,16 +1,24 @@
 function addStep() {
-			let step = "<div class=\"step add-step\"><input type=\"text\" name=\"step\" value=\"" + $("#stepName").val() + "\" readonly><div class=\"description\"><textarea rows=\"7\" readonly>" + $("#stepDescription").val() + "</textarea></div><i class=\"fa fa-pencil edit-step\" id=\"editStep\" style=\"font-size:24px\"></i><i class=\"fa fa-trash-o remove-step\" style=\"font-size:24px\"></i></div>";
+			let step = "<div class=\"step add-step\">"
+				+ "<input name=\"step\" type=\"text\" style=\"margin:auto;width: 70%;font-family: Montserrat, sans-serif;margin-bottom: 2%;font-weight: bold;\" value=\"" + $("#stepName").val() + "\">"
+				+ "<div class='description' style='width: 70%; margin: auto; color: black;'><div id=\"stepDesc\" class=\"editor\">" + $("#stepEditor").children("div").html() + "</div></div>"
+				+ "<div class='step-buttons'>"
+				+ "<i class=\"fa fa-trash-o remove-step\" style=\"font-size:24px\"></i></div></div>";
 			$(".steps").prepend(step);
+			var quill = new Quill('#stepDesc',
+				{
+					theme: 'snow'
+				});
 			$("#stepName").val("");
 			$("#stepDescription").val("");
 			return false;
 }
 
 function addPart() {
-
+			console.log("add part button");
 			if(!isNaN($('#quantity').val())) {
 				// add <i class="fa fa-pencil pencil" id="editPart" style="font-size:24px"></i> for editing
-				let part = "<div class=\"addedPart\"><input type=\"text\" name=\"quantity\" value=\"" + $("#quantity").val() + "\" readonly><input type=\"text\" name=\"part\" id=\"part\" value=\"" + $("#part").val() + "\" readonly><i class=\"fa fa-trash-o trash right\" style=\"font-size:24px\"></i></div>";
+				let part = "<div class=\"border rounded border-primary d-inline-flex align-items-sm-center addedPart\" style=\"width: 100%;padding: 1%;border-color: #575757;\"><input style=\"width: 10%;margin-right: 1%;padding: 5px;\" class=\"border rounded border-secondary\" type=\"text\" name=\"quantity\" value=\"" + $("#quantity").val() + "\" readonly><input style=\"width: 80%;margin-right: 1%;padding: 5px;\" class=\"border rounded border-secondary\" type=\"text\" name=\"part\" id=\"part\" value=\"" + $("#part").val() + "\" readonly><i class=\"fa fa-trash-o trash right\" style=\"font-size:24px\"></i></div>";
 				$("#quantity").val("");
 				$("#part").val("");
 				$('#partsDefault').remove();
@@ -83,7 +91,7 @@ $(document).on("click", "i.save-step", function() {
 
 $(document).on("click", "i.remove-step", function() {
 		console.log("trash");
-		$(this).parent().remove();
+		$(this).parent().parent().remove();
 });
 
 // comment, reply, and upvote functions
@@ -130,7 +138,7 @@ function getProjectData() {
 		steps += "<div class='stepDesc'>" + stepDesc + "</div>"
 		steps += "</div>";
 	});
-	var input = $("#upload-photo");
+	var input = $("#files");
 	var img = $("#projectImg").attr('src');
 	var category = $("#category").val();
 	console.log(img);
@@ -325,6 +333,7 @@ $(document).ready(function() {
 	$("#save").click(function() {
 		var csrftoken = getCookie('csrftoken');
 		var data = getProjectData();
+		data.published = 0;
 		$.ajaxSetup({
     		headers: { "X-CSRFToken": getCookie("csrftoken") }
 		});
@@ -344,6 +353,7 @@ $(document).ready(function() {
 	$("#publish").click(function() {
 		var csrftoken = getCookie('csrftoken');
 		var data = getProjectData();
+		data.published = 1;
 		$.ajaxSetup({
     		headers: { "X-CSRFToken": getCookie("csrftoken") }
 		});
@@ -368,8 +378,10 @@ $(document).ready(function() {
 		});
 	});
 
-	$("#upload-photo").change(function() {
+	$("#files").change(function() {
 		$('#projectImg').attr('src', readURL(this));
+		$('#projectImg').removeClass("invisible");
+		$(".cont").removeClass("center");
 	});
 
 	$("#part").on("input", function (event) {

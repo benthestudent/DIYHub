@@ -154,6 +154,10 @@ body {
 	text-decoration: none;
 }
 
+.header a:hover {
+	text-decoration: none;
+}
+
 .successMessage {
 	background-color: #25973c;
 	width: 100%;

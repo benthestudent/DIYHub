@@ -147,6 +147,7 @@ def createProject(request):
         projectPath = "hub/static/projects/" + url
         os.makedirs(projectPath)
         imgURL = projectPath + "/" + "project-image.png"
+        published = request.POST.get("published")
         print(imgURL)
         with open(imgURL, "wb") as f:
             f.write(base64.b64decode(imgData))
@@ -173,6 +174,7 @@ def createProject(request):
         form.steps = str(request.POST.get("steps"))
         form.parts = str(request.POST.get("parts"))
         form.imgPath = imgURL[imgURL.find("projects/"):]
+        form.published = int(published)
         category = request.POST.get("category")
         cat = None
         try:
@@ -186,7 +188,7 @@ def createProject(request):
         form.author.add(request.user)
         form.save()
         return HttpResponse(url)
-    return render(request, 'hub/createProject.html', context)
+    return render(request, 'hub/newCreateProject.html', context)
 
 
 def project(request, slug):
@@ -200,7 +202,7 @@ def project(request, slug):
         account = request.user.username if request.user.is_authenticated else None
         context = {"account": account, "page": page}
         context["message"] = {"text": "We can find this project, would you like to create one?", "color": "red"}
-        return render(request, "hub/createProject.html", context)
+        return render(request, "hub/newCreateProject.html", context)
     if not project.author.all().first() == request.user:
         project.views += 1
         project.save()
