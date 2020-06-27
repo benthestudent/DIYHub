@@ -32,7 +32,7 @@
 
       <div class="module">
 	  <div class="container-grid">
-          <img src="{% static '' %}{{ project.imgPath }}" alt="ProjectImage">
+          <img src="{% static '' %}{{ project.imgPath }}" alt="ProjectImage" onerror="this.onerror=null;this.src='{% static 'img/ProjectImage.png' %}'>
           {% if project.difficulty %}
               {% if project.difficulty == 1 %}
                 <div class="overlay" style="background-color: #14aa30">
