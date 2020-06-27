@@ -429,3 +429,7 @@ a.edit-button{
 	border-radius: 2px;
 	color: white;
 }
+
+.tabcontent a{
+	margin: auto;
+}

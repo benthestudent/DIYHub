@@ -58,7 +58,7 @@ def loginAndRegister(request, slug="login"):
                     login(request, user)
                 else:
                     context['message'] = {"text": "Login Failed", "color": "red"}
-                return redirect("/profile")
+                return redirect("profile")
             else:
                 context['message'] = {"text": "Registration Failed", "color": "red"}
         else:
@@ -66,7 +66,7 @@ def loginAndRegister(request, slug="login"):
             user = authenticate(request, username=request.POST.get("email"), password=request.POST.get("password"))
             if user is not None:
                 login(request, user)
-                return redirect("/profile")
+                return redirect("profile")
             else:
                 context['message'] = {"text": "Login Failed", "color": "red"}
         return render(request, 'hub/login.html', context)
@@ -79,7 +79,7 @@ def loginAndRegister(request, slug="login"):
 
 def logout(request):
     lgout(request)
-    return redirect("/")
+    return redirect("index")
 
 
 def profile(request, username=None):
@@ -132,7 +132,7 @@ def profile(request, username=None):
                 upvotedProjectsArray.append(
                    {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url})
     else:
-        return redirect("/login")
+        return redirect("loginAndRegister")
     context = {"user": userObj, "projects": projectsArray, "upvotedProjects": upvotedProjectsArray, "message": message, "account": account}
     return render(request, 'hub/profile.html', context)
 
@@ -382,7 +382,7 @@ def upvote(request):
     elementID = request.POST.get("elementID")
     operation = request.POST.get("operation")
     if not request.user.is_authenticated:
-        return redirect("/login")
+        return redirect("loginAndRegister")
     if operation == "downvote":
         element = Comment.objects.filter(id=elementID).first() if (type == "comment") else Project.objects.filter(id=elementID).first()
         print(element)
@@ -534,7 +534,7 @@ def resetPassword(request):
             user.set_password(request.POST.get("newPassword"))
             user.save()
             login(request, user)
-            return redirect("/index")
+            return redirect("index")
     return render(request, 'hub/resetPassword.html')
 
 def comingSoon(request):
