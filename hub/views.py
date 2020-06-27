@@ -188,7 +188,8 @@ def createProject(request, projectID=0):
         imgURL = form.imgPath
         if not 'static/' in str(imgData)[0:10] and imgData: # if img has a / in, its probably a domain
             projectPath = "projects/" + formattedName
-            projectPath = staticfiles_storage.url(projectPath)
+            projectPath = "/opt/bitnami/apps/django/django_projects/static/" + projectPath
+            # projectPath = staticfiles_storage.url(projectPath)
             try:
                 os.makedirs(projectPath)
             except FileExistsError:
@@ -221,6 +222,7 @@ def createProject(request, projectID=0):
         form.difficulty = request.POST.get("difficulty")
         form.steps = str(request.POST.get("steps"))
         form.parts = str(request.POST.get("parts"))
+        imgURL = imgURL.replace("/opt/bitnami/apps/django/django_projects/", "")
         imgURL = imgURL[imgURL.find("projects/"):] if imgURL else ""
         form.imgPath = imgURL
         form.published = int(published)
