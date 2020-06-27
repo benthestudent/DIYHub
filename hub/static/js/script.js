@@ -1,17 +1,45 @@
 function addStep() {
+			let stepID = "stepDesc" + $(".add-step").length.toString();
+			var appendElem = ".added";
+			var stepName = $("#stepName").val()
+			var stepContent = $("#stepEditor").children("div").html()
+			if($(".saved").length > 0){
+				stepName = "";
+				stepContent = "";
+				appendElem = ".steps"
+			}else{
+				if (stepName === "" || stepContent === "<p><br></p>"){
+					alert("Step may not be empty");
+					return
+				}
+			}
 			let step = "<div class=\"step add-step\">"
-				+ "<input name=\"step\" type=\"text\" style=\"margin:auto;width: 70%;font-family: Montserrat, sans-serif;margin-bottom: 2%;font-weight: bold;\" value=\"" + $("#stepName").val() + "\">"
-				+ "<div class='description' style='width: 70%; margin: auto; color: black;'><div id=\"stepDesc\" class=\"editor\">" + $("#stepEditor").children("div").html() + "</div></div>"
+				+ "<input name=\"step\" type=\"text\" style=\"margin:auto;width: 70%;font-family: Montserrat, sans-serif;margin-bottom: 2%;font-weight: bold;\" placeholder=\"Name of Step\" value=\"" + stepName + "\">"
+				+ "<div class='description' style='width: 70%; margin: auto; color: black;'><div id=\"" + stepID + "\" class=\"editor\">" + stepContent + "</div></div>"
 				+ "<div class='step-buttons'>"
 				+ "<i class=\"fa fa-trash-o remove-step\" style=\"font-size:24px\"></i></div></div>";
-			$(".steps").prepend(step);
+			if($(".saved").length > 0){
+
+			}
+			$(appendElem).append(step);
+
+
 			$("#stepEditor").children("div").html("")
-			var quill = new Quill('#stepDesc',
+			var quill = new Quill('#' + stepID,
 				{
-					theme: 'snow'
+					modules: {
+					toolbar: [
+					  [{ header: [1, 2, false] }],
+					  ['bold', 'italic', 'underline'],
+					  ['image', 'code-block']
+					]
+				  	},
+					  scrollingContainer: '#scrolling-container',
+					  theme: 'snow',
+					  placeholder: 'What happens in this step?'
 				});
 			$("#stepName").val("");
-			$("#stepDescription").val("");
+			$("#stepEditor").val("");
 			return false;
 }
 

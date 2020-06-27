@@ -81,7 +81,6 @@
           <img src="{% static '' %}{{ project.imgPath }}" alt="ProjectImage" onerror="this.onerror=null;this.src='{% static 'img/ProjectImage.png' %}';">
           <div class="overlay">
               <h1>{{ project.name }}</h1>
-              <p>{{ project.desc | safe }}</p>
               {% if project.published == 1 %}
               <a class="edit-button" href="create/{{ project.url }}">Edit</a>
               {% endif %}
@@ -108,7 +107,7 @@
           <img src="{% static '' %}{{ project.imgPath }}" alt="ProjectImage">
           <div class="overlay">
               <h1>{{ project.name }}</h1>
-              <p>{{ project.desc }}</p>
+              <p>{{ project.shortDesc }}</p>
           </div>
 	  </div>
     </div>
