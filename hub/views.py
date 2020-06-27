@@ -184,7 +184,7 @@ def createProject(request, projectID=0):
             formattedName = formattedName.replace("+", "_")
         imgData = request.POST.get('img')
         imgData = imgData.replace("data:image/jpeg;base64,", "") if imgData else imgData
-
+        imgData = imgData.replace("data:image/png;base64,", "") if imgData else imgData
         imgURL = form.imgPath
         if not 'static/' in str(imgData)[0:10] and imgData: # if img has a / in, its probably a domain
             projectPath = "hub/static/projects/" + formattedName
@@ -478,9 +478,9 @@ def getProjectsByParts(request):
                 partQueryString += " " + part
             query = SearchQuery(partQueryString)
             vector = SearchVector('parts')
-            projectResults = Project.objects.annotate(rank=SearchRank(vector, query)).order_by('-rank').exclude(partNames__contained_by=parts)
+            projectResults = Project.objects.annotate(rank=SearchRank(vector, query)).order_by('-rank').exclude(partNames__contained_by=parts).exclude(published=0)
             projects["almostProjects"] = getProjectsFromQuery(projectResults)
-            projectResults = Project.objects.filter(partNames__contained_by=parts)
+            projectResults = Project.objects.filter(partNames__contained_by=parts).exclude(published=0)
             print(parts)
 
             projects["projects"] = getProjectsFromQuery(projectResults)
@@ -501,8 +501,9 @@ def getProjectsFromQuery(projects):
     if projects:
         for project in projects:
             desc = removeElements(project.desc, ["<h1>", "</h1>", "<strong>", "</strong>", "<em>", "</em>", "<u>", "</u>", "<ul>", "</ul>", "<li>", "</li>"])
+            shortDesc = desc[:150] + "... " if len(desc) > 150 else desc
             projectsArray.append(
-                {"name": project.name, "desc": desc, "imgPath": project.imgPath, "url": project.url,
+                {"name": project.name, "desc": desc, "shortDesc": shortDesc ,"imgPath": project.imgPath, "url": project.url,
                  "difficulty": project.difficulty, "upvotes": Upvote.objects.filter(project=project).count(), "views": project.views, "published": project.published})
 
     return projectsArray

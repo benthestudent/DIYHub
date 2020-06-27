@@ -167,7 +167,9 @@
                 <div class="form-group d-flex d-sm-flex flex-column justify-content-center align-items-center align-content-center justify-content-sm-start align-items-sm-center" style="height: 100vh;overflow: auto;margin-top: 0;padding-top: 5%;padding-bottom: 5%;">
                     <p style="font-size: 30px;font-weight: bold;color: white;font-family: Montserrat, sans-serif;">Steps</p>
                     <div class="steps">
+
                         {% if project and project.steps %}
+                             <div class="added saved">
                         {% for step in project.steps %}
                         <div class="step add-step">
                             <input class="border rounded d-md-flex align-items-md-center form-control" id="stepName" name="step" type="text" style="font-family: Montserrat, sans-serif;margin-bottom: 2%;font-weight: bold;" placeholder="Step Title" value="{{ step.name }}" autofocus="">
@@ -206,7 +208,9 @@
                                 });
 
                             </script>
+                            </div>
                         {% else %}
+                        <div class="added"></div>
                         <div class="step">
                             <input class="border rounded d-md-flex align-items-md-center form-control" id="stepName" name="step" type="text" style="margin:auto;width: 70%;font-family: Montserrat, sans-serif;margin-bottom: 2%;font-weight: bold;" placeholder="Name of Step" autofocus="">
                             <div class="container-fluid" style="width: 70%;color: black;">
@@ -218,7 +222,7 @@
                                         <div class="text-white" id="toolbar"></div>
                                         <div class="description">
                                             <div id="stepEditor" class="editor">
-                                                <p></p>
+
                                             </div>
                                         </div>
                                         <script>
