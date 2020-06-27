@@ -1773,7 +1773,6 @@ p.hero-subtitle {
 	justify-content: center;
 	align-content: center;
 	align-items: center;
-	margin-bottom: 2%;
 }
 
 .color-selector input {
@@ -1841,7 +1840,7 @@ p.hero-subtitle {
 
 .description {
     margin-top: 1%;
-    height: 25vh;
+  height: auto;
     margin-bottom: 7%;
     text-align: left;
 }
@@ -1899,7 +1898,7 @@ p.hero-subtitle {
 }
 
 .step-buttons {
-  margin-top: 4%;
+  margin-top: 2%;
 }
 
 #projectImg {
@@ -1938,4 +1937,71 @@ p.hero-subtitle {
 	transition-duration: 0.2s;
 	cursor: pointer;
 
+}
+
+.label-text {
+  text-align: center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  color: black;
+}
+
+.label-clicked {
+    -webkit-box-shadow: inset -4px 0px 78px -24px rgba(0,0,0,0.75);
+	-moz-box-shadow: inset -4px 0px 78px -24px rgba(0,0,0,0.75);
+	box-shadow: inset -2px 0px 45px -24px rgba(0,0,0,0.75);
+}
+
+.diff-label {
+  color: black;
+  padding-left: 1%;
+  padding-right: 1%;
+  margin-bottom: 1%;
+}
+
+/* Tell Quill not to scroll */
+#stepEditor {
+  min-height: 25vh;
+}
+#stepEditor .ql-editor {
+  min-height: 25vh;
+  font-size: 14px;
+  overflow-y: visible;
+}
+
+div.stepEdit {
+  min-height: 25vh;
+}
+
+.stepEdit .ql-editor {
+  min-height: 25vh;
+  font-size: 14px;
+  overflow-y: visible;
+  color: black;
+}
+
+#descEditor {
+  min-height: 25vh;
+}
+#descEditor .ql-editor {
+  min-height: 25vh;
+  font-size: 18px;
+  overflow-y: visible;
+}
+
+
+
+/* Specify our own scrolling container */
+#scrolling-container {
+  height: 100%;
+  min-height: 100%;
+  overflow-y: auto;
+}
+
+#stepEditor img {
+  max-width: 75%;
+}
+.ql-editor p {
+    font-weight: 400;
 }

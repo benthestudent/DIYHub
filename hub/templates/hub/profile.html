@@ -64,22 +64,32 @@
   {% if projects %}
       <div class="grid">
   {% for project in projects %}
-      {% if "https" in project.url %}
-          <a href="{{ project.url }}">
-      {% else %}
-        <a href="project/{{ project.url }}">
-      {% endif %}
 
       <div class="module">
 	  <div class="container-grid">
-          <img src="{% static '' %}{{ project.imgPath }}" alt="ProjectImage">
+            {% if "https" in project.url %}
+          <a href="{{ project.url }}">
+      {% else %}
+          <a href="project/{{ project.url }}">
+          {% if project.published == 1 %}
+              <a href="project/{{ project.url }}">
+          {% else %}
+              <a href="create/{{ project.url }}">
+          {% endif %}
+      {% endif %}
+
+          <img src="{% static '' %}{{ project.imgPath }}" alt="ProjectImage" onerror="this.onerror=null;this.src='{% static 'img/ProjectImage.png' %}';">
           <div class="overlay">
               <h1>{{ project.name }}</h1>
               <p>{{ project.desc | safe }}</p>
+              {% if project.published == 1 %}
+              <a class="edit-button" href="create/{{ project.url }}">Edit</a>
+              {% endif %}
           </div>
+      </a>
 	  </div>
     </div>
-      </a>
+
   {% endfor %}
       </div>
   {% else %}

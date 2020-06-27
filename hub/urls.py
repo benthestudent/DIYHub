@@ -4,6 +4,7 @@ urlpatterns = [
     path('', views.comingSoon, name='comingSoon'),
     path('dev', views.index, name='index'),
     path('dev/create', views.createProject, name='createProject'),
+    path('dev/create/<int:projectID>', views.createProject, name='createProject'),
     path('dev/discovery', views.discovery, name='discovery'),
     path('dev/getParts', views.getParts, name='getParts'),
     path('dev/login', views.loginAndRegister, name='loginAndRegister'),

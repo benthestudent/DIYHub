@@ -13,11 +13,11 @@ import base64
 import os
 import operator
 import datetime
-
+from urllib.parse import quote, unquote, quote_plus
 
 def index(request):
     page = "search"
-    projects = Project.objects.all()
+    projects = Project.objects.filter(published=1)
     projectsArray = []
     account = request.user.username if request.user.is_authenticated else None
     projectsArray = getProjectsFromQuery(projects)
@@ -137,25 +137,68 @@ def profile(request, username=None):
     return render(request, 'hub/profile.html', context)
 
 
-def createProject(request):
+def createProject(request, projectID=0):
     page = "create"
     account = request.user.username if request.user.is_authenticated else None
     context = {"account": account, "page": page}
+    if projectID and request.user.is_authenticated:
+        project = Project.objects.filter(id=projectID, author=request.user).first()
+        if project:
+            # editing project
+            parts = project.parts.split(",")
+            partsArray = []
+            for part in parts:
+                part = part.split(" x ")
+                if len(part) == 2:
+                    partsArray.append({"quantity": part[0], "name": part[1]})
+            steps = formatSteps(project.steps)
+            context["project"] = {
+                "name": project.name,
+                "desc": project.desc,
+                "difficulty": project.difficulty,
+                "parts": partsArray,
+                "steps": steps,
+                "img": project.imgPath,
+                "category": project.category.name,
+                "published": project.published
+            }
     if request.method == 'POST' and request.user.is_authenticated:
-        url = request.POST.get("name")
-        if url:
-            url = url.replace(" ", "-")
-            url = "dev/" + url #CHECK# ONLY FOR DEV PROJECTS
-        imgData = request.POST.get('img').replace("data:image/jpeg;base64,", "")
-        projectPath = "hub/static/projects/" + url
-        os.makedirs(projectPath)
-        imgURL = projectPath + "/" + "project-image.png"
         published = request.POST.get("published")
-        print(imgURL)
-        with open(imgURL, "wb") as f:
-            f.write(base64.b64decode(imgData))
+        if published:
+            name = request.POST.get("name")
+            form = None
+            projectID = request.POST.get("urlEnd") if request.POST.get("urlEnd") != "create" else None
+            if projectID:
+                form = Project.objects.filter(id=projectID).first()
+            else:
+                form = Project.objects.filter(name=name).first()
+            print("id: {}, form: {}, urlEnd: {}".format(projectID, str(form), request.POST.get("urlEnd")))
+
+            if not form:
+                form = Project()
+        name = request.POST.get("name")
+        formattedName = name
+        if name:
+            formattedName = formattedName.replace("/", "-")
+            formattedName = quote_plus(formattedName)
+            formattedName = formattedName.replace("+", "_")
+        imgData = request.POST.get('img')
+        imgData = imgData.replace("data:image/jpeg;base64,", "") if imgData else imgData
+
+        imgURL = form.imgPath
+        if not 'static/' in str(imgData)[0:10] and imgData: # if img has a / in, its probably a domain
+            projectPath = "hub/static/projects/" + formattedName
+            try:
+                os.makedirs(projectPath)
+            except FileExistsError:
+                print("Using already made path")
+            imgURL = projectPath + "/" + "project-image.png"
+            print(imgURL)
+            with open(imgURL, "wb") as f:
+                f.write(base64.b64decode(imgData))
         partIDs = []
-        parts = request.POST.get("parts").split(",")
+        parts = request.POST.get("parts")
+        parts = parts.split(",") if parts else []
         print("parts: " + str(parts))
         partNames = []
         for part in parts:
@@ -171,14 +214,14 @@ def createProject(request):
                 partIDs.append(partObj.id)
                 partNames.append(partName)
         print("partIDs: " + str(partIDs))
-        form = Project()
+
         form.name = request.POST.get("name")
         form.desc = request.POST.get("desc")
         form.difficulty = request.POST.get("difficulty")
-        form.url = url
         form.steps = str(request.POST.get("steps"))
         form.parts = str(request.POST.get("parts"))
-        form.imgPath = imgURL[imgURL.find("projects/"):]
+        imgURL = imgURL[imgURL.find("projects/"):] if imgURL else ""
+        form.imgPath = imgURL
         form.published = int(published)
         form.partNames = partNames
         category = request.POST.get("category")
@@ -191,24 +234,32 @@ def createProject(request):
         form.category = cat
         form.partIDs = partIDs
         form.save()
+        url = str(form.id)
+        form.url = url
         form.author.add(request.user)
         form.save()
         return HttpResponse(url)
+    categories = []
+    result = ProjectCategories.objects.all()
+    for part in result:
+        categories.append({"name": part.name})
+    context["categories"] = categories
     return render(request, 'hub/newCreateProject.html', context)
 
 
 def project(request, slug):
     account = request.user.username if request.user.is_authenticated else None
-    projectName = slug.replace("-", " ")
+    projectName = ""
     project = None
     try:
-        project = Project.objects.get(name__exact=projectName)
+        project = Project.objects.get(url__exact=slug)
     except Project.DoesNotExist:
         page = "create"
         account = request.user.username if request.user.is_authenticated else None
         context = {"account": account, "page": page}
         context["message"] = {"text": "We can find this project, would you like to create one?", "color": "red"}
         return render(request, "hub/newCreateProject.html", context)
+    projectName = project.name
     if not project.author.all().first() == request.user:
         project.views += 1
         project.save()
@@ -305,7 +356,7 @@ def addComment(request):
     if request.method == "POST":
         if request.user.is_authenticated:
             form = Comment()
-            form.userID = request.user.id
+            form.user = request.user
             form.body = request.POST.get("body")
             form.save()
             if request.POST.get("type") == "comment":
@@ -438,7 +489,7 @@ def getProjectsByParts(request):
 
 def discovery(request):
     page = "discover"
-    projects = Project.objects.all()
+    projects = Project.objects.filter(published=1)
     projectsArray = []
     account = request.user.username if request.user.is_authenticated else None
     projectsArray = getProjectsFromQuery(projects)
@@ -452,7 +503,7 @@ def getProjectsFromQuery(projects):
             desc = removeElements(project.desc, ["<h1>", "</h1>", "<strong>", "</strong>", "<em>", "</em>", "<u>", "</u>", "<ul>", "</ul>", "<li>", "</li>"])
             projectsArray.append(
                 {"name": project.name, "desc": desc, "imgPath": project.imgPath, "url": project.url,
-                 "difficulty": project.difficulty, "upvotes": Upvote.objects.filter(project=project).count(), "views": project.views})
+                 "difficulty": project.difficulty, "upvotes": Upvote.objects.filter(project=project).count(), "views": project.views, "published": project.published})
 
     return projectsArray
 
@@ -488,3 +539,17 @@ def resetPassword(request):
 
 def comingSoon(request):
     return render(request, 'hub/comingSoon.html')
+
+def formatSteps(steps):
+    steps = steps.split('<div class="steps-container">')[1:]
+    for i in range(0, len(steps)):
+        steps[i] = steps[i][:-6]
+        name = steps[i].split("<div class='stepDesc'>")[0]
+        name = name.replace("<h2>", "") if name else name
+        name = name.replace("</h2><hr>", "") if name else name
+        print(steps[i].split("<div class='stepDesc'>"))
+        desc = steps[i].split("<div class='stepDesc'>")[1]
+        desc = desc[:-6] if len(desc) > 6 else desc
+
+        steps[i] = {"name": name, "desc": desc}
+    return steps

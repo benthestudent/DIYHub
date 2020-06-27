@@ -5,6 +5,8 @@
 	<link href="{% static 'project.css' %}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:600, 400|Montserrat:400, 700|Nunito+Sans:800, 400&display=swap" rel="stylesheet">
     <meta name="projectID" content="{{ projectID }}">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 {% endblock %}
 {% block content %}
 <div class="body">
@@ -111,12 +113,6 @@
 function addComment(element, reply=false) {
         var commentForm = "<div class=\"comment-container comment-creator\">\n" +
             "\t\t\t\t<div>\n" +
-            "\t\t\t\t\t<div class=\"profile\">\n" +
-            "\t\t\t\t\t\t<div class=\"comment-image\">\n" +
-            "\t\t\t\t\t\t\t<img src=\"{% static 'img/img_avatar.png' %}\" alt=\"Profile Picture\">\n" +
-            "\t\t\t\t\t\t</div>\n" +
-            "\t\t\t\t\t\t<a>username</a>\n" +
-            "\t\t\t\t\t</div>\n" +
             "                    <br>\n" +
             "                    <textarea id=\"commentInput\" rows=\"2\"></textarea>\n" +
             "\t\t\t\t</div>\n" +

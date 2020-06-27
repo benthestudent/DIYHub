@@ -5,6 +5,7 @@ function addStep() {
 				+ "<div class='step-buttons'>"
 				+ "<i class=\"fa fa-trash-o remove-step\" style=\"font-size:24px\"></i></div></div>";
 			$(".steps").prepend(step);
+			$("#stepEditor").children("div").html("")
 			var quill = new Quill('#stepDesc',
 				{
 					theme: 'snow'
@@ -110,17 +111,32 @@ $(document).on("click", "#commentUpvote", function () {
 function getProjectData() {
 	var projectName = $("#projectName").val();
 	var projectDesc = $("#descEditor").children("div").html()
+	if (!projectDesc){projectDesc = "";}
 	var difficulty = $("input:checked").val();
 	var parts = "";
 	var steps = "";
+	var partsCompleted = true;
+	var url = $(location).attr('href');
+    var partsOfUrl = url.split("/");
+    var last_part = partsOfUrl[partsOfUrl.length-1];
+
 	$(".addedPart").each(function() {
 		q = true
 		$(this).children("input").each(function() {
 			if (q) {
-				parts += this.value + " x ";
+				var quantity = 0
+				if (this.value) {
+					quantity = this.value
+				}
+				parts += quantity + " x ";
 				q = false;
 			}else {
-				parts += this.value + ",";
+				var partName = this.value
+				if (!partName) {
+					partsCompleted = false;
+
+				}
+				parts += partName + ",";
 			}
 		});
 
@@ -135,6 +151,7 @@ function getProjectData() {
 		steps += "<hr>";
 		// <img src="{% static 'img/stepImage.png' %}" alt="Step Image">
 		stepDesc = $(this).find(".description").children("div").children("div").html();
+		if (!stepDesc){stepDesc="";}
 		steps += "<div class='stepDesc'>" + stepDesc + "</div>"
 		steps += "</div>";
 	});
@@ -142,6 +159,10 @@ function getProjectData() {
 	var img = $("#projectImg").attr('src');
 	var category = $("#category").val();
 	console.log(img);
+	completed = 0;
+	if (projectName && projectDesc && difficulty && parts && partsCompleted && steps && img && category) {
+		completed = 1;
+	}
 	return {
 		"name": projectName,
 		"desc": projectDesc,
@@ -149,7 +170,9 @@ function getProjectData() {
 		"parts": parts,
 		"steps": steps,
 		"img": img,
-		"category": category
+		"category": category,
+		"completed": completed,
+		"urlEnd": last_part
 	};
 }
 
@@ -331,51 +354,63 @@ $(document).ready(function() {
 		}
 	});
 	$("#save").click(function() {
-		var csrftoken = getCookie('csrftoken');
-		var data = getProjectData();
-		data.published = 0;
-		$.ajaxSetup({
-    		headers: { "X-CSRFToken": getCookie("csrftoken") }
-		});
-		console.log(JSON.stringify(data))
-		$.ajax({
-					url: '/dev/create',
-					data: data,
-					type: 'POST',
-					success: function(response) {
-						console.log(response.text);
-					},
-					error: function(response) {
-						console.log("error");
+		if($("#projectName").val() === ""){
+			alert("Your Project Must Be Named Before Saving")
+		}else {
+			var csrftoken = getCookie('csrftoken');
+			var data = getProjectData();
+			data.published = 0;
+			$.ajaxSetup({
+				headers: { "X-CSRFToken": getCookie("csrftoken") }
+			});
+			console.log(JSON.stringify(data))
+			$.ajax({
+						url: '/dev/create',
+						data: data,
+						type: 'POST',
+						success: function(response) {
+							console.log(response.text);
+							if (response.indexOf("//www.") === -1) {
+								document.location.href = "/dev/create/" + response;
+							} else {
+								window.location.href = response;
 					}
-		});
+						},
+						error: function(response) {
+							console.log("error");
+						}
+			});
+		}
 	});
 	$("#publish").click(function() {
 		var csrftoken = getCookie('csrftoken');
 		var data = getProjectData();
-		data.published = 1;
-		$.ajaxSetup({
-    		headers: { "X-CSRFToken": getCookie("csrftoken") }
-		});
-		console.log(JSON.stringify(data))
-		$.ajax({
-					url: '/dev/create',
-					data: data,
-					type: 'POST',
-					success: function(response) {
-						console.log(response);
-						if (response.indexOf("//www.") !== -1){
-							document.location.href = "/" + response;
-						}
-						else {
-							window.location.href = response;
-						}
-					},
-					error: function(response) {
-						console.log("error");
-						alert("Could not Publish. Error saving project. Please contact site administrator, using contact page.");
+		if (data.completed) {
+			data.published = 1;
+			$.ajaxSetup({
+				headers: {"X-CSRFToken": getCookie("csrftoken")}
+			});
+			console.log(JSON.stringify(data))
+			$.ajax({
+				url: '/dev/create',
+				data: data,
+				type: 'POST',
+				success: function (response) {
+					console.log(response);
+					if (response.indexOf("//www.") === -1) {
+						document.location.href = "/dev/project/" + response;
+					} else {
+						window.location.href = response;
 					}
-		});
+				},
+				error: function (response) {
+					console.log("error");
+					alert("Could not Publish. Error saving project. Please contact site administrator, using contact page.");
+				}
+			});
+		}else {
+			alert("You have not completely filled out your project. Go back and make sure you have a name, description, image, supplies, and steps");
+		}
 	});
 
 	$("#files").change(function() {
@@ -388,8 +423,8 @@ $(document).ready(function() {
 		if(!$("#partsList").length){
 			$("#part").after(" <datalist id=\"partsList\"></datalist>");
 		}
-		$.get({
-			url: '/getParts',
+		$.ajax({
+			url: '/dev/getParts',
 			data: {"search": $("#part").val()},
 			success: function (response) {
 				parts = JSON.parse(response)
@@ -412,11 +447,12 @@ $(document).ready(function() {
 		if(!$("#categories").length){
 			$("#category").after(" <datalist id=\"categories\"></datalist>");
 		}
-		$.get({
-			url: '/getCategories',
+		$.ajax({
+			url: '/dev/getCategories',
 			data: {"search": $("#category").val()},
 			success: function (response) {
 				cats = JSON.parse(response)
+				console.log(cats);
 				$("#categories").empty();
 				cats.forEach(function (item) {
 					$("#categories").append('<option value="' + item.name + '" >');
@@ -433,8 +469,8 @@ $(document).ready(function() {
 	});
 
 	$("#category").focus(function () {
-		$.get({
-			url: '/getCategories',
+		$.ajax({
+			url: '/dev/getCategories',
 			data: {},
 			success: function (response) {
 				cats = JSON.parse(response)
@@ -521,6 +557,21 @@ $(document).ready(function() {
 				console.log("error");
 			}
 		});
+	});
+
+	$("input:radio[name='difficulty']").change(function () {
+		console.log("label clicked");
+		if($(".label-clicked").length > 0){
+			if($(this).parent().hasClass("label-clicked")){
+				$(this).parent().toggleClass("label-clicked");
+			}else {
+				$(".label-clicked").removeClass("label-clicked");
+				$(this).parent().addClass("label-clicked");
+			}
+
+		}else {
+			$(this).parent().addClass("label-clicked");
+		}
 	});
 });
 

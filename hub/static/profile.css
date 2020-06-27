@@ -415,3 +415,17 @@ main {
 .successMessage h3 {
 	margin-top: 2vh;
 }
+
+.overlay a {
+    text-decoration: none;
+    color: inherit;
+}
+
+a.edit-button{
+	padding: 10px 11px;
+	background: none;
+	border: solid white 1px;
+	font-family: "Montserrat", sans-serif;
+	border-radius: 2px;
+	color: white;
+}

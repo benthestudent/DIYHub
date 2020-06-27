@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://cdn.quilljs.com/1.0.0/quill.js"></script>
-    <script src="assets/js/Quill-Text-Editor.js"></script>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
 {% endblock %}
 {% block content %}
@@ -22,7 +22,11 @@
         <div class="carousel-inner" role="listbox">
             <div class="carousel-item  active" style="height: 100vh;">
                 <div class="form-group d-flex flex-column justify-content-center align-items-center align-content-center" style="height: 90vh;max-height: 100vh;overflow: auto;">
-                    <input class="border rounded d-md-flex align-items-md-center form-control" id="projectName" type="text" style="width: 70%;font-family: Montserrat, sans-serif;margin-bottom: 2%;font-weight: bold;" placeholder="Project Title" autofocus="">
+                    {% if project and project.name %}
+                        <input class="border rounded d-md-flex align-items-md-center form-control" id="projectName" type="text" style="width: 70%;font-family: Montserrat, sans-serif;margin-bottom: 2%;font-weight: bold;" value="{{ project.name }}" autofocus="">
+                    {% else %}
+                        <input class="border rounded d-md-flex align-items-md-center form-control" id="projectName" type="text" style="width: 70%;font-family: Montserrat, sans-serif;margin-bottom: 2%;font-weight: bold;" placeholder="Project Title" autofocus="">
+                    {% endif %}
                     <div class="container-fluid"
                         style="width: 70%;color: black;height: 50vh;">
                         <div class="row">
@@ -33,7 +37,11 @@
                                 <div class="text-white" id="toolbar"></div>
                                 <div class="description">
                                     <div id="descEditor" class="editor">
-                                        <p></p>
+                                        {% if project and project.desc %}
+                                            {{ project.desc | safe }}
+                                        {% else %}
+                                            <p></p>
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <script>
@@ -52,8 +60,15 @@
                 <div class="dashed_upload">
                     <div class="wrapper">
                         <div class="drop">
-                            <img id="projectImg" class="invisible">
-                            <div class="cont center">
+                            {% if project and project.img %}
+                                <img id="projectImg" src="{% static '' %}{{ project.img }}">
+                                <div class="cont">
+                            {% else %}
+                                <img id="projectImg" class="invisible">
+                                <div class="cont center">
+                            {% endif %}
+
+
                              <i class="fa fa-cloud-upload"></i>
                                 <div class="tit">
                                     Drag & Drop Project Image
@@ -76,7 +91,7 @@
                 <div class="d-flex flex-column justify-content-center align-items-center" style="height: 100vh;width: 100%;">
                     <div class="border rounded" style="width: 70%;background-color: white;padding: 10px;margin-bottom: 4%;">
                         <p style="font-size: 18px;font-family: Montserrat, sans-serif;color: black;font-weight: 700;margin: 0;">Difficulty</p>
-                        <div class="btn-group d-inline-flex align-items-center justify-content-sm-center" role="group" style="width: 100%;height: 15vh;background-color: white;padding: 10px;filter: blur(0px) hue-rotate(0deg) saturate(99%);">
+                        <div class="btn-group d-inline-flex align-items-center justify-content-sm-center" role="group" style="width: 100%;margin-top:1%;background-color: white;filter: blur(0px) hue-rotate(0deg) saturate(99%);">
                             <label class="color-selector" id="green" for="one">
                                 <input type="radio" checked="checked" name="difficulty" value="1" id="one">
                                 <span class="checkmark"></span>
@@ -98,23 +113,53 @@
                                 <span class="checkmark"></span>
                             </label>
                         </div>
+                        <script>
+                            {% if project and project.difficulty %}
+                                $(document).ready(function () {
+                                    $(".color-selector input").eq({{ project.difficulty }} - 1).attr("checked", "checked");
+                                    $("label.color-selector").eq({{ project.difficulty }} - 1).addClass("label-clicked");
+                                });
+                            {% endif %}
+                        </script>
+                        <div class="diff-label"><span>Very Easy</span><span style="float:right">Very Difficult</span></div>
                         <p class="slide-text">Category</p>
-                        <input type="text" id="category" name="category" list="categories" />
-                        <datalist id="categories">
-                            <option value="test category"/>
-                        </datalist>
+                        <select id="category">
+                            {% for category in categories %}
+                                <option class="cat-options" value="{{ category.name }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <script>
+                            {% if project and project.category %}
+                                $(document).ready(function () {
+                                    $("option[value='{{ project.category }}']").attr("selected", "selected");
+                                });
+                            {% endif %}
+                        </script>
                         <p class="slide-text">Supplies</p>
                         <div class="supplies-container">
                             <div class="border rounded border-primary d-inline-flex align-items-sm-center part " style="width: 100%;padding: 1%;border-color: #575757;">
-                                <input class="border rounded border-secondary" type="text" style="width: 10%;margin-right: 1%;padding: 5px;" name="quantity" id="quantity" placeholder="Quantity">
-                                <input class="border rounded border-secondary" type="text" style="width: 80%;margin-right: 1%;padding: 5px;" name="partsNeeded" id="part" placeholder="Search for a part...">
-                                <datalist id="partsList"></datalist>
-                                <i class="fa fa-search" style="color: #000000;"></i>
-                                <i class="fas fa-plus-circle" style="margin-left: 3%;cursor: pointer;" onclick="addPart()"></i>
+                                    <input class="border rounded border-secondary" type="text" style="width: 10%;margin-right: 1%;padding: 5px;" name="quantity" id="quantity" placeholder="Quantity">
+                                    <input class="border rounded border-secondary" type="text" style="width: 80%;margin-right: 1%;padding: 5px;" name="partsNeeded" id="part" list="partsList" placeholder="Search for a part...">
+                                    <i class="fa fa-search" style="color: #000000;"></i>
+                                    <i class="fas fa-plus-circle" style="margin-left: 3%;cursor: pointer;" onclick="addPart()"></i>
                             </div>
+                            {% if project and project.parts %}
+                                    {% for part in project.parts %}
+                                        <div class="border rounded border-primary d-inline-flex align-items-sm-center part addedPart" style="width: 100%;padding: 1%;border-color: #575757;">
+                                            <input class="border rounded border-secondary" type="text" style="width: 10%;margin-right: 1%;padding: 5px;" name="quantity" id="quantity" value="{{ part.quantity }}">
+                                            <input class="border rounded border-secondary" type="text" style="width: 80%;margin-right: 1%;padding: 5px;" name="partsNeeded" id="part" list="partsList" value="{{ part.name }}">
+                                            <datalist id="partsList"></datalist>
+                                            <i class="fa fa-search" style="color: #000000;"></i>
+                                            <i class="fas fa-plus-circle" style="margin-left: 3%;cursor: pointer;" onclick="addPart()"></i>
+                                        </div>
+                                    {% endfor %}
+
+                            {% endif %}
+
                         </div>
-                        <hr style="color: black;background-color: black;">
-                        <p class="text-center" style="font-family: Montserrat, sans-serif;color: black;">No Parts Added</p>
+                    {% if not project or project and not project.parts %}
+                        <p id='partsDefault' class="text-center" style="font-family: Montserrat, sans-serif;color: black;margin-top: 2%">No Parts Added</p>
+                    {% endif %}
                     </div>
                 </div>
             </div>
@@ -122,6 +167,46 @@
                 <div class="form-group d-flex d-sm-flex flex-column justify-content-center align-items-center align-content-center justify-content-sm-start align-items-sm-center" style="height: 100vh;overflow: auto;margin-top: 0;padding-top: 5%;padding-bottom: 5%;">
                     <p style="font-size: 30px;font-weight: bold;color: white;font-family: Montserrat, sans-serif;">Steps</p>
                     <div class="steps">
+                        {% if project and project.steps %}
+                        {% for step in project.steps %}
+                        <div class="step add-step">
+                            <input class="border rounded d-md-flex align-items-md-center form-control" id="stepName" name="step" type="text" style="font-family: Montserrat, sans-serif;margin-bottom: 2%;font-weight: bold;" placeholder="Step Title" value="{{ step.name }}" autofocus="">
+
+                            <div class="description" style="margin:auto;width: 70%;font-family: Montserrat, sans-serif;margin-bottom: 2%;font-weight: bold;">
+                                <div class="editor stepEdit">
+                                    {{ step.desc | safe }}
+                                </div>
+                            </div>
+                            <div class='step-buttons'>
+				                <i class="fa fa-trash-o remove-step" style="font-size:24px"></i>
+                            </div>
+
+                        </div>
+                        {% endfor %}
+                            <script>
+                                $(document).ready(function () {
+                                    for (var i = 0; i < $(".step div.description").length; i++) {
+                                    var elemID = i;
+                                    elemID = 'stepTest' + elemID.toString();
+                                    console.log(elemID);
+                                    $(".step .editor").eq(i).attr('id', elemID);
+                                    var quill = new Quill("#" + elemID, {
+                                        modules: {
+                                            toolbar: [
+                                                [{header: [1, 2, false]}],
+                                                ['bold', 'italic', 'underline'],
+                                                ['image', 'code-block']
+                                            ]
+                                        },
+                                        scrollingContainer: '#scrolling-container',
+                                        theme: 'snow',
+                                        placeholder: 'What happens in this step?'
+                                    });
+                                }
+                                });
+
+                            </script>
+                        {% else %}
                         <div class="step">
                             <input class="border rounded d-md-flex align-items-md-center form-control" id="stepName" name="step" type="text" style="margin:auto;width: 70%;font-family: Montserrat, sans-serif;margin-bottom: 2%;font-weight: bold;" placeholder="Name of Step" autofocus="">
                             <div class="container-fluid" style="width: 70%;color: black;">
@@ -138,7 +223,15 @@
                                         </div>
                                         <script>
                                           var quill = new Quill('#stepEditor', {
-                                            theme: 'snow',
+                                              modules: {
+                                                toolbar: [
+                                                  [{ header: [1, 2, false] }],
+                                                  ['bold', 'italic', 'underline'],
+                                                  ['image', 'code-block']
+                                                ]
+                                              },
+                                              scrollingContainer: '#scrolling-container',
+                                              theme: 'snow',
                                               placeholder: 'What happens in this step?'
                                           });
                                         </script>
@@ -146,6 +239,7 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
                     </div>
 
                     <button class="btn" onclick="addStep()" type="button" style="background-color: #BFBFBF;font-family: 'Open Sans', sans-serif;font-weight: bold;color: #444444;">Add Step</button>
@@ -154,8 +248,20 @@
         <div class="carousel-item" style="height: 100vh;">
             <div class="d-flex flex-column justify-content-center justify-content-sm-center align-items-sm-center" style="height: 100vh;">
                 <div class="btn-group" role="group" style="width: 50%;">
-                    <button class="btn" type="button" style="color: white;background-color: #008a00;margin-right: 20%;border-radius: 5px;font-family: 'Open Sans', sans-serif;font-weight: bold;font-size: 18px;" id="save">Save</button>
-                    <button class="btn" type="button" style="color: white;background-color: #e60000;border-color: #e60000;border-radius: 5px;font-family: 'Open Sans', sans-serif;font-weight: bold;font-size: 18px;" id="publish" >Publish</button></div>
+                    {% if project %}
+                        {% if project.published %}
+                            <button class="btn" type="button" style="color: white;background-color: #008a00;margin-right: 20%;border-radius: 5px;font-family: 'Open Sans', sans-serif;font-weight: bold;font-size: 18px;" id="save">Save and Unpublish</button>
+                            <button class="btn" type="button" style="color: white;background-color: #e60000;border-color: #e60000;border-radius: 5px;font-family: 'Open Sans', sans-serif;font-weight: bold;font-size: 18px;" id="publish" >Publish</button>
+                        {% else %}
+                            <button class="btn" type="button" style="color: white;background-color: #008a00;margin-right: 20%;border-radius: 5px;font-family: 'Open Sans', sans-serif;font-weight: bold;font-size: 18px;" id="save">Save Changes</button>
+                            <button class="btn" type="button" style="color: white;background-color: #e60000;border-color: #e60000;border-radius: 5px;font-family: 'Open Sans', sans-serif;font-weight: bold;font-size: 18px;" id="publish" >Publish Changes</button>
+                        {% endif %}
+                    {% else %}
+                        <button class="btn" type="button" style="color: white;background-color: #008a00;margin-right: 20%;border-radius: 5px;font-family: 'Open Sans', sans-serif;font-weight: bold;font-size: 18px;" id="save">Save</button>
+                        <button class="btn" type="button" style="color: white;background-color: #e60000;border-color: #e60000;border-radius: 5px;font-family: 'Open Sans', sans-serif;font-weight: bold;font-size: 18px;" id="publish" >Publish</button>
+                    {% endif %}
+                </div>
+
             </div>
         </div>
     </div>
