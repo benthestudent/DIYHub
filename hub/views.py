@@ -187,7 +187,8 @@ def createProject(request, projectID=0):
         imgData = imgData.replace("data:image/png;base64,", "") if imgData else imgData
         imgURL = form.imgPath
         if not 'static/' in str(imgData)[0:10] and imgData: # if img has a / in, its probably a domain
-            projectPath = "hub/static/projects/" + formattedName
+            projectPath = "projects/" + formattedName
+            projectPath = staticfiles_storage.url(projectPath)
             try:
                 os.makedirs(projectPath)
             except FileExistsError:
