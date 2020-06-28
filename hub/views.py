@@ -431,16 +431,16 @@ def filterProjects(request, filter="popular", num_of_results=25, page=1, categor
     # return 25 projects based on number of upvotes
     if filter == "most_liked":
         if category:
-            projects = Project.objects.order_by("-upvotes").filter(category=category)[startOfResults:startOfResults+num_of_results]
+            projects = Project.objects.order_by("-upvotes").filter(category=category).exclude(published=0)[startOfResults:startOfResults+num_of_results]
         else:
-            projects = Project.objects.order_by("-upvotes")[startOfResults:startOfResults+num_of_results]
+            projects = Project.objects.order_by("-upvotes").exclude(published=0)[startOfResults:startOfResults+num_of_results]
 
     if filter == "popular":
         if category:
-            projects = Project.objects.order_by("-views").filter(category=category)[
+            projects = Project.objects.order_by("-views").filter(category=category).exclude(published=0)[
                        startOfResults:startOfResults + num_of_results]
         else:
-            projects = Project.objects.order_by("-views")[startOfResults:startOfResults + num_of_results]
+            projects = Project.objects.order_by("-views").exclude(published=0)[startOfResults:startOfResults + num_of_results]
 
     projects = {"projects": getProjectsFromQuery(projects)}
     return HttpResponse(json.dumps(projects))

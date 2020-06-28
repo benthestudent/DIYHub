@@ -263,7 +263,7 @@ function refreshProjects(projects) {
         var element = "<a href=\"project/" + projects["projects"][i].url + "\">\n" +
             "      <div class=\"module\">\n" +
             "\t  <div class=\"container-grid\">\n" +
-            "          <img src=\"static/" + projects["projects"][i].imgPath + "\" alt=\"ProjectImage\">\n" +
+            "          <img src=\"static/" + projects["projects"][i].imgPath + "\" alt=\"ProjectImage\" >\n" +
             styles +
             "              <h1>" + projects["projects"][i].name + "</h1>\n" +
             "              <p>" + projects["projects"][i].desc + "</p>\n" +
