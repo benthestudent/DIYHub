@@ -89,8 +89,9 @@ def profile(request, username=None):
     upvotedProjectsArray = []
     projectsArray = []
     message = {}
-    if request.user.is_authenticated:
-        if request.method == "POST":
+    user_by_name = User.objects.filter(username=username).first()
+    if request.user.is_authenticated or user_by_name:
+        if request.method == "POST" and not user_by_name:
             user = request.user
             if request.POST.get("oldPassword") and request.POST.get("newPassword") and request.POST.get("newPassword1"):
                 if check_password(request.POST.get("oldPassword"), user.password) and request.POST.get("newPassword") == request.POST.get("newPassword1"):
@@ -113,6 +114,7 @@ def profile(request, username=None):
                 if request.POST.get("bio"):
                     user.bio = request.POST.get("bio")
                 user.save()
+        user = user_by_name if user_by_name else user
         userObj = {
             "email": user.email,
             "username": user.username,
@@ -121,7 +123,7 @@ def profile(request, username=None):
             "phone": user.phone,
             "bio": user.bio
         }
-        projects = Project.objects.filter(author=user)
+        projects = Project.objects.filter(author=user).exclude(published=0)
 
         projectsArray = getProjectsFromQuery(projects)
         upvotes = Upvote.objects.filter(user=user, comment=None)
@@ -134,6 +136,8 @@ def profile(request, username=None):
     else:
         return redirect("loginAndRegister")
     context = {"user": userObj, "projects": projectsArray, "upvotedProjects": upvotedProjectsArray, "message": message, "account": account}
+    if user_by_name:
+        return render(request, 'hub/profilePage.html', context)
     return render(request, 'hub/profile.html', context)
 
 

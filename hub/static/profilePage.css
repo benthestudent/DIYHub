@@ -170,8 +170,7 @@ body {
 
 .profile-back {
   background-color: #9b1f1f;
-  height: 150px;
-  margin-bottom: -75px;
+  padding-bottom: 6%;
 }
 
 .profile-pic {

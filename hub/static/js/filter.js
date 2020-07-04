@@ -19,7 +19,7 @@ $(document).ready(function() {
 });
 
 function filterProjects(method, projectsPerPage=25) {
-    let url = "filterProjects/" + method + "/" + projectsPerPage.toString();
+    let url = "/dev/filterProjects/" + method + "/" + projectsPerPage.toString();
     $.get(url).done(function (data) {
         refreshProjects(JSON.parse(data));
     });
