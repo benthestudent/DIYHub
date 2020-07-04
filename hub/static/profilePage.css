@@ -345,3 +345,8 @@ body {
 	cursor: pointer;
 	transition-duration: 0.2s;
 }
+
+a:hover{
+    color: #FFFFFF;
+	text-decoration: none;
+}
