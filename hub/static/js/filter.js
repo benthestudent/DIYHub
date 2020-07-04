@@ -58,7 +58,7 @@ function refreshProjects(projects) {
             "          <img src=\"/static/" + projects["projects"][i].imgPath + "\" alt=\"ProjectImage\">\n" +
             styles +
             "              <h1>" + projects["projects"][i].name + "</h1>\n" +
-            "              <p>" + projects["projects"][i].desc + "</p>\n" +
+            "              <p>" + projects["projects"][i].shortDesc + "</p>\n" +
             "          </div>\n" +
             "</div>" +
             "    </div>" +

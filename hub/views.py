@@ -509,6 +509,7 @@ def getProjectsFromQuery(projects):
         for project in projects:
             desc = removeElements(project.desc, ["<h1>", "</h1>", "<strong>", "</strong>", "<em>", "</em>", "<u>", "</u>", "<ul>", "</ul>", "<li>", "</li>"])
             shortDesc = desc[:150] + "... " if len(desc) > 150 else desc
+            print("debug: getting the shorter desc: {}".format(shortDesc))
             projectsArray.append(
                 {"name": project.name, "desc": desc, "shortDesc": shortDesc ,"imgPath": project.imgPath, "url": project.url,
                  "difficulty": project.difficulty, "upvotes": Upvote.objects.filter(project=project).count(), "views": project.views, "published": project.published})
