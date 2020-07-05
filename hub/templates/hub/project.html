@@ -20,7 +20,7 @@
 				<div class="username-image">
 					<img src="{% static 'img/img_avatar.png' %}" alt="Profile Picture">
 				</div>
-			<a>{{ author }}</a>
+			<a href="{% url 'profile' author %}">{{ author }}</a>
 				<span>{{ views }} <i class="fa fa-eye"></i> <span id="projectUpvoteCounter">{{ upvotes }}</span> <i class="fa fa-thumbs-up"></i></span>
 		</div>
 				<p>{{ desc | safe }}</p>
@@ -39,7 +39,7 @@
 		</div>
 		<div class="upvote-tag">
 			<div class="tag">
-				<p>Posted {{ dateCreated }} by <a href="">{{ author }}</a> in <a>{{ category }}</a></p>
+				<p>Posted {{ dateCreated }} by <a href="{% url 'profile' author %}">{{ author }}</a> in <a>{{ category }}</a></p>
 			</div>
 
             {% if upvoted %}
@@ -62,7 +62,7 @@
                             <div class="comment-image">
                                 <img src="{% static 'img/img_avatar.png' %}" alt="Profile Picture">
                             </div>
-                            <a>{{ comment.user }}</a>
+                            <a href="{% url 'profile' comment.user %}">{{ comment.user }}</a>
                         </div>
 
                         <p>{{ comment.body }}</p>
@@ -85,7 +85,7 @@
                                     <div class="comment-image">
                                         <img src="{% static 'img/img_avatar.png' %}" alt="Profile Picture">
                                     </div>
-                                    <a>{{ reply.user }}</a>
+                                    <a href="{% url 'profile' reply.user %}">{{ reply.user }}</a>
                                 </div>
 
                                 <p>{{ reply.body }}</p>

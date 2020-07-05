@@ -556,6 +556,15 @@ $(document).ready(function() {
 			$(".validation-error").removeClass("invisible");
 		}
 	});
+
+	$("#reset-pass-button").click(function () {
+		if ($("#register-password").hasClass("valid") && $("#register-password").val() && $("#reset-password-confirm").val() && $("#register-password").val() === $("#reset-password-confirm").val()) {
+			$(this).closest("form").submit();
+		}else{
+			$(".validation-error").removeClass("invisible");
+		}
+	});
+
 	$("input[type='checkbox']").change(function() {
 		let parts = "";
 		$("input[type='checkbox']").each(function() {

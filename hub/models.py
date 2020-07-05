@@ -50,6 +50,8 @@ class User(AbstractBaseUser):
     # parts = ArrayField(models.TextField(), blank=True)
     # projects = ArrayField(models.TextField(), blank=True)
     savedProjects = ArrayField(models.IntegerField(null=True), null=True, blank=True)
+    passwd_reset_token = models.CharField(max_length=50, null=True)
+    passwd_reset_token_timestamp = models.DateTimeField(null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', ]

@@ -37,6 +37,8 @@ body {
 .username a  {
 	font-family: "Open Sans";
 	margin-left: 10px;
+	color: white;
+	text-decoration: none;
 }
 
 .username-image img {

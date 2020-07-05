@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from . import views
 urlpatterns = [
     path('', views.comingSoon, name='comingSoon'),
@@ -25,5 +25,6 @@ urlpatterns = [
     path('dev/about', views.about, name='about'),
     path('dev/getProjects', views.getProjectsByParts, name='getProjects'),
     path('dev/forgotPassword', views.forgotPassword, name='forgotPassword'),
-    path('dev/resetPassword', views.resetPassword, name='resetPassword')
+    re_path('dev/resetPassword/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})', views.resetPassword, name='resetPassword_confirm'),
+    path('dev/resetPassword/done', views.resetPassword, name='resetPassword_complete')
 ]

@@ -53,7 +53,7 @@
 {#        </select>#}
 {#      </div>#}
   {% for project in projects %}
-      {% if "https" in project.url %}
+      {% if "http" in project.url %}
           <a href="{{ project.url }}">
       {% else %}
         <a href="/dev/project/{{ project.url }}">

@@ -8,6 +8,10 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django.contrib.auth.hashers import check_password
 from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django.core.mail import send_mail
+from django.utils.html import strip_tags
+from django.template.loader import render_to_string
+from django.utils import timezone
+import rstr
 import json
 import base64
 import os
@@ -461,7 +465,7 @@ def contact(request):
         message += "Country: " + country + "\n"
         message += subject
         now = datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
-        fromEmail = 'diyhub@benphillips.site'
+        fromEmail = 'diyhub.io@gmail.com'
         toEmail = 'benthefreelancer@gmail.com'
         send_mail('Contact Form Message: ' + now, message, fromEmail, [toEmail], fail_silently=False)
         context["message"] = {"text": "Message Sent", "color": "green"}
@@ -528,7 +532,24 @@ def forgotPassword(request):
             user = User.objects.filter(email=email).first()
             if user:
                 print("send mail to reset")
-                #send mail to user so they can reset password
+                token = gen_token()
+                while User.objects.filter(passwd_reset_token=token).first():
+                    token = gen_token()
+                user.passwd_reset_token = token
+                user.passwd_reset_token_timestamp = timezone.now()
+                user.save()
+                mail_context = {
+                    'protocol': 'http',
+                    'domain': '127.0.0.1:8000',
+                    'uid': user.id,
+                    'token': token
+                }
+                html_message = render_to_string('hub/forgotPassword_email.html', context=mail_context)
+                plain_message = strip_tags(html_message)
+                fromEmail = 'diyhub.io@gmail.com'
+                toEmail = email
+                send_mail("Reset Password", plain_message, fromEmail, [toEmail], fail_silently=False, html_message=html_message)
+                return render(request, "hub/forgotPassword_done.html")
             else:
                 print("Not a recognized email")
                 context = {"message": {"text": "Email not recognized", "color": "red"}}
@@ -536,15 +557,23 @@ def forgotPassword(request):
     return render(request, 'hub/forgotPassword.html')
 
 
-def resetPassword(request):
-    if request.method == "POST":
-        user = User() #get user
-        if request.POST.get("newPassword") == request.POST.get("newPassword2"):
-            user.set_password(request.POST.get("newPassword"))
-            user.save()
-            login(request, user)
-            return redirect("index")
-    return render(request, 'hub/resetPassword.html')
+def resetPassword(request, uidb64=None, token=None):
+    if uidb64 and token:
+        user = User.objects.filter(passwd_reset_token=token).first()
+        if user:
+            now = timezone.now()
+            token_timestamp = user.passwd_reset_token_timestamp
+            if (now - token_timestamp).days == 0:
+                if request.method == "POST":
+                    if request.POST.get("newPassword") == request.POST.get("newPassword2"):
+                        user.set_password(request.POST.get("newPassword"))
+                        user.passwd_reset_token = None
+                        user.save()
+                        login(request, user)
+                        return render(request, "hub/resetPassword_complete.html")
+                else:
+                    return render(request, "hub/resetPassword.html", context={'validlink': True, 'uid': uidb64, 'token': token})
+    return render(request, 'hub/resetPassword.html', context={'validlink': False, 'uid': None, 'token': None})
 
 def comingSoon(request):
     return render(request, 'hub/comingSoon.html')
@@ -562,3 +591,6 @@ def formatSteps(steps):
 
         steps[i] = {"name": name, "desc": desc}
     return steps
+
+def gen_token():
+    return rstr.xeger(r'[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20}')
