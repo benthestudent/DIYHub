@@ -567,11 +567,11 @@ def contact(request):
     account = request.user.username if request.user.is_authenticated else None
     context = {"account": account}
     if request.method == "POST":
-        firstname = request.POST.get("firstname")
-        lastname = request.POST.get("lastname")
+        name = request.POST.get("name")
+        email = request.POST.get("email")
         country = request.POST.get("country")
         subject = request.POST.get("subject")
-        message = "From: " + firstname + " " + lastname + "\n"
+        message = "From: " + name + ", Email: " + email + "\n"
         message += "Country: " + country + "\n"
         message += subject
         now = datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
