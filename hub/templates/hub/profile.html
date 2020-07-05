@@ -67,9 +67,9 @@
 
       <div class="module">
 	  <div class="container-grid">
-        {% if "https" in project.url %}
+        {% if "http" in project.url %}
           <a href="{{ project.url }}">
-        {% else %}
+        {% elif project.url %}
           {% if project.published == 1 %}
               <a href="{% url 'project' project.url %}">
           {% else %}
@@ -80,11 +80,11 @@
           <img src="{% static '' %}{{ project.imgPath }}" alt="ProjectImage" onerror="this.onerror=null;this.src='{% static 'img/ProjectImage.png' %}';">
           <div class="overlay">
               <h1>{{ project.name }}</h1>
-              {% if project.published == 1 %}
+              {% if project.published == 1  and not "http" in project.url and project.url %}
               <a class="edit-button" href="{% url 'createProject' project.url %}">Edit</a>
               {% endif %}
           </div>
-        </a>
+      </a>
 	  </div>
     </div>
 
@@ -100,6 +100,7 @@
     {% if upvotedProjects %}
       <div class="grid-upvoted">
   {% for project in upvotedProjects %}
+
       <a href="{% url 'project' project.url %}">
       <div class="module-upvoted">
 	  <div class="container-grid">
