@@ -257,6 +257,116 @@ def createProject(request, projectID=0):
     context["categories"] = categories
     return render(request, 'hub/newCreateProject.html', context)
 
+def linkProject(request, projectID=0):
+    account = request.user.username if request.user.is_authenticated else None
+    context = {"account": account}
+    if projectID and request.user.is_authenticated:
+        project = Project.objects.filter(id=projectID, author=request.user).first()
+        if project:
+            # editing project
+            parts = project.parts.split(",")
+            partsArray = []
+            for part in parts:
+                part = part.split(" x ")
+                if len(part) == 2:
+                    partsArray.append({"quantity": part[0], "name": part[1]})
+            steps = formatSteps(project.steps)
+            context["project"] = {
+                "name": project.name,
+                "desc": project.desc,
+                "difficulty": project.difficulty,
+                "parts": partsArray,
+                "steps": steps,
+                "img": project.imgPath,
+                "category": project.category.name,
+                "published": project.published,
+                "url": project.url
+            }
+    if request.method == 'POST' and request.user.is_authenticated:
+        published = request.POST.get("published")
+        if published:
+            name = request.POST.get("name")
+            form = None
+            projectID = request.POST.get("urlEnd") if request.POST.get("urlEnd") != "link" else None
+            if projectID:
+                form = Project.objects.filter(id=int(projectID)).first()
+            else:
+                form = Project.objects.filter(name=name).first()
+            print("id: {}, form: {}, urlEnd: {}".format(projectID, str(form), request.POST.get("urlEnd")))
+
+            if not form:
+                form = Project()
+        name = request.POST.get("name")
+        formattedName = name
+        if name:
+            formattedName = formattedName.replace("/", "-")
+            formattedName = quote_plus(formattedName)
+            formattedName = formattedName.replace("+", "_")
+        imgData = request.POST.get('img')
+        imgData = imgData.replace("data:image/jpeg;base64,", "") if imgData else imgData
+        imgData = imgData.replace("data:image/png;base64,", "") if imgData else imgData
+        imgURL = form.imgPath
+        if not 'static/' in str(imgData)[0:10] and imgData: # if img has a / in, its probably a domain
+            projectPath = "projects/" + formattedName
+            projectPath = "/opt/bitnami/apps/django/django_projects/static/" + projectPath
+            # projectPath = staticfiles_storage.url(projectPath)
+            try:
+                os.makedirs(projectPath)
+            except FileExistsError:
+                print("Using already made path")
+            imgURL = projectPath + "/" + "project-image.png"
+            print(imgURL)
+            with open(imgURL, "wb") as f:
+                f.write(base64.b64decode(imgData))
+        partIDs = []
+        parts = request.POST.get("parts")
+        parts = parts.split(",") if parts else []
+        print("parts: " + str(parts))
+        partNames = []
+        for part in parts:
+            partObj = None
+            partName = part.split(" x ")[1]
+            try:
+                partObj = Parts.objects.get(name__exact=partName)
+            except Parts.DoesNotExist:
+                partObj = None
+                print("Does Not Exist. Creating Part")
+                partObj = createPart(partName) # create part if not found
+            if partObj:
+                partIDs.append(partObj.id)
+                partNames.append(partName)
+        print("partIDs: " + str(partIDs))
+
+        form.name = request.POST.get("name")
+        form.desc = request.POST.get("desc")
+        form.parts = str(request.POST.get("parts"))
+        imgURL = imgURL.replace("/opt/bitnami/apps/django/django_projects/", "")
+        imgURL = imgURL[imgURL.find("projects/"):] if imgURL else ""
+        form.imgPath = imgURL
+        form.published = int(published)
+        form.partNames = partNames
+        category = request.POST.get("category")
+        cat = None
+        try:
+            cat = ProjectCategories.objects.get(name__exact=category)
+        except ProjectCategories.DoesNotExist:
+            print("Category not found, using General instead")
+            cat = ProjectCategories.objects.all().first()
+        form.category = cat
+        form.partIDs = partIDs
+        form.save()
+        url = request.POST.get("url")
+        form.url = url
+        form.author.add(request.user)
+        form.save()
+        return HttpResponse(url)
+    categories = []
+    result = ProjectCategories.objects.all()
+    for part in result:
+        categories.append({"name": part.name})
+    context["categories"] = categories
+    return render(request, 'hub/linkProject.html', context)
+
 
 def project(request, slug):
     account = request.user.username if request.user.is_authenticated else None

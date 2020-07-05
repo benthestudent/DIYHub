@@ -186,10 +186,15 @@ function getProjectData() {
 	var input = $("#files");
 	var img = $("#projectImg").attr('src');
 	var category = $("#category").val();
+	var url = $("#projectUrl").val();
 	console.log(img);
 	completed = 0;
 	if (projectName && projectDesc && difficulty && parts && partsCompleted && steps && img && category) {
 		completed = 1;
+	}
+	completedForLink = 0;
+	if (projectName && projectDesc && parts && partsCompleted && url && img && category) {
+		completedForLink = 1;
 	}
 	return {
 		"name": projectName,
@@ -200,7 +205,9 @@ function getProjectData() {
 		"img": img,
 		"category": category,
 		"completed": completed,
-		"urlEnd": last_part
+		"completedForLink": completedForLink,
+		"urlEnd": last_part,
+		"url": url
 	};
 }
 
@@ -438,6 +445,34 @@ $(document).ready(function() {
 			});
 		}else {
 			alert("You have not completely filled out your project. Go back and make sure you have a name, description, image, supplies, and steps");
+		}
+	});
+
+	$("#link").click(function() {
+		var csrftoken = getCookie('csrftoken');
+		var data = getProjectData();
+		if (data.completedForLink) {
+			data.published = 1;
+			$.ajaxSetup({
+				headers: {"X-CSRFToken": getCookie("csrftoken")}
+			});
+			console.log(JSON.stringify(data))
+			$.ajax({
+				url: '/dev/link',
+				data: data,
+				type: 'POST',
+				success: function (response) {
+					console.log(response);
+						document.location.href = response;
+
+				},
+				error: function (response) {
+					console.log("error");
+					alert("Could not Publish. Error saving project. Please contact site administrator, using contact page.");
+				}
+			});
+		}else {
+			alert("You have not completely filled out your project. Go back and make sure you have a name, description, image, url, and supplies");
 		}
 	});
 
