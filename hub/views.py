@@ -540,7 +540,7 @@ def forgotPassword(request):
                 user.save()
                 mail_context = {
                     'protocol': 'http',
-                    'domain': '127.0.0.1:8000',
+                    'domain': 'diyhub.io',
                     'uid': user.id,
                     'token': token
                 }
