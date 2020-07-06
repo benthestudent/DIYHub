@@ -1,5 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import ensure_csrf_cookie
+
 from .models import Project, Parts, ProjectCategories, Comment, Upvote, User, PartCategories
 from .forms import Register
 from django.contrib.auth import authenticate, login
@@ -144,7 +146,7 @@ def profile(request, username=None):
         return render(request, 'hub/profilePage.html', context)
     return render(request, 'hub/profile.html', context)
 
-
+@ensure_csrf_cookie
 def createProject(request, projectID=0):
     page = "create"
     account = request.user.username if request.user.is_authenticated else None
@@ -257,6 +259,7 @@ def createProject(request, projectID=0):
     context["categories"] = categories
     return render(request, 'hub/newCreateProject.html', context)
 
+@ensure_csrf_cookie
 def linkProject(request, projectID=0):
     account = request.user.username if request.user.is_authenticated else None
     context = {"account": account}
