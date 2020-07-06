@@ -188,6 +188,7 @@ def createProject(request, projectID=0):
 
             if not form:
                 form = Project()
+                form.save()
         name = request.POST.get("name")
         formattedName = name
         if name:
@@ -299,8 +300,9 @@ def linkProject(request, projectID=0):
                 form = Project.objects.filter(name=name).first()
             print("id: {}, form: {}, urlEnd: {}".format(projectID, str(form), request.POST.get("urlEnd")))
 
-            if not form:
-                form = Project()
+        if not form:
+            form = Project()
+            form.save()
         name = request.POST.get("name")
         formattedName = name
         if name:
