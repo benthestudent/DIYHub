@@ -24,10 +24,12 @@ from urllib.parse import quote, unquote, quote_plus
 SITE_URL = "http://diyhub.io"
 def index(request):
     page = "search"
-    projects = Project.objects.filter(published=1)
+    projects = Project.objects.filter(published=1).exclude(id=1)
     projectsArray = []
     account = request.user.username if request.user.is_authenticated else None
     projectsArray = getProjectsFromQuery(projects)
+    first_project = Project.objects.filter(id=1)
+    projectsArray.insert(0, getProjectsFromQuery(first_project)[0])
     categoryArray = []
     categories = PartCategories.objects.all()
     if categories:
