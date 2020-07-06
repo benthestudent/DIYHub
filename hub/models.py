@@ -88,12 +88,12 @@ class Parts(models.Model):
 
 class Project(models.Model):
     imgPath = models.TextField(null=True)
-    name = models.TextField(unique=True)
+    name = models.TextField()
     desc = models.TextField()
     difficulty = models.IntegerField(default=0)
     url = models.TextField(null=True, unique=True)
     steps = models.TextField(null=True)
-    parts = models.CharField(max_length=250, null=True) #with quantities
+    parts = models.TextField( null=True) #with quantities
     partNames = ArrayField(models.CharField(max_length=200), null=True)
     partIDs = ArrayField(models.IntegerField(), null=True)
     category = models.ForeignKey(ProjectCategories, default=1, on_delete=models.CASCADE)
