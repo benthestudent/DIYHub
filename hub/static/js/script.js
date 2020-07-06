@@ -45,16 +45,13 @@ function addStep() {
 
 function addPart() {
 			console.log("add part button");
-			if(!isNaN($('#quantity').val())) {
 				// add <i class="fa fa-pencil pencil" id="editPart" style="font-size:24px"></i> for editing
 				let part = "<div class=\"border rounded border-primary d-inline-flex align-items-sm-center addedPart\" style=\"width: 100%;padding: 1%;border-color: #575757;\"><input style=\"width: 10%;margin-right: 1%;padding: 5px;\" class=\"border rounded border-secondary\" type=\"text\" name=\"quantity\" value=\"" + $("#quantity").val() + "\" readonly><input style=\"width: 80%;margin-right: 1%;padding: 5px;\" class=\"border rounded border-secondary\" type=\"text\" name=\"part\" id=\"part\" value=\"" + $("#part").val() + "\" readonly><i class=\"fa fa-trash-o trash right\" style=\"font-size:24px\"></i></div>";
 				$("#quantity").val("");
 				$("#part").val("");
 				$('#partsDefault').remove();
 				$(".supplies-container").append(part);
-			}else {
-				alert("Quantity must be a number");
-			}
+
 			return false;
 }
 
