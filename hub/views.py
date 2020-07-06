@@ -199,7 +199,7 @@ def createProject(request, projectID=0):
         imgData = imgData.replace("data:image/png;base64,", "") if imgData else imgData
         imgURL = form.imgPath
         if not 'static/' in str(imgData)[0:10] and imgData: # if img has a / in, its probably a domain
-            projectPath = "projects/" + formattedName
+            projectPath = "projects/project_" + str(form.id)
             projectPath = "/opt/bitnami/apps/django/django_projects/static/" + projectPath
             # projectPath = staticfiles_storage.url(projectPath)
             try:
@@ -312,7 +312,7 @@ def linkProject(request, projectID=0):
         imgData = imgData.replace("data:image/png;base64,", "") if imgData else imgData
         imgURL = form.imgPath
         if not 'static/' in str(imgData)[0:10] and imgData: # if img has a / in, its probably a domain
-            projectPath = "projects/" + formattedName
+            projectPath = "projects/project_" + str(form.id)
             projectPath = "/opt/bitnami/apps/django/django_projects/static/" + projectPath
             # projectPath = staticfiles_storage.url(projectPath)
             try:
