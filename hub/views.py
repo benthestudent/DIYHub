@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import ensure_csrf_cookie
-
+import re
 from .models import Project, Parts, ProjectCategories, Comment, Upvote, User, PartCategories
 from .forms import Register
 from django.contrib.auth import authenticate, login
@@ -628,7 +628,7 @@ def getProjectsFromQuery(projects):
     projectsArray = []
     if projects:
         for project in projects:
-            desc = removeElements(project.desc, ["<h1>", "</h1>", "<strong>", "</strong>", "<em>", "</em>", "<u>", "</u>", "<ul>", "</ul>", "<li>", "</li>"])
+            desc = "<p>" + re.sub('<[^<]+?>', '', project.desc) + "</p>"
             shortDesc = desc[:150] + "... " if len(desc) > 150 else desc
             print("debug: getting the shorter desc: {}".format(shortDesc))
             projectsArray.append(
