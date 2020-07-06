@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.urls import reverse
 import re
 from .models import Project, Parts, ProjectCategories, Comment, Upvote, User, PartCategories
 from .forms import Register
@@ -20,7 +21,7 @@ import os
 import operator
 import datetime
 from urllib.parse import quote, unquote, quote_plus
-
+SITE_URL = "http://diyhub.io"
 def index(request):
     page = "search"
     projects = Project.objects.filter(published=1)
@@ -148,8 +149,6 @@ def profile(request, username=None):
 
 @ensure_csrf_cookie
 def createProject(request, projectID=0):
-    if not request.user.is_authenticated:
-        return redirect("loginAndRegister")
     page = "create"
     account = request.user.username if request.user.is_authenticated else None
     context = {"account": account, "page": page}
@@ -255,6 +254,10 @@ def createProject(request, projectID=0):
         form.author.add(request.user)
         form.save()
         return HttpResponse(url)
+    elif request.method == 'POST' and not request.user.is_authenticated:
+        return HttpResponse(SITE_URL + reverse("loginAndRegister"))
+    if not request.user.is_authenticated:
+        return redirect("loginAndRegister")
     categories = []
     result = ProjectCategories.objects.all()
     for part in result:
@@ -367,6 +370,10 @@ def linkProject(request, projectID=0):
         form.author.add(request.user)
         form.save()
         return HttpResponse(url)
+    elif request.method == 'POST' and not request.user.is_authenticated:
+        return HttpResponse(SITE_URL + reverse("loginAndRegister"))
+    if not request.user.is_authenticated:
+        return redirect("loginAndRegister")
     categories = []
     result = ProjectCategories.objects.all()
     for part in result:
