@@ -389,6 +389,7 @@ $(document).ready(function() {
 		if($("#projectName").val() === ""){
 			alert("Your Project Must Be Named Before Saving")
 		}else {
+			$(this).html("<div class='loader'></div>");
 			var csrftoken = getCookie('csrftoken');
 			var data = getProjectData();
 			data.published = 0;
@@ -410,11 +411,13 @@ $(document).ready(function() {
 						},
 						error: function(response) {
 							console.log("error");
+							$(this).html("Save");
 						}
 			});
 		}
 	});
 	$("#publish").click(function() {
+		$(this).html("<div class='loader'></div>");
 		var csrftoken = getCookie('csrftoken');
 		var data = getProjectData();
 		if (data.completed) {
@@ -437,6 +440,7 @@ $(document).ready(function() {
 				},
 				error: function (response) {
 					console.log("error");
+					$(this).html("Publish");
 					alert("Could not Publish. Error saving project. Please contact site administrator, using contact page.");
 				}
 			});
@@ -446,6 +450,7 @@ $(document).ready(function() {
 	});
 
 	$("#link").click(function() {
+		$(this).html("<div class='loader'></div>");
 		var csrftoken = getCookie('csrftoken');
 		var data = getProjectData();
 		if (data.completedForLink) {
@@ -465,6 +470,7 @@ $(document).ready(function() {
 				},
 				error: function (response) {
 					console.log("error");
+					$(this).html("Link");
 					alert("Could not Publish. Error saving project. Please contact site administrator, using contact page.");
 				}
 			});
