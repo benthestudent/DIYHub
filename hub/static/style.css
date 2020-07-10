@@ -233,6 +233,12 @@ body {
 	width: 100%;
 	color: white;
 	font-size: 22px;
+	font-family: Montserrat, sans-serif;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #037F8C;
+	font-weight: 500;
 }
 /* If Grid is supported, remove the margin we set for the fallback */
 @supports (display: grid) {
