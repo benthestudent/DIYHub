@@ -279,12 +279,17 @@ pre.ql-syntax {
 	color: white;
 }
 
-.project-link h1:hover{
-	font-size: 48px;
-	color: #8d8d8d;
-}
 
 a.project-link {
 	text-decoration: none;
 	padding: 2%;
+	border: 2px white solid;
+	border-radius: 15px;
+	margin: 1%;
+	font-family: "Open Sans", sans-serif;
+}
+
+a.project-link:hover {
+	background-color: #037F8C;
+	border-color: #037F8C;
 }
