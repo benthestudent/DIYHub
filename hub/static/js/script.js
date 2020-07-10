@@ -239,8 +239,6 @@ function readURL(input) {
 }
 
 function refreshProjects(projects) {
-
-    console.log(projects["projects"]);
     for(i = 0; i < projects["projects"].length; i++){
         var color;
         var styles;
@@ -275,11 +273,12 @@ function refreshProjects(projects) {
             "</div>" +
             "    </div>" +
             "      </a>";
-        console.log(element);
+        console.log("Appending Element");
         $(".grid").append(element);
 
     }
     if (projects["almostProjects"].length > 0){
+    	console.log("PROJECTS YOU CAN ALMOST MAKE");
         	$(".grid").append("<h2 class='divider'>Projects you can almost make:</h2>");
         	refreshProjects({"projects": projects["almostProjects"]});
 		}
@@ -623,7 +622,6 @@ $(document).ready(function() {
 			data: data,
 			type: 'POST',
 			success: function(response) {
-				console.log(response);
 				$(".grid a").remove();
 				$(".grid h2").remove();
 				refreshProjects(JSON.parse(response));
