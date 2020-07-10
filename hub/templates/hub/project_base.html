@@ -1,6 +1,7 @@
 {% load static %}
 {% if projects %}
       <div class="grid">
+      {% if filterable %}
       <div class="sort-bar">
 		<i class="fa fa-filter"></i>
 	    <button id="likedSort"><i class="fa fa-heart"></i><i class="fa fa-sort"></i></button>
@@ -13,16 +14,17 @@
             <option value="100">100</option>
         </select>
       </div>
+      {% endif %}
   {% for project in projects %}
-      {% if "https" in project.url %}
-          <a href="{{ project.url }}">
+      {% if "http" in project.url %}
+          <a href="{% url 'external_project' %}?url={{ project.url }}">
       {% else %}
         <a href="{% url 'project' project.url %}">
       {% endif %}
 
       <div class="module">
 	  <div class="container-grid">
-          <img src="{% static '' %}{{ project.imgPath }}" alt="ProjectImage" onerror="this.onerror=null;this.src='{% static 'img/ProjectImage.png' %}';">
+          <img src="{% static '' %}{{ project.imgPath }}" alt="ProjectImage" onerror="this.onerror=null;this.src='{% static '/img/ProjectImage.png' %}';">
           {% if project.difficulty %}
               {% if project.difficulty == 1 %}
                 <div class="overlay" style="background-color: #14aa30">

@@ -13,6 +13,7 @@ urlpatterns = [
     path('dev/login/<slug:slug>', views.loginAndRegister, name='loginAndRegister'),
     path('dev/getCategories', views.getCategories, name='getCategories'),
     path('dev/project/<slug:slug>/', views.project, name='project'),
+    path('dev/project/external/', views.project, name='external_project'),
     path('dev/upvote', views.upvote, name='upvote'),
     path('dev/addComment', views.addComment, name='addComment'),
     path('dev/logout', views.logout, name='logout'),

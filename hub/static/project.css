@@ -273,3 +273,18 @@ pre.ql-syntax {
   overflow: visible;
 	padding: 5px;
 }
+
+.project-link h1{
+	font-size: 48px;
+	color: white;
+}
+
+.project-link h1:hover{
+	font-size: 48px;
+	color: #8d8d8d;
+}
+
+a.project-link {
+	text-decoration: none;
+	padding: 2%;
+}

@@ -13,7 +13,7 @@
 	<div class="main">
 		<div class="information-container">
 			<div class="project-image">
-				<img src="{% static '' %}{{ imgPath }}" alt="project image">
+				<img src="{% static '' %}{{ imgPath }}" alt="project image" onerror="this.onerror=null;this.src='{% static '/img/ProjectImage.png' %}';">
 			</div>
 			<h1>{{ projectName }}</h1>
 			<div class="username">
@@ -34,9 +34,13 @@
                 {% endfor %}
 			</ul>
 		</div>
+        {% if external_url %}
+            <a class="project-link" href="{{ external_url }}"><h1>Go to the Project</h1></a>
+        {% else %}
 		<div class="steps-container">
 			{{ steps | safe}}
 		</div>
+        {% endif %}
 		<div class="upvote-tag">
 			<div class="tag">
 				<p>Posted {{ dateCreated }} by <a href="{% url 'profile' author %}">{{ author }}</a> in <a>{{ category }}</a></p>

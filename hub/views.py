@@ -144,7 +144,7 @@ def profile(request, username=None):
                    {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url})
     else:
         return redirect("loginAndRegister")
-    context = {"user": userObj, "projects": projectsArray, "upvotedProjects": upvotedProjectsArray, "message": message, "account": account}
+    context = {"user": userObj, "projects": projectsArray, "upvotedProjects": upvotedProjectsArray, "message": message, "account": account, "filterable": True}
     if user_by_name:
         return render(request, 'hub/profilePage.html', context)
     return render(request, 'hub/profile.html', context)
@@ -384,18 +384,27 @@ def linkProject(request, projectID=0):
     return render(request, 'hub/linkProject.html', context)
 
 
-def project(request, slug):
+def project(request, slug=None):
     account = request.user.username if request.user.is_authenticated else None
     projectName = ""
     project = None
-    try:
-        project = Project.objects.get(url__exact=slug)
-    except Project.DoesNotExist:
-        page = "create"
-        account = request.user.username if request.user.is_authenticated else None
-        context = {"account": account, "page": page}
-        context["message"] = {"text": "We can find this project, would you like to create one?", "color": "red"}
-        return render(request, "hub/newCreateProject.html", context)
+    external_url = None
+    if request.method == "GET":
+        url = request.GET.get("url")
+        if url:
+            project = Project.objects.filter(url=url).first()
+            if not project:
+                return render(request, "hub/projectNotFound.html")
+            external_url = url
+        else:
+            try:
+                project = Project.objects.get(url__exact=slug)
+            except Project.DoesNotExist:
+                page = "create"
+                account = request.user.username if request.user.is_authenticated else None
+                context = {"account": account, "page": page}
+                context["message"] = {"text": "We can find this project, would you like to create one?", "color": "red"}
+                return render(request, "hub/newCreateProject.html", context)
     projectName = project.name
     if not project.author.all().first() == request.user:
         project.views += 1
@@ -419,7 +428,8 @@ def project(request, slug):
                "views": project.views,
                "dateCreated": project.dateCreated.strftime('%D %I:%M %p'),
                "author": project.author.get().username,
-               "account": account
+               "account": account,
+               "external_url": external_url
                }
     # get comments
     commentArray = []
@@ -449,7 +459,6 @@ def project(request, slug):
             print("Error: multiple upvotes from user on one project")
             context['upvoted'] = True
     return render(request, 'hub/project.html', context)
-
 
 def getParts(request):
     parts = []
