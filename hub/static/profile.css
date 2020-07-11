@@ -153,7 +153,6 @@ main {
 
 #createProject {
 	font-family: "Open Sans", sans-serif;
-	width: 10vw;
 	height: 10vh;
 	font-size: 15pt;
 	background-color: #037F8C;
@@ -181,7 +180,7 @@ main {
 
 #Account #change-password {
 	font-family: "Open Sans", sans-serif;
-	width: 20vw;
+	height: 10vh;
 	font-size: 15pt;
 	background-color: #037F8C;
 	color: white;
@@ -433,4 +432,39 @@ a.edit-button{
 
 .tabcontent a{
 	margin: auto;
+}
+
+.overlay-profile {
+	position: absolute;
+	display: flex;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  transition: .3s ease;
+  background-color: #564D4D;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	cursor: pointer;
+}
+
+.container-profile-picture:hover .overlay-profile {
+	opacity: .75;
+}
+
+.overlay-profile button {
+    background: none;
+    border: none;
+    min-width: 30%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.overlay-profile i {
+    font-size: 20px;
 }

@@ -14,7 +14,10 @@
 	<main>
 	<div class="info-container">
 		<div class="image-and-name">
+			<div class="container-profile-picture">
 	<img src="{% static 'img/img_avatar.png' %}" alt="Profile Picture">
+				<div class="overlay-profile"><button><i class="fa fa-edit"></i></button></div>
+			</div>
 		<h1>{{ user.username }}</h1>
 		</div>
 			<button class="tablink" onclick="openPage('Account', this, 'white')" id="defaultOpen">Account</button>
