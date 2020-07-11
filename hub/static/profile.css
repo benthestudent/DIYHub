@@ -153,7 +153,6 @@ main {
 
 #createProject {
 	font-family: "Open Sans", sans-serif;
-	width: 10vw;
 	height: 10vh;
 	font-size: 15pt;
 	background-color: #037F8C;
@@ -181,7 +180,7 @@ main {
 
 #Account #change-password {
 	font-family: "Open Sans", sans-serif;
-	width: 20vw;
+	height: 10vh;
 	font-size: 15pt;
 	background-color: #037F8C;
 	color: white;
