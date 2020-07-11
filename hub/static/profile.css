@@ -448,4 +448,26 @@ a.edit-button{
 	align-items: center;
 	flex-direction: column;
 	cursor: pointer;
+<<<<<<< HEAD
+=======
+}
+
+.container-profile-picture:hover .overlay-profile {
+	opacity: .75;
+}
+
+.overlay-profile button {
+    background: none;
+    border: none;
+    min-width: 30%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.overlay-profile i {
+    font-size: 20px;
+>>>>>>> 593bfba0b37d7760e02e3bbc356836ecfc2fe042
 }
