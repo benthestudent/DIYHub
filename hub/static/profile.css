@@ -449,3 +449,22 @@ a.edit-button{
 	flex-direction: column;
 	cursor: pointer;
 }
+
+.container-profile-picture:hover .overlay-profile {
+	opacity: .75;
+}
+
+.overlay-profile button {
+    background: none;
+    border: none;
+    min-width: 30%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.overlay-profile i {
+    font-size: 20px;
+}
