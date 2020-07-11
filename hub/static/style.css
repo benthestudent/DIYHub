@@ -216,11 +216,11 @@ body {
 }
 .module {
 	/* Demo-Specific Styles */
-	background: black;
+	background: #1b262c;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	height: 300px;
+	height: 100%;
 	/* Flex Fallback */
 	margin-left: 5px;
 	margin-right: 5px;
