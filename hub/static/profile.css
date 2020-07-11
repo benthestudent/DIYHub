@@ -437,19 +437,17 @@ a.edit-button{
 .overlay-profile {
 	position: absolute;
 	display: flex;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  opacity: 0;
-  transition: .3s ease;
-  background-color: #564D4D;
+  	top: 0;
+  	bottom: 0;
+  	left: 0;
+  	right: 0;
+  	opacity: 0;
+  	transition: .3s ease;
+  	background-color: #564D4D;
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
 	cursor: pointer;
-<<<<<<< HEAD
-=======
 }
 
 .container-profile-picture:hover .overlay-profile {
@@ -468,6 +466,5 @@ a.edit-button{
 }
 
 .overlay-profile i {
-    font-size: 20px;
->>>>>>> 593bfba0b37d7760e02e3bbc356836ecfc2fe042
+    font-size: 21px;
 }
