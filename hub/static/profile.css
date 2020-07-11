@@ -468,3 +468,7 @@ a.edit-button{
 .overlay-profile i {
     font-size: 21px;
 }
+
+.container-profile-picture {
+	position: relative;
+}
