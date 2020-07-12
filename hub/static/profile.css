@@ -43,6 +43,12 @@ main {
 	#Account #change-password {
 		height: auto !important;
 	}
+	.module-upvoted {
+		height: auto !important;
+	}
+	.module {
+		height: auto !important;
+	}
 }
 
 .info-container {
