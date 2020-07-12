@@ -32,6 +32,16 @@ main {
 	#Account h3 {
 		text-align: center !important;
 		padding: 10px 20px !important;
+		font-size: 15px !important;
+	}
+	#Account p {
+		font-size: 15px !important;
+	}
+	#Account strong {
+		font-size: 17px !important;
+	}
+	#Account #change-password {
+		height: auto !important;
 	}
 }
 
