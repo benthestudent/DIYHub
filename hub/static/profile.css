@@ -506,3 +506,48 @@ a.edit-button{
 .container-profile-picture {
     position: relative;
 }
+
+.garage-list h4 {
+	font-family: "Open Sans";
+}
+
+.garage-list {
+	width: 100%;
+}
+
+
+
+.garage-list li {
+	display: flex;
+	padding: 20px;
+	border: 1px solid gray;
+	border-bottom: none;
+	width: 100%;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.garage-list ul {
+	border-bottom: 1px solid gray;
+	background-color: whitesmoke;
+}
+
+.garage-list i {
+	cursor: pointer;
+	font-size: 15pt;
+}
+
+.garage-list button {
+	background-color: transparent;
+	border: none;
+}
+
+.garage {
+	overflow: auto;
+}
+
+.garage-list button:hover i {
+	color: red;
+	transition-duration: 0.2s;
+}
+
