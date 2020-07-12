@@ -6,6 +6,15 @@ body {
 	height: 100%;
 	background-color: #1b262c;
 }
+
+@media screen and (max-width: 450px){
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+}
+
 .header {
 	margin: 0;
 	background-color: #1b262c;
@@ -341,7 +350,7 @@ body {
 		align-self: center;
 	}
 	.grid {
-		width: 100%;
+		width: 95%;
 		
 	}
 }
