@@ -55,6 +55,7 @@ function addPart() {
 			return false;
 }
 
+
 //The next three functions handle the edit, save and delete icons for the parts list
 $(document).on("click", "i.pencil", function() {
 		$(this).prev('input').prop('readonly', function (i, r) {
@@ -148,20 +149,28 @@ function getProjectData() {
 	$(".addedPart").each(function() {
 		q = true
 		$(this).children("input").each(function() {
+			var quantity = 0;
 			if (q) {
-				var quantity = 0
 				if (this.value) {
 					quantity = this.value
 				}
-				parts += quantity + " x ";
+
 				q = false;
 			}else {
 				var partName = this.value
-				if (!partName) {
-					partsCompleted = false;
+				var partArray = partName.split(",");
+				for(var i = 0; i < partArray.length; i++){
+					if (!partName) {
+						partsCompleted = false;
+					}
+					if (quantity){
+						parts += quantity + " x " + partArray[i] + ",";
+					}else {
+						parts += partArray[i] + ",";
+					}
 
 				}
-				parts += partName + ",";
+
 			}
 		});
 

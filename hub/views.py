@@ -463,16 +463,18 @@ def project(request, slug=None):
 def getParts(request):
     parts = []
     if "search" in request.GET:
-        query = request.GET['search']
-        print(query)
-        if query:
-            postresult = Parts.objects.filter(name__icontains=query)
-            result = postresult
-            for part in result:
-                parts.append({"id": part.id, "name": part.name})
-            print(parts)
-        else:
-            result = None
+        queryStr = request.GET['search']
+        queryArray = queryStr.split(",")
+        for query in queryArray:
+            print(query)
+            if query:
+                postresult = Parts.objects.filter(name__icontains=query)
+                result = postresult
+                for part in result:
+                    parts.append({"id": part.id, "name": part.name})
+
+            else:
+                result = None
     return HttpResponse(json.dumps(parts))
 
 
