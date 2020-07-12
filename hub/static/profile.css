@@ -214,11 +214,13 @@ main {
 
 #Account #change-password {
 	font-family: "Open Sans", sans-serif;
-	height: 10vh;
 	font-size: 15pt;
 	background-color: #037F8C;
 	color: white;
 	border-radius: 3px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 #Account #change-password:hover {
