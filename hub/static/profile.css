@@ -17,6 +17,24 @@ main {
 	flex-direction: row;
 	align-content: center;
 }
+
+@media screen and (max-width: 450px){
+	main {
+		flex-direction: column;
+	}
+	.info-container {
+		width: 100%;
+	}
+	.tabcontent {
+		width: 100%;
+		text-align: center;
+	}
+	#Account h3 {
+		text-align: center;
+		padding: 10px 20px;
+	}
+}
+
 .info-container {
 	display: inline-block !important;
 	width: 30%;
@@ -175,7 +193,7 @@ main {
 	color: white;
 	border-radius: 3px;
 	transition-duration: 0.1s;
-	
+
 }
 
 #Account #change-password {
