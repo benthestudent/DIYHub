@@ -125,6 +125,7 @@ def profile(request, username=None):
                 user.save()
         user = user_by_name if user_by_name else user
         userObj = {
+            "id": user.id,
             "email": user.email,
             "username": user.username,
             "firstn": user.firstn,
@@ -573,24 +574,28 @@ def upvote(request):
     print("upvoted")
     return HttpResponse("upvoted")
 
-def filterProjects(request, filter="popular", num_of_results=25, page=1, category=None):
+def filterProjects(request, userID=None, filter="popular", num_of_results=25, page=1, category=None):
     startOfResults = (page - 1) * num_of_results
     projects = None
     category = ProjectCategories.objects.filter(name=category).first()
     projectsArray = []
     # return 25 projects based on number of upvotes
+    if userID:
+        projects = Project.objects.filter(author=userID)
+    else:
+        projects = Project.objects.all()
     if filter == "most_liked":
         if category:
-            projects = Project.objects.order_by("-upvotes").filter(category=category).exclude(published=0)[startOfResults:startOfResults+num_of_results]
+            projects = projects.order_by("-upvotes").filter(category=category).exclude(published=0)[startOfResults:startOfResults+num_of_results]
         else:
-            projects = Project.objects.order_by("-upvotes").exclude(published=0)[startOfResults:startOfResults+num_of_results]
+            projects = projects.order_by("-upvotes").exclude(published=0)[startOfResults:startOfResults+num_of_results]
 
     if filter == "popular":
         if category:
-            projects = Project.objects.order_by("-views").filter(category=category).exclude(published=0)[
+            projects = projects.order_by("-views").filter(category=category).exclude(published=0)[
                        startOfResults:startOfResults + num_of_results]
         else:
-            projects = Project.objects.order_by("-views").exclude(published=0)[startOfResults:startOfResults + num_of_results]
+            projects = projects.order_by("-views").exclude(published=0)[startOfResults:startOfResults + num_of_results]
 
     projects = {"projects": getProjectsFromQuery(projects)}
     return HttpResponse(json.dumps(projects))

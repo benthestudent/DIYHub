@@ -4,26 +4,39 @@ $(document).ready(function() {
         $(".grid a").remove();
         sortMethod = "popular";
         resultsPerPage = $("#resultsPerPage").val();
-        filterProjects("popular", resultsPerPage);
+
+        filterProjects("popular", resultsPerPage, getUserID());
     });
     $("#likedSort").click(function () {
         $(".grid a").remove();
         sortMethod = "most_liked";
         resultsPerPage = $("#resultsPerPage").val();
-        filterProjects("most_liked", resultsPerPage);
+        filterProjects("most_liked", resultsPerPage, getUserID());
     });
     $("#resultsPerPage").change(function () {
         $(".grid a").remove();
-        filterProjects(sortMethod, $(this).val());
+        filterProjects(sortMethod, $(this).val(), getUserID());
     });
 });
 
-function filterProjects(method, projectsPerPage=25) {
-    let url = "/dev/filterProjects/" + method + "/" + projectsPerPage.toString();
+function filterProjects(method, projectsPerPage=25, userID=false) {
+    let url;
+    if (userID){
+        url = "/dev/filterProjects/" + method + "/" + userID + "/" + projectsPerPage.toString();
+    }else {
+        url = "/dev/filterProjects/" + method + "/" + projectsPerPage.toString();
+    }
     $.get(url).done(function (data) {
         refreshProjects(JSON.parse(data));
     });
 
+}
+function getUserID() {
+    if ($("meta[name='userID']")[0]) {
+        return $("meta[name='userID']")[0].content;
+    }else {
+        return false;
+    }
 }
 
 function refreshProjects(projects) {
