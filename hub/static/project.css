@@ -55,6 +55,7 @@ body {
 	width: 50%;
 	cursor: default;
 	height: auto;
+	display: block;
 }
 
 .information-container p{
