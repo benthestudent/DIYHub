@@ -95,11 +95,22 @@ body {
 }
 @media screen and (max-width: 800px){
 	.navigation ul {
-		flex-direction: column;
+		flex-direction: row;
+		justify-content: center;
+		
 	}
 	.navigation #active {
 		margin: 15px 0;
 	}
+}
+@media screen and (max-width: 800px){
+	.navigation a {
+    	font-size: 25px;
+	}
+	.navigation {
+    padding: 10px 0;
+    padding-bottom: 0;
+}
 }
 /* __________________________ */
 .selector {
