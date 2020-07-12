@@ -22,6 +22,7 @@ urlpatterns = [
     path('dev/filterProjects', views.filterProjects, name='filterProjects'),
     path('dev/filterProjects/<slug:filter>', views.filterProjects, name='filterProjects'),
     path('dev/filterProjects/<slug:filter>/<int:num_of_results>', views.filterProjects, name='filterProjects'),
+    path('dev/filterProjects/<slug:filter>/<int:userID>/<int:num_of_results>', views.filterProjects, name='filterProjects'),
     path('dev/filterProjects/<slug:filter>/<int:num_of_results>/<int:page>', views.filterProjects, name='filterProjects'),
     path('dev/filterProjects/<slug:filter>/<int:num_of_results>/<int:page>/<slug:category>', views.filterProjects, name='filterProjects'),
     path('dev/contact', views.contact, name='contact'),
