@@ -551,3 +551,8 @@ a.edit-button{
 	transition-duration: 0.2s;
 }
 
+.garage-list h1 {
+	font-family: Montserrat;
+	font-weight: bold;
+	font-size: 20pt;
+}
