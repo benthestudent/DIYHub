@@ -52,14 +52,11 @@ body {
 }
 .project-image img {
 	margin: 0 auto;
-	width: 90%;
+	width: 50%;
 	object-fit: cover;
 	cursor: default;
 }
-.project-image img:hover {
-	width: 91%;
-	transition-duration: 0.4s;
-}
+
 .information-container p{
 	font-family: "Open Sans";
 	padding: 10px 5%;
@@ -282,12 +279,14 @@ pre.ql-syntax {
 
 
 a.project-link {
-	text-decoration: none;
-	padding: 2%;
-	border: 2px white solid;
-	border-radius: 15px;
-	margin: 1%;
-	font-family: "Open Sans", sans-serif;
+    text-decoration: none;
+    padding: 2%;
+    border: 2px #fff solid;
+    border-radius: 15px;
+    margin: 1%;
+    font-family: "Open Sans",sans-serif;
+    text-align: center;
+    width: 90%;
 }
 
 a.project-link:hover {

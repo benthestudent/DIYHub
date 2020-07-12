@@ -137,6 +137,16 @@ body {
 	}
 }
 
+@media screen and (max-width: 800px){
+	.navigation a {
+    	font-size: 25px;
+	}
+	.navigation {
+    padding: 10px 0;
+    padding-bottom: 0;
+}
+}
+
 .profile {
 	display: inline-flex;
 	align-items: center;
