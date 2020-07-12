@@ -147,9 +147,11 @@ function getProjectData() {
     var last_part = partsOfUrl[partsOfUrl.length-1];
 
 	$(".addedPart").each(function() {
-		q = true
+		let q = true
+		var quantity = 0;
+		var partName = "";
 		$(this).children("input").each(function() {
-			var quantity = 0;
+			console.log("once");
 			if (q) {
 				if (this.value) {
 					quantity = this.value
@@ -157,21 +159,30 @@ function getProjectData() {
 
 				q = false;
 			}else {
-				var partName = this.value
-				var partArray = partName.split(",");
-				for(var i = 0; i < partArray.length; i++){
-					if (!partName) {
+				partName = this.value
+				if (!partName) {
 						partsCompleted = false;
-					}
-					if (quantity){
-						parts += quantity + " x " + partArray[i] + ",";
-					}else {
-						parts += partArray[i] + ",";
-					}
-
 				}
-
+				// var partArray = partName.split(",");
+				// for(var i = 0; i < partArray.length; i++) {
+				// 	if (!partName) {
+				// 		partsCompleted = false;
+				// 	}
+				// 	if (quantity) {
+				// 		parts += quantity + " x " + partArray[i] + " or ";
+				// 	} else {
+				// 		parts += partArray[i] + " or ";
+				// 	}
+				// }
+				// parts = parts.slice(0, -4) + ","
+				if (quantity) {
+					parts += quantity + " x " + partName;
+				} else {
+					parts += partName;
+				}
+				parts += ",";
 			}
+
 		});
 
 	});

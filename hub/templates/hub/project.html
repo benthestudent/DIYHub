@@ -1,5 +1,6 @@
 {% extends 'hub/base.html' %}
 {% load static %}
+{% load to_plus %}
 {% block header %}
 	 <title>{{ projectName }}</title>
 	<link href="{% static 'project.css' %}" rel="stylesheet">
@@ -30,7 +31,7 @@
 			<hr>
 			<ul>
                 {% for item in parts %}
-                    <li><span>{{ item }}</span><button>Find</button></li>
+                    <li><span>{{ item }}</span><a target="_blank" href="https://www.google.nl/search?q={{ item|to_plus }}"><button>Find</button></a></li>
                 {% endfor %}
 			</ul>
 		</div>
