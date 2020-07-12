@@ -164,6 +164,8 @@ def createProject(request, projectID=0):
                 part = part.split(" x ")
                 if len(part) == 2:
                     partsArray.append({"quantity": part[0], "name": part[1]})
+                elif len(part) == 1:
+                    partsArray.append({"quantity": "", "name": part[0]})
             steps = formatSteps(project.steps)
             context["project"] = {
                 "name": project.name,
@@ -219,7 +221,10 @@ def createProject(request, projectID=0):
         partNames = []
         for part in parts:
             partObj = None
-            partName = part.split(" x ")[1]
+            if " x " in part:
+                partName = part.split(" x ")[1]
+            else:
+                partName = part
             try:
                 partObj = Parts.objects.get(name__exact=partName)
             except Parts.DoesNotExist:
