@@ -47,7 +47,7 @@ body {
 }
 .project-image {
 	/*height: 500px;*/
-	display: flex;
+	display: block;
 	/*overflow: hidden;*/
 }
 .project-image img {
