@@ -83,12 +83,12 @@ def main():
 
     # Reconstruct the image
     idx = np.array(idx, dtype=np.uint8)
-    X_reconstructed = np.array(colors[idx, :] * 255, dtype=np.uint8).reshape((w, h, d))
     compressed_image = Image.fromarray(X_reconstructed)
+    X_reconstructed = np.array(colors[idx, :] * 255, dtype=np.uint8).reshape((w, h, d))
 
-    # Save reconstructed image to disk
     compressed_image.save('out.png')
-
+    # Save reconstructed image to disk
 
 if __name__ == '__main__':
+
     main()
