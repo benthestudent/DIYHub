@@ -20,18 +20,18 @@ main {
 
 @media screen and (max-width: 450px){
 	main {
-		flex-direction: column;
+		flex-direction: column !important;
 	}
 	.info-container {
-		width: 100%;
+		width: 100% !important;
 	}
 	.tabcontent {
-		width: 100%;
-		text-align: center;
+		width: 100% !important;
+		text-align: center !important;
 	}
 	#Account h3 {
-		text-align: center;
-		padding: 10px 20px;
+		text-align: center !important;
+		padding: 10px 20px !important;
 	}
 }
 
