@@ -746,3 +746,8 @@ def privacyPolicy(request):
     account = request.user.username if request.user.is_authenticated else None
     context = {"account": account}
     return render(request, 'hub/privacyPolicy.html', context)
+
+def doNotSellMyInformation(request):
+    account = request.user.username if request.user.is_authenticated else None
+    context = {"account": account}
+    return render(request, 'hub/doNotSellMyInformation.html', context)
