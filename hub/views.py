@@ -741,3 +741,8 @@ def formatSteps(steps):
 
 def gen_token():
     return rstr.xeger(r'[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20}')
+
+def privacyPolicy(request):
+    account = request.user.username if request.user.is_authenticated else None
+    context = {"account": account}
+    return render(request, 'hub/privacyPolicy.html', context)
