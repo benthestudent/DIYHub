@@ -479,7 +479,7 @@ a.edit-button{
   	right: 0;
   	opacity: 0;
   	transition: .3s ease;
-  	background-color: #564D4D;
+  	background-color: white;
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
@@ -490,11 +490,9 @@ a.edit-button{
 	opacity: .75;
 }
 
-.overlay-profile button {
+.overlay-profile input {
     background: none;
     border: none;
-    min-width: 30%;
-    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -503,7 +501,14 @@ a.edit-button{
 
 .overlay-profile i {
     font-size: 21px;
+    cursor: pointer;
+    color: #037F8C;
 }
+
+.overlay-profile label {
+	cursor: pointer;
+}
+
 
 .container-profile-picture {
     position: relative;
