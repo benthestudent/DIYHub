@@ -1,13 +1,17 @@
-p {
+.privacy-container p {
 	font-family: "Open Sans", sans-serif;
+	line-height: 30px;
 }
 
-strong {
-	font-family: Montserrat, sans-serif;
-	font-size: 15pt;
+.privacy-container strong {
+	font-family: Montserrat,sans-serif;
+    font-size: 15pt;
+    font-weight: bold;
+    padding: 20px 0;
+    line-height: 50px;
 }
 
-li {
+.privacy-container li {
 	font-family: "Open Sans", sans-serif; 
 	line-height: 30px;
 }
@@ -16,6 +20,7 @@ body {
 	background-color: #1B262C;
 	display: flex;
 	justify-content: center;
+	flex-direction: column;
 	
 }
 
@@ -26,7 +31,15 @@ body {
 	border-radius: 1px;
 }
 
-h1 {
-	font-family: Montserrat, sans-serif;
-	margin-top: 0;
+.privacy-container h1 {
+    font-family: Montserrat,sans-serif;
+    margin-top: 0;
+    font-weight: bold;
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.privacy-container ul {
+	list-style: disc;
+    margin-left: 50px;
 }
