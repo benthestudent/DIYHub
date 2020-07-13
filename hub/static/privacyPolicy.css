@@ -1,0 +1,32 @@
+p {
+	font-family: "Open Sans", sans-serif;
+}
+
+strong {
+	font-family: Montserrat, sans-serif;
+	font-size: 15pt;
+}
+
+li {
+	font-family: "Open Sans", sans-serif; 
+	line-height: 30px;
+}
+
+body {
+	background-color: #1B262C;
+	display: flex;
+	justify-content: center;
+	
+}
+
+.privacy-container {
+	background-color: white;
+	padding: 30px;
+	margin: 1%;
+	border-radius: 1px;
+}
+
+h1 {
+	font-family: Montserrat, sans-serif;
+	margin-top: 0;
+}
