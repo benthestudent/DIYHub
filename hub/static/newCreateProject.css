@@ -1762,7 +1762,7 @@ p.hero-subtitle {
 }
 
 @media screen and (max-width: 600px){
-  .btn-group {
+  .save-btn-group {
     width: 100%;
     display: flex;
     flex-direction: column;
