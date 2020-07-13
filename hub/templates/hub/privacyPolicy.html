@@ -1,13 +1,13 @@
-<!doctype html>
-<html>
-<head>
+{% extends 'hub/base.html' %}
+{% load static %}
+{% block header %}
 <meta charset="utf-8">
 <title>Privacy Policy</title>
 <link href="../../static/privacyPolicy.css" rel="stylesheet" type="text/css">
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:700, 400|Montserrat:400, 700|Nunito+Sans:800, 400&display=swap" rel="stylesheet">
 </head>
-
-<body>
+{% endblock %}
+{% block content %}
 	<div class="privacy-container">
 		<h1>Privacy Policy</h1>
 	<p>This privacy policy discloses the privacy practices for diyhub.io. This privacy policy applies solely to information collected by this web site. If you’re a registered user or have otherwise provided us with your email address, you may exercise your opt-out choices by visiting our <a href="{% url 'doNotSellMyInformation' %}">Do Not Sell My Information</a> page.</p>
@@ -41,6 +41,5 @@
 <p>This web site contains links to other sites. Please be aware that we are not responsible for the content or privacy practices of such other sites. We encourage our users to be aware when they leave our site and to read the privacy statements of any other site that collects personally identifiable information.</p>
 <p><strong>UPDATES</strong></p>
 <p>This policy was last updated on July 6, 2020. Our Privacy Policy may change from time to time and all updates will be posted on this page. If you feel that we are not abiding by this privacy policy, you should contact us immediately via email at diyhub.io@gmail.com.</p></div>
-	
-</body>
-</html>
+
+{% endblock %}
