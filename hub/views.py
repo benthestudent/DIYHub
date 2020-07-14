@@ -40,7 +40,7 @@ def index(request):
                 if parts:
                     for part in parts:
                         partObj = {"name": part.name, "url": part.url}
-                        partObj["checked"] = "checked" if request.user.is_authenticated and part in request.user.garage.all() else ""
+                        partObj["checked"] = "checked" if request.user.is_authenticated and request.user.garage.all().first() and part in request.user.garage.all() else ""
                         partsArray.append(partObj)
                 categoryArray.append({"name": category.name, "parts": partsArray})
     context = {"projects": projectsArray, "categories": categoryArray, "account": account, "page": page}
