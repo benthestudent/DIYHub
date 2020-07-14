@@ -39,7 +39,9 @@ def index(request):
                 parts = Parts.objects.filter(category=category)
                 if parts:
                     for part in parts:
-                        partsArray.append({"name": part.name, "url": part.url})
+                        partObj = {"name": part.name, "url": part.url}
+                        partObj["checked"] = "checked" if request.user.is_authenticated and part in request.user.garage.all() else ""
+                        partsArray.append(partObj)
                 categoryArray.append({"name": category.name, "parts": partsArray})
     context = {"projects": projectsArray, "categories": categoryArray, "account": account, "page": page}
     return render(request, 'hub/DIYHUB.html', context)

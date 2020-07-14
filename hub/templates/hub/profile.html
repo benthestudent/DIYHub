@@ -126,20 +126,26 @@
 </div>
 
 <div id="Garage" class="tabcontent">
-        {% for category in user.garage %}
-            <div class="garage-list">
-                <h1>{{ category }}</h1>
-                <hr>
-                <ul>
-                {% for part in user.garage|return_array:category %}
+        <div class="garage-list">
+        {% if user.garage %}
+            {% for category in user.garage %}
 
-                    <li>
-                             <h4>{{ part }}</h4><button class="removePart"><i class="fa fa-minus-circle"></i></button>
-                     </li>
-                {% endfor %}
-                </ul>
-          </div>
-        {% endfor %}
+                    <h1>{{ category }}</h1>
+                    <hr>
+                    <ul>
+                    {% for part in user.garage|return_array:category %}
+
+                        <li>
+                                 <h4>{{ part }}</h4><button class="removePart"><i class="fa fa-minus-circle"></i></button>
+                         </li>
+                    {% endfor %}
+                    </ul>
+
+            {% endfor %}
+        {% else %}
+            <h4 style="text-align: center; margin:auto">Your Garage is Empty. Check parts and supplies on the search page to add Parts to your garage.</h4>
+        {% endif %}
+        </div>
 
 
 </div>

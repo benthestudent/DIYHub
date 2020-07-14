@@ -21,7 +21,7 @@
                             <ul>
                                 {% for part in category.parts %}
                                 <li>
-                                    <label class="container">{{ part.name }}<input type="checkbox" name="">
+                                    <label class="container">{{ part.name }}<input type="checkbox" name="" {{ part.checked }}>
                                         <span class="checkmark"></span>
                                     </label>
                                 </li>

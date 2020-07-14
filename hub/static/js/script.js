@@ -328,7 +328,7 @@ function refreshProjects(projects) {
         $(".grid").append(element);
 
     }
-    if (projects["almostProjects"] && projects["almostProjects"] > 0){
+    if (projects["almostProjects"] && projects["almostProjects"].length > 0){
     	console.log("PROJECTS YOU CAN ALMOST MAKE");
         	$(".grid").append("<h2 class='divider'>Projects you can almost make:</h2>");
         	refreshProjects({"projects": projects["almostProjects"]});
