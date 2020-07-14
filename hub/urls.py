@@ -32,5 +32,7 @@ urlpatterns = [
     re_path('dev/resetPassword/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})', views.resetPassword, name='resetPassword_confirm'),
     path('dev/resetPassword/done', views.resetPassword, name='resetPassword_complete'),
     path('dev/privacyPolicy', views.privacyPolicy, name='privacyPolicy'),
-    path('dev/doNotSellMyInformation', views.doNotSellMyInformation, name='doNotSellMyInformation')
+    path('dev/doNotSellMyInformation', views.doNotSellMyInformation, name='doNotSellMyInformation'),
+    path('dev/removePartFromGarage', views.removePartFromGarage, name='removePartFromGarage'),
+    path('dev/addPartFromGarage', views.addPartFromGarage, name='addPartFromGarage')
 ]

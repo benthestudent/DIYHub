@@ -2,3 +2,7 @@
 __pycache__
 DIYHub/settings.py
 DIYHub/settings.py
+
+hub/migrations/0004_auto_20200713_1740.py
+
+hub/migrations/0003_user_garage.py

@@ -1,4 +1,51 @@
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function removePartFromGarage(name, userID) {
+    data = {"userID": userID,
+            "part": name};
+    var csrftoken = getCookie('csrftoken');
+		$.ajaxSetup({
+    		headers: { "X-CSRFToken": getCookie("csrftoken") }
+		});
+    $.ajax({
+			url: '/dev/removePartFromGarage',
+			data: data,
+			type: 'POST',
+			success: function(response) {
+				console.log("success");
+				console.log(response);
+				return 1;
+
+			},
+			error: function(response) {
+				console.log(response);
+				return response;
+			}
+		});
+}
+
 $(document).ready(function () {
+    $("button.removePart").click(function () {
+        let name = $(this).prev().html();
+        let userID = $("meta[name='userID']").attr("content");
+        let res = removePartFromGarage(name, userID);
+        console.log(res);
+        $(this).parent().remove();
+    });
     $("#change-password").click(function () {
         $(this).html("Change");
         if($("#oldPassword").length === 0) {

@@ -26,7 +26,7 @@ def index(request):
     page = "search"
     projects = Project.objects.filter(published=1).exclude(id=1)
     projectsArray = []
-    account = request.user.username if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username} if request.user.is_authenticated else None
     projectsArray = getProjectsFromQuery(projects)
     first_project = Project.objects.filter(id=1)
     projectsArray.insert(0, getProjectsFromQuery(first_project)[0])
@@ -90,9 +90,9 @@ def logout(request):
     lgout(request)
     return redirect("index")
 
-
+@ensure_csrf_cookie
 def profile(request, username=None):
-    account = request.user.username if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username} if request.user.is_authenticated else None
     user = request.user if request.user.is_authenticated else None
     user = User.objects.filter(username=username).first() if username is not None else user
     upvotedProjectsArray = []
@@ -131,7 +131,8 @@ def profile(request, username=None):
             "firstn": user.firstn,
             "lastn": user.lastn,
             "phone": user.phone,
-            "bio": user.bio
+            "bio": user.bio,
+            "garage": getPartsInGarage(user)
         }
         projects = Project.objects.filter(author=user).exclude(published=0)
 
@@ -153,7 +154,7 @@ def profile(request, username=None):
 @ensure_csrf_cookie
 def createProject(request, projectID=0):
     page = "create"
-    account = request.user.username if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username} if request.user.is_authenticated else None
     context = {"account": account, "page": page}
     if projectID and request.user.is_authenticated:
         project = Project.objects.filter(id=projectID, author=request.user).first()
@@ -275,7 +276,7 @@ def createProject(request, projectID=0):
 
 @ensure_csrf_cookie
 def linkProject(request, projectID=0):
-    account = request.user.username if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username} if request.user.is_authenticated else None
     context = {"account": account}
     if projectID and request.user.is_authenticated:
         project = Project.objects.filter(id=projectID, author=request.user).first()
@@ -391,7 +392,7 @@ def linkProject(request, projectID=0):
 
 
 def project(request, slug=None):
-    account = request.user.username if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username} if request.user.is_authenticated else None
     projectName = ""
     project = None
     external_url = None
@@ -601,7 +602,7 @@ def filterProjects(request, userID=None, filter="popular", num_of_results=25, pa
     return HttpResponse(json.dumps(projects))
 
 def contact(request):
-    account = request.user.username if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username} if request.user.is_authenticated else None
     context = {"account": account}
     if request.method == "POST":
         name = request.POST.get("name")
@@ -620,7 +621,7 @@ def contact(request):
     return render(request, 'hub/contact.html', context)
 
 def about(request):
-    account = request.user.username if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username} if request.user.is_authenticated else None
     context = {"account": account}
     return render(request, 'hub/about.html', context)
 
@@ -649,7 +650,7 @@ def discovery(request):
     page = "discover"
     projects = Project.objects.filter(published=1)
     projectsArray = []
-    account = request.user.username if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username} if request.user.is_authenticated else None
     projectsArray = getProjectsFromQuery(projects)
     context = {"projects": projectsArray, "account": account, "page": page}
     return render(request, 'hub/discovery.html', context)
@@ -743,11 +744,55 @@ def gen_token():
     return rstr.xeger(r'[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20}')
 
 def privacyPolicy(request):
-    account = request.user.username if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username} if request.user.is_authenticated else None
     context = {"account": account}
     return render(request, 'hub/privacyPolicy.html', context)
 
 def doNotSellMyInformation(request):
-    account = request.user.username if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username} if request.user.is_authenticated else None
     context = {"account": account}
     return render(request, 'hub/doNotSellMyInformation.html', context)
+
+def getPartsInGarage(user):
+    partsInGarage = {}
+    if user.garage.all().first():
+        for part in user.garage.all():
+            if not str(part.category.name) in partsInGarage:
+                partsInGarage[str(part.category.name)] = []
+            partsInGarage[str(part.category.name)].append(part.name)
+    print(partsInGarage)
+    return partsInGarage
+
+def removePartFromGarage(request):
+    if request.method == "POST":
+        userID = request.POST.get("userID")
+        print(userID)
+        user = User.objects.filter(id=userID).first()
+        if user:
+            if request.POST.get("part"):
+                part = Parts.objects.filter(name=str(request.POST.get("part"))).first()
+                if part and part in user.garage.all():
+                    user.garage.remove(part)
+                    try:
+                        user.save()
+                        return HttpResponse("success")
+                    except:
+                        return HttpResponse("There was a problem removing the part")
+    return HttpResponse("error")
+
+def addPartFromGarage(request):
+    if request.method == "POST":
+        userID = request.POST.get("userID")
+        print(userID)
+        user = User.objects.filter(id=userID).first()
+        if user:
+            if request.POST.get("part"):
+                part = Parts.objects.filter(name=str(request.POST.get("part"))).first()
+                if part and not part in user.garage.all():
+                    user.garage.add(part)
+                    try:
+                        user.save()
+                        return HttpResponse("success")
+                    except:
+                        return HttpResponse("There was a problem adding the part")
+    return HttpResponse("error")

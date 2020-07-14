@@ -1,3 +1,34 @@
+function togglePartInGarage(name, userID, operation) {
+	data = {"userID": userID,
+            "part": name};
+    var csrftoken = getCookie('csrftoken');
+		$.ajaxSetup({
+    		headers: { "X-CSRFToken": getCookie("csrftoken") }
+		});
+	let url = "";
+	if (operation === "add") {
+		url = '/dev/addPartFromGarage';
+	}else {
+		url = '/dev/removePartFromGarage';
+	}
+    $.ajax({
+			url: url,
+			data: data,
+			type: 'POST',
+			success: function(response) {
+				console.log("success");
+				console.log(response);
+				return 1;
+
+			},
+			error: function(response) {
+				console.log(response);
+				return response;
+			}
+		});
+}
+
+
 function addStep() {
 			let stepID = "stepDesc" + $(".add-step").length.toString();
 			var appendElem = ".added";
@@ -297,7 +328,7 @@ function refreshProjects(projects) {
         $(".grid").append(element);
 
     }
-    if (projects["almostProjects"].length > 0){
+    if (projects["almostProjects"] && projects["almostProjects"] > 0){
     	console.log("PROJECTS YOU CAN ALMOST MAKE");
         	$(".grid").append("<h2 class='divider'>Projects you can almost make:</h2>");
         	refreshProjects({"projects": projects["almostProjects"]});
@@ -624,9 +655,18 @@ $(document).ready(function() {
 
 	$("input[type='checkbox']").change(function() {
 		let parts = "";
+		if ($(this)[0].checked && $("meta[name='userID']").attr("content")) {
+			let name = $(this).parent(".container").text().trim();
+			let userID = $("meta[name='userID']").attr("content");
+			togglePartInGarage(name, userID, "add");
+		}else if (!$(this)[0].checked && $("meta[name='userID']").attr("content")) {
+			let name = $(this).parent(".container").text().trim();
+			let userID = $("meta[name='userID']").attr("content");
+			togglePartInGarage(name, userID, "remove");
+		}
 		$("input[type='checkbox']").each(function() {
 			if (this.checked) {
-				var part = $(this).parent(".container").text().trim()
+				var part = $(this).parent(".container").text().trim();
 				if (part !== undefined) {
 					parts += part + ",";
 				}

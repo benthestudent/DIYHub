@@ -1,8 +1,8 @@
 {% extends 'hub/base.html' %}
 {% load static %}
+{% load return_array %}
 {% block header %}
     <meta charset="utf-8">
-    <meta name="userID" content="{{ user.id }}">
 	<link href="{% static 'profile.css' %}" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="{% static 'js/profile.js' %}"></script>
@@ -24,7 +24,8 @@
 			<button class="tablink" onclick="openPage('Account', this, 'white')" id="defaultOpen">Account</button>
 		<button class="tablink" onclick="openPage('Projects', this, 'white')">Projects</button>
 			<button class="tablink" onclick="openPage('Upvoted-Projects', this, 'white')">Upvoted Projects</button>
-	</div>
+	    <button class="tablink" onclick="openPage('Garage', this, 'white')">Garage</button>
+    </div>
 	<div id="Account" class="tabcontent">
         <form method="post" action="">
             <h3><strong>Email:</strong> <span id="email">{{ user.email }}</span> <button id="edit" type="button"><i class="fa fa-edit"></i></button></h3>
@@ -124,7 +125,24 @@
 		
 </div>
 
+<div id="Garage" class="tabcontent">
+        {% for category in user.garage %}
+            <div class="garage-list">
+                <h1>{{ category }}</h1>
+                <hr>
+                <ul>
+                {% for part in user.garage|return_array:category %}
 
+                    <li>
+                             <h4>{{ part }}</h4><button class="removePart"><i class="fa fa-minus-circle"></i></button>
+                     </li>
+                {% endfor %}
+                </ul>
+          </div>
+        {% endfor %}
+
+
+</div>
 
 </div>
 		<script language="javascript">

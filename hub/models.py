@@ -31,6 +31,14 @@ class MyAccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+class PartCategories(models.Model):
+    name = models.TextField()
+
+
+class Parts(models.Model):
+    name = models.TextField()
+    url = models.TextField(null=True)
+    category = models.ForeignKey(PartCategories, default=0, on_delete=models.CASCADE)
 
 
 class User(AbstractBaseUser):
@@ -50,6 +58,7 @@ class User(AbstractBaseUser):
     # parts = ArrayField(models.TextField(), blank=True)
     # projects = ArrayField(models.TextField(), blank=True)
     savedProjects = ArrayField(models.IntegerField(null=True), null=True, blank=True)
+    garage = models.ManyToManyField(Parts, blank=True)
     passwd_reset_token = models.CharField(max_length=50, null=True)
     passwd_reset_token_timestamp = models.DateTimeField(null=True)
 
@@ -72,18 +81,12 @@ class User(AbstractBaseUser):
 
 
 
-class PartCategories(models.Model):
-    name = models.TextField()
 
 
 class ProjectCategories(models.Model):
     name = models.TextField()
 
 
-class Parts(models.Model):
-    name = models.TextField()
-    url = models.TextField(null=True)
-    category = models.ForeignKey(PartCategories, default=0, on_delete=models.CASCADE)
 
 
 class Project(models.Model):
