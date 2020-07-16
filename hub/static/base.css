@@ -152,6 +152,7 @@ body {
 	display: inline-flex;
 	align-items: center;
 	font-family: montserrat;
+	padding-right: 5px;
 }
 
 .profile-image img {
