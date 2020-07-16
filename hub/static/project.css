@@ -44,6 +44,8 @@ body {
 .username-image img {
 	border-radius: 50%;
 	width: 50px;
+	height: 50px;
+	object-fit: cover;
 }
 .project-image {
 	/*height: 500px;*/
@@ -191,6 +193,8 @@ body {
 .comment-image img {
 	border-radius: 50%;
 	width: 30px;
+	height: 30px;
+	object-fit: cover;
 }
 
 .profile {
