@@ -437,7 +437,8 @@ def project(request, slug=None):
                "upvotes": Upvote.objects.filter(project=project).count(),
                "views": project.views,
                "dateCreated": project.dateCreated.strftime('%D %I:%M %p'),
-               "author": project.author.get().username,
+               "author": {"username": project.author.get().username,
+                          "img": project.author.get().profilePicturePath},
                "account": account,
                "external_url": external_url
                }

@@ -19,9 +19,13 @@
 			<h1>{{ projectName }}</h1>
 			<div class="username">
 				<div class="username-image">
-					<img src="{% static 'img/img_avatar.png' %}" alt="Profile Picture">
+                    {% if author.img %}
+                        <img id="profileImg" src="{% static '' %}{{ author.img }}" alt="Profile Picture">
+                    {% else %}
+                        <img id="profileImg" src="{% static 'img/img_avatar.png' %}">
+                    {% endif %}
 				</div>
-			<a href="{% url 'profile' author %}">{{ author }}</a>
+			<a href="{% url 'profile' author.username %}">{{ author.username }}</a>
 				<span>{{ views }} <i class="fa fa-eye"></i> <span id="projectUpvoteCounter">{{ upvotes }}</span> <i class="fa fa-thumbs-up"></i></span>
 		</div>
 				<p>{{ desc | safe }}</p>
@@ -44,7 +48,7 @@
         {% endif %}
 		<div class="upvote-tag">
 			<div class="tag">
-				<p>Posted {{ dateCreated }} by <a href="{% url 'profile' author %}">{{ author }}</a> in <a>{{ category }}</a></p>
+				<p>Posted {{ dateCreated }} by <a href="{% url 'profile' author.username %}">{{ author.username }}</a> in <a>{{ category }}</a></p>
 			</div>
 
             {% if upvoted %}
