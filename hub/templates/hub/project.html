@@ -65,9 +65,13 @@
                     <div>
                         <div class="profile">
                             <div class="comment-image">
-                                <img src="{% static 'img/img_avatar.png' %}" alt="Profile Picture">
+                                {% if comment.user.img %}
+                                    <img id="profileImg" src="{% static '' %}{{ comment.user.img }}" alt="Profile Picture">
+                                {% else %}
+                                    <img id="profileImg" src="{% static 'img/img_avatar.png' %}">
+                                {% endif %}
                             </div>
-                            <a href="{% url 'profile' comment.user.name %}">{{ comment.user.name }}</a>
+                            <a href="{% url 'profile' comment.user.username %}">{{ comment.user.username }}</a>
                         </div>
 
                         <p>{{ comment.body }}</p>
@@ -88,9 +92,13 @@
                             <div>
                                 <div class="profile">
                                     <div class="comment-image">
-                                        <img src="{% static 'img/img_avatar.png' %}" alt="Profile Picture">
+                                        {% if comment.user.img %}
+                                            <img id="profileImg" src="{% static '' %}{{ reply.user.img }}" alt="Profile Picture">
+                                        {% else %}
+                                            <img id="profileImg" src="{% static 'img/img_avatar.png' %}">
+                                        {% endif %}
                                     </div>
-                                    <a href="{% url 'profile' reply.user %}">{{ reply.user }}</a>
+                                    <a href="{% url 'profile' reply.user.username %}">{{ reply.user.username }}</a>
                                 </div>
 
                                 <p>{{ reply.body }}</p>
