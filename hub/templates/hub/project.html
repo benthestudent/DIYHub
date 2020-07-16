@@ -67,7 +67,7 @@
                             <div class="comment-image">
                                 <img src="{% static 'img/img_avatar.png' %}" alt="Profile Picture">
                             </div>
-                            <a href="{% url 'profile' comment.user %}">{{ comment.user }}</a>
+                            <a href="{% url 'profile' comment.user.name %}">{{ comment.user.name }}</a>
                         </div>
 
                         <p>{{ comment.body }}</p>

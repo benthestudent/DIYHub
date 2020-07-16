@@ -61,7 +61,11 @@
             <div class="profile">
                 {{ account.name }}
                 <div class="profile-image">
-                    <img src="{% static 'img/img_avatar.png' %}" alt="Profile Picture">
+                    {% if account.img %}
+                        <img id="profileImg" src="{% static '' %}{{ account.img }}" alt="Profile Picture">
+                    {% else %}
+                        <img id="profileImg" src="{% static 'img/img_avatar.png' %}">
+                    {% endif %}
                 </div>
             </div>
             </a>

@@ -26,7 +26,7 @@ def index(request):
     page = "search"
     projects = Project.objects.filter(published=1).exclude(id=1)
     projectsArray = []
-    account = {"id": request.user.id, "name": request.user.username} if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username, "img": request.user.profilePicturePath} if request.user.is_authenticated else None
     projectsArray = getProjectsFromQuery(projects)
     first_project = Project.objects.filter(id=1)
     projectsArray.insert(0, getProjectsFromQuery(first_project)[0])
@@ -94,7 +94,7 @@ def logout(request):
 
 @ensure_csrf_cookie
 def profile(request, username=None):
-    account = {"id": request.user.id, "name": request.user.username} if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username, "img": request.user.profilePicturePath} if request.user.is_authenticated else None
     user = request.user if request.user.is_authenticated else None
     user = User.objects.filter(username=username).first() if username is not None else user
     upvotedProjectsArray = []
@@ -157,7 +157,7 @@ def profile(request, username=None):
 @ensure_csrf_cookie
 def createProject(request, projectID=0):
     page = "create"
-    account = {"id": request.user.id, "name": request.user.username} if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username, "img": request.user.profilePicturePath} if request.user.is_authenticated else None
     context = {"account": account, "page": page}
     if projectID and request.user.is_authenticated:
         project = Project.objects.filter(id=projectID, author=request.user).first()
@@ -279,7 +279,7 @@ def createProject(request, projectID=0):
 
 @ensure_csrf_cookie
 def linkProject(request, projectID=0):
-    account = {"id": request.user.id, "name": request.user.username} if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username, "img": request.user.profilePicturePath} if request.user.is_authenticated else None
     context = {"account": account}
     if projectID and request.user.is_authenticated:
         project = Project.objects.filter(id=projectID, author=request.user).first()
@@ -395,7 +395,7 @@ def linkProject(request, projectID=0):
 
 
 def project(request, slug=None):
-    account = {"id": request.user.id, "name": request.user.username} if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username, "img": request.user.profilePicturePath} if request.user.is_authenticated else None
     projectName = ""
     project = None
     external_url = None
@@ -450,10 +450,10 @@ def project(request, slug=None):
         repliesArray = []
         for reply in replies:
             replyUpvoted = True if Upvote.objects.filter(comment=reply).first() else False
-            repliesArray.append({"user": reply.user.username, "body": reply.body, "upvotes": reply.upvotes, "commentID": reply.id,
+            repliesArray.append({"user": {"username": reply.user.username, "img": reply.user.profilePicturePath}, "body": reply.body, "upvotes": reply.upvotes, "commentID": reply.id,
              "upvoted": replyUpvoted})
         commentArray.append(
-            {"user": comment.user.username, "body": comment.body, "upvotes": comment.upvotes, "commentID": comment.id, "upvoted": upvoted, "replies": repliesArray})
+            {"user": {"username": comment.user.username, "img": comment.user.profilePicturePath}, "body": comment.body, "upvotes": comment.upvotes, "commentID": comment.id, "upvoted": upvoted, "replies": repliesArray})
     commentArray.sort(key=operator.itemgetter('upvotes'), reverse=True)
     context['comments'] = commentArray
     print(context['comments'])
@@ -605,7 +605,7 @@ def filterProjects(request, userID=None, filter="popular", num_of_results=25, pa
     return HttpResponse(json.dumps(projects))
 
 def contact(request):
-    account = {"id": request.user.id, "name": request.user.username} if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username, "img": request.user.profilePicturePath} if request.user.is_authenticated else None
     context = {"account": account}
     if request.method == "POST":
         name = request.POST.get("name")
@@ -624,7 +624,7 @@ def contact(request):
     return render(request, 'hub/contact.html', context)
 
 def about(request):
-    account = {"id": request.user.id, "name": request.user.username} if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username, "img": request.user.profilePicturePath} if request.user.is_authenticated else None
     context = {"account": account}
     return render(request, 'hub/about.html', context)
 
@@ -653,7 +653,7 @@ def discovery(request):
     page = "discover"
     projects = Project.objects.filter(published=1)
     projectsArray = []
-    account = {"id": request.user.id, "name": request.user.username} if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username, "img": request.user.profilePicturePath} if request.user.is_authenticated else None
     projectsArray = getProjectsFromQuery(projects)
     context = {"projects": projectsArray, "account": account, "page": page}
     return render(request, 'hub/discovery.html', context)
@@ -747,12 +747,12 @@ def gen_token():
     return rstr.xeger(r'[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20}')
 
 def privacyPolicy(request):
-    account = {"id": request.user.id, "name": request.user.username} if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username, "img": request.user.profilePicturePath} if request.user.is_authenticated else None
     context = {"account": account}
     return render(request, 'hub/privacyPolicy.html', context)
 
 def doNotSellMyInformation(request):
-    account = {"id": request.user.id, "name": request.user.username} if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username, "img": request.user.profilePicturePath} if request.user.is_authenticated else None
     context = {"account": account}
     return render(request, 'hub/doNotSellMyInformation.html', context)
 
