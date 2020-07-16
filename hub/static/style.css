@@ -74,6 +74,7 @@ body {
 	margin-right: 5px;
 	margin-bottom: 10px;
 	margin-top: 10px;
+	align-items: center;
 }
 .account button {
 	background-color: transparent;
@@ -448,7 +449,7 @@ label.category-label {
 }
 
 .sort-bar {
-	position: absolute;
+	position: relative;
 	z-index: 1;
 	width: 100%;
 	background-color: white;

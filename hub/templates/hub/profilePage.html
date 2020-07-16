@@ -17,11 +17,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bitter:400,700">
     <link rel="stylesheet" href="{% static 'profilePage.css' %}">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 {% endblock %}
 {% block content %}
     <div class="profile-card" style="overflow: auto;">
         <div class="profile-back" style="background-color: #1b262c;">
-            <img class="rounded-circle profile-pic" src="https://www.w3schools.com/howto/img_avatar.png">
+            {% if user.img %}
+                <img class="rounded-circle profile-pic" id="profileImg" src="{% static '' %}{{ account.img }}" alt="Profile Picture">
+            {% else %}
+                <img class="rounded-circle profile-pic" id="profileImg" src="{% static 'img/img_avatar.png' %}">
+            {% endif %}
             <h3 class="text-uppercase border-primary profile-name" style="font-family: 'Open Sans', sans-serif;background-color: #0b3a63;border-color: #1b262c;padding: 2%;">{{ user.username }}</h3>
             <p class="profile-bio" style="font-family: Montserrat, sans-serif;color: white;padding: 10px 5%;">{{ user.bio }} </p>
             <ul class="visible social-list">
