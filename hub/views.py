@@ -798,3 +798,28 @@ def addPartFromGarage(request):
                     except:
                         return HttpResponse("There was a problem adding the part")
     return HttpResponse("error")
+
+
+def updateProfileImg(request):
+    if request.method == "POST" and request.user.is_authenticated:
+        imgData = request.POST.get('img')
+        print(imgData)
+        imgData = imgData.replace("data:image/jpeg;base64,", "") if imgData else imgData
+        imgData = imgData.replace("data:image/png;base64,", "") if imgData else imgData
+        print(imgData)
+        if not 'static/' in str(imgData)[0:10] and imgData:  # if img has a / in, its probably a domain
+            projectPath = "users/user_" + str(request.user.id)
+            projectPath = "/opt/bitnami/apps/django/django_projects/static/" + projectPath
+            # projectPath = staticfiles_storage.url(projectPath)
+            try:
+                os.makedirs(projectPath)
+            except FileExistsError:
+                print("Using already made path")
+            imgURL = projectPath + "/" + "project-image.png"
+            print(imgURL)
+            with open(imgURL, "wb") as f:
+                f.write(base64.b64decode(imgData))
+            request.user.profilePicturePath = imgURL
+            request.user.save()
+            return HttpResponse("Success")
+    return HttpResponse("Failed")

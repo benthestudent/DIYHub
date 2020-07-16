@@ -34,5 +34,6 @@ urlpatterns = [
     path('dev/privacyPolicy', views.privacyPolicy, name='privacyPolicy'),
     path('dev/doNotSellMyInformation', views.doNotSellMyInformation, name='doNotSellMyInformation'),
     path('dev/removePartFromGarage', views.removePartFromGarage, name='removePartFromGarage'),
-    path('dev/addPartFromGarage', views.addPartFromGarage, name='addPartFromGarage')
+    path('dev/addPartFromGarage', views.addPartFromGarage, name='addPartFromGarage'),
+    path('dev/updateProfileImg', views.updateProfileImg, name='updateProfileImg')
 ]

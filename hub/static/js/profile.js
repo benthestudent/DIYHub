@@ -60,7 +60,14 @@ $(document).ready(function () {
 		    }
         }
     });
-})
+
+    $("#profile_files").change(function () {
+        if($("#saveProfile").length === 0) {
+            $("form").append("<br><button id=\"saveProfile\">Save</button>");
+        }
+
+    });
+});
 
  $(document).on("click", "#edit", function () {
         let name = $(this).parent().find("span").attr("id");
@@ -71,6 +78,8 @@ $(document).ready(function () {
         }
         $(this).remove();
  });
+
+
 
  $(document).on("click", "#editBio", function () {
         let name = "bio"

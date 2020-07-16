@@ -1,3 +1,26 @@
+function saveProfileImg() {
+	url = $("#profileImg").attr('src');
+		let data = {"img": url};
+        var csrftoken = getCookie('csrftoken');
+		$.ajaxSetup({
+    		headers: { "X-CSRFToken": getCookie("csrftoken") }
+		});
+		console.log(data);
+        $.ajax({
+			url: '/dev/updateProfileImg',
+			data: data,
+			type: 'POST',
+			success: function(response) {
+				console.log("success");
+				console.log(response);
+			},
+			error: function(response) {
+				console.log(response);
+				return response;
+			}
+		});
+}
+
 function togglePartInGarage(name, userID, operation) {
 	data = {"userID": userID,
             "part": name};
@@ -275,18 +298,24 @@ function getCookie(name) {
     return cookieValue;
 }
 
-function readURL(input) {
+function readURL(input, imageElement) {
+	var imgData;
     if (input.files && input.files[0]) {
         var reader = new FileReader();
 
         reader.onload = function (e) {
-        	$('#projectImg').attr('src', e.target.result);
+        	$(imageElement).attr('src', e.target.result);
+        	imgData = e.target.result;
+			if (imageElement === "#profileImg") {
+				saveProfileImg();
+			}
         }
 
         reader.readAsDataURL(input.files[0]);
     }else {
     	alert("No Image")
 	}
+
 }
 
 function refreshProjects(projects) {
@@ -530,9 +559,13 @@ $(document).ready(function() {
 	});
 
 	$("#files").change(function() {
-		$('#projectImg').attr('src', readURL(this));
+		$('#projectImg').attr('src', readURL(this, "#projectImg"));
 		$('#projectImg').removeClass("invisible");
 		$(".cont").removeClass("center");
+	});
+
+	$("#profile_files").change(function() {
+		let url = readURL(this, "#profileImg");
 	});
 
 	$("#part").on("input", function (event) {

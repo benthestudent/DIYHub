@@ -563,3 +563,8 @@ a.edit-button{
 	font-weight: bold;
 	font-size: 20pt;
 }
+
+
+.invisible {
+  display: none;
+}
