@@ -173,7 +173,6 @@ body {
 	padding: 0;
 	position: relative;
 	float: right;
-	width: 79.5%;
 	overflow: auto;
 	/* Supports Grid */
 	display: grid;
@@ -189,7 +188,6 @@ body {
 	padding: 0;
 	position: relative;
 	float: right;
-	width: 79.5%;
 	max-height: 100vh;
 	overflow: auto;
 	/* Supports Grid */

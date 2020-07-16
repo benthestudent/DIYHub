@@ -1,3 +1,35 @@
+function loadProjectsFromParts() {
+	let parts = "";
+	$("input[type='checkbox']").each(function() {
+			if (this.checked) {
+				var part = $(this).parent(".container").text().trim();
+				if (part !== undefined) {
+					parts += part + ",";
+				}
+			}
+		});
+		data = {"parts": parts.slice(0, -1)};
+		console.log(data);
+		$.ajaxSetup({
+			headers: { "X-CSRFToken": getCookie("csrftoken") }
+		});
+		$.ajax({
+			url: '/dev/getProjects',
+			data: data,
+			type: 'POST',
+			success: function(response) {
+				$(".grid a").remove();
+				$(".grid h2").remove();
+				$(".divider").remove();
+				$(".grid-almost-makable").remove();
+				refreshProjects(JSON.parse(response));
+			},
+			error: function(response) {
+				console.log("error");
+			}
+		});
+}
+
 function saveProfileImg() {
 	url = $("#profileImg").attr('src');
 		let data = {"img": url};
@@ -318,7 +350,7 @@ function readURL(input, imageElement) {
 
 }
 
-function refreshProjects(projects) {
+function refreshProjects(projects, almost=false) {
     for(i = 0; i < projects["projects"].length; i++){
         var color;
         var styles;
@@ -354,13 +386,21 @@ function refreshProjects(projects) {
             "    </div>" +
             "      </a>";
         console.log("Appending Element");
-        $(".grid").append(element);
+        if(almost){
 
+        	$(".grid-almost-makable").append(element);
+		}else {
+			$(".grid-makable").append(element);
+		}
     }
     if (projects["almostProjects"] && projects["almostProjects"].length > 0){
     	console.log("PROJECTS YOU CAN ALMOST MAKE");
         	$(".grid").append("<h2 class='divider'>Projects you can almost make:</h2>");
-        	refreshProjects({"projects": projects["almostProjects"]});
+        	$(".grid").append("<div class=\"grid-almost-makable\" style=\"\n" +
+				"    width: 100%;\n" +
+				"    overflow: visible;\n" +
+				"\"></div>");
+        	refreshProjects({"projects": projects["almostProjects"]}, true);
 		}
 }
 
@@ -443,6 +483,15 @@ function createComment(element, type){
 
 
 $(document).ready(function() {
+	if ($(".partContainer input:checkbox:checked").length > 0)
+	{
+		loadProjectsFromParts();// any one is checked
+	}
+	else
+	{
+	   // none is checked
+	}
+
 	//comments and upvotes
 	 $("#commentInput").on('input', function () {
         console.log("input");
@@ -687,7 +736,6 @@ $(document).ready(function() {
 	});
 
 	$("input[type='checkbox']").change(function() {
-		let parts = "";
 		if ($(this)[0].checked && $("meta[name='userID']").attr("content")) {
 			let name = $(this).parent(".container").text().trim();
 			let userID = $("meta[name='userID']").attr("content");
@@ -697,32 +745,7 @@ $(document).ready(function() {
 			let userID = $("meta[name='userID']").attr("content");
 			togglePartInGarage(name, userID, "remove");
 		}
-		$("input[type='checkbox']").each(function() {
-			if (this.checked) {
-				var part = $(this).parent(".container").text().trim();
-				if (part !== undefined) {
-					parts += part + ",";
-				}
-			}
-		});
-		data = {"parts": parts.slice(0, -1)};
-		console.log(data);
-		$.ajaxSetup({
-			headers: { "X-CSRFToken": getCookie("csrftoken") }
-		});
-		$.ajax({
-			url: '/dev/getProjects',
-			data: data,
-			type: 'POST',
-			success: function(response) {
-				$(".grid a").remove();
-				$(".grid h2").remove();
-				refreshProjects(JSON.parse(response));
-			},
-			error: function(response) {
-				console.log("error");
-			}
-		});
+		loadProjectsFromParts();
 	});
 
 	$("input:radio[name='difficulty']").change(function () {
