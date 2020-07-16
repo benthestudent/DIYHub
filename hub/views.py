@@ -134,6 +134,7 @@ def profile(request, username=None):
             "lastn": user.lastn,
             "phone": user.phone,
             "bio": user.bio,
+            "img": user.profilePicturePath,
             "garage": getPartsInGarage(user)
         }
         projects = Project.objects.filter(author=user).exclude(published=0)
