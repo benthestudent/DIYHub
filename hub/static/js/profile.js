@@ -60,13 +60,7 @@ $(document).ready(function () {
 		    }
         }
     });
-
-    $("#profile_files").change(function () {
-        if($("#saveProfile").length === 0) {
-            $("form").append("<br><button id=\"saveProfile\">Save</button>");
-        }
-
-    });
+    
 });
 
  $(document).on("click", "#edit", function () {
