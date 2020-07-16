@@ -820,6 +820,8 @@ def updateProfileImg(request):
             print(imgURL)
             with open(imgURL, "wb") as f:
                 f.write(base64.b64decode(imgData))
+            imgURL = imgURL.replace("/opt/bitnami/apps/django/django_projects/", "")
+            imgURL = imgURL[imgURL.find("users/"):] if imgURL else ""
             request.user.profilePicturePath = imgURL
             request.user.save()
             return HttpResponse("Success")
