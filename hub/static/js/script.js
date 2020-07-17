@@ -1,3 +1,5 @@
+
+
 function loadProjectsFromParts() {
 	let parts = "";
 	$("input[type='checkbox']").each(function() {
@@ -768,3 +770,6 @@ $(document).ready(function() {
 	});
 });
 
+$(window).on("load",function(){
+     $(".loader-wrapper").fadeOut("slow");
+});
