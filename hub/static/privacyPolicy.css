@@ -12,16 +12,15 @@
 }
 
 .privacy-container li {
-	font-family: "Open Sans", sans-serif; 
+	font-family: "Open Sans", sans-serif;
 	line-height: 30px;
 }
 
 body {
 	background-color: #1B262C;
-	display: flex;
 	justify-content: center;
 	flex-direction: column;
-	
+
 }
 
 .privacy-container {
