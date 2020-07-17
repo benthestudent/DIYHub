@@ -232,7 +232,6 @@ body {
 	padding: 0;
 	position: relative;
 	float: right;
-	width: 100%;
 	overflow: auto;
 	/* Supports Grid */
 	display: grid;
