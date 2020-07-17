@@ -308,13 +308,13 @@ body {
   100% { transform: rotate(360deg); }
 }
 
-.loader {
+.loader-square {
   display: inline-block;
   width: 30px;
   height: 30px;
   position: relative;
   border: 4px solid #Fff;
-  animation: loader 2s infinite ease;
+  animation: loader-square 2s infinite ease;
 }
 
 .loader-inner {
