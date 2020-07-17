@@ -13,6 +13,7 @@
       <input type="text" placeholder="username" name="username" id="register-username" class="valid"/>
       <input type="password" placeholder="password" name="password" id="register-password" class="valid"/>
       <input type="text" placeholder="email address" name="email" id="register-email" class="valid"/>
+       <p style="margin-bottom: 5px;"><input id="agree-to-ppp" type="checkbox" style="width: initial; margin: initial" /> I agree to the diyhub.io Privacy Policy</p>
       <button type="button" id="create-account-button">create</button>
       <p class="message">Already registered? <a href="#">Sign In</a></p>
         {% csrf_token %}
@@ -29,6 +30,7 @@
 <div class="validation-error invisible">
         Please Enter Valid Information.
     <ul>
+        <li>You must agree to our Privacy Policy.</li>
         <li>Usernames must be greater than 3 characters.</li>
         <li>Passwords must be longer than 6 characters and contain a special character.</li>
     </ul>

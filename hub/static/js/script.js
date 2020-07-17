@@ -720,7 +720,7 @@ $(document).ready(function() {
 	});
 
 	$("#create-account-button").click(function () {
-		if ($("#register-username").hasClass("valid") && $("#register-password").hasClass("valid") && $("#register-email").hasClass("valid") && $("#register-username").val() && $("#register-password").val() && $("#register-email").val()) {
+		if ($("#register-username").hasClass("valid") && $("#register-password").hasClass("valid") && $("#register-email").hasClass("valid") && $("#register-username").val() && $("#register-password").val() && $("#register-email").val() && $("#agree-to-ppp")[0].checked) {
 			$(this).closest("form").submit();
 		}else{
 			$(".validation-error").removeClass("invisible");
@@ -735,7 +735,7 @@ $(document).ready(function() {
 		}
 	});
 
-	$("input[type='checkbox']").change(function() {
+	$(".partContainer input[type='checkbox']").change(function() {
 		if ($(this)[0].checked && $("meta[name='userID']").attr("content")) {
 			let name = $(this).parent(".container").text().trim();
 			let userID = $("meta[name='userID']").attr("content");

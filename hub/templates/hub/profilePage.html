@@ -22,7 +22,7 @@
     <div class="profile-card" style="overflow: auto;">
         <div class="profile-back" style="background-color: #1b262c;">
             {% if user.img %}
-                <img class="rounded-circle profile-pic" id="profileImg" src="{% static '' %}{{ account.img }}" alt="Profile Picture">
+                <img class="rounded-circle profile-pic" id="profileImg" src="{% static '' %}{{ user.img }}" alt="Profile Picture">
             {% else %}
                 <img class="rounded-circle profile-pic" id="profileImg" src="{% static 'img/img_avatar.png' %}">
             {% endif %}
