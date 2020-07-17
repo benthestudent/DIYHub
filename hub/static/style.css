@@ -372,7 +372,7 @@ body {
 	filter: blur(3px);
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 1000px) {
 	.selector {
 		width: 50%;
 	}
