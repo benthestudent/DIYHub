@@ -21,7 +21,7 @@
                 {% else %}
                     <img id="profileImg" src="{% static 'img/img_avatar.png' %}">
                 {% endif %}
-				<div class="overlay-profile"><input id="profile_files" multiple name="profile_files[]" type="file" name="choose-file" style="position: absolute; opacity: 0; width: 100%; height: 100%" /><label for="choose-file"><i class="fa fa-edit"></i></label>
+				<div class="overlay-profile"><input accept="image/*" id="profile_files" multiple name="profile_files[]" type="file" name="choose-file" style="position: absolute; opacity: 0; width: 100%; height: 100%" /><label for="choose-file"><i class="fa fa-edit"></i></label>
 			</div></div>
 		<h1>{{ user.username }}</h1>
 		</div>

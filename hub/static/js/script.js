@@ -354,6 +354,10 @@ function refreshProjects(projects, almost=false) {
     for(i = 0; i < projects["projects"].length; i++){
         var color;
         var styles;
+        var url = projects["projects"][i].url;
+        if (url.indexOf("http://") !== -1 || url.indexOf("https://") !== -1) {
+			url = "external/?url=" + url;
+		}
         if (projects["projects"][i].difficulty === 1) {
             color = "#14aa30";
         }
@@ -374,7 +378,7 @@ function refreshProjects(projects, almost=false) {
         }else {
             styles = "<div class=\"overlay\">"
         }
-        var element = "<a href=\"project/" + projects["projects"][i].url + "\">\n" +
+        var element = "<a href=\"dev/project/" + url + "\">\n" +
             "      <div class=\"module\">\n" +
             "\t  <div class=\"container-grid\">\n" +
             "          <img src=\"static/" + projects["projects"][i].imgPath + "\" alt=\"ProjectImage\" >\n" +
