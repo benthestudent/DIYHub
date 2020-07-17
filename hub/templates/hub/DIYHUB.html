@@ -17,7 +17,7 @@
                 {% for category in categories %}
                     <div class="category">
                         <label class="category-label"><input class="toggle" type="checkbox">{{ category.name }} <i class="fa fa-caret-down"></i></label>
-                        <div class="partContainer expand">
+                        <div class="partContainer notExpanded">
                             <ul>
                                 {% for part in category.parts %}
                                 <li>
@@ -92,9 +92,13 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script>
 	(function($){
-  $("#searchbar").on('keyup', function(e) {
+  $("#searchbar").on('input', function(e) {
+
     var $this = $(this);
     var exp = new RegExp($this.val(), 'i');
+    if($(this).val() !== "") {
+        $(".notExpanded").addClass("expand").removeClass("notExpanded");
+    }
     $(".items-container li label").each(function() {
       var $self = $(this);
       if(!exp.test($self.text())) {
