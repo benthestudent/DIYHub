@@ -46,10 +46,10 @@ def index(request):
     context = {"projects": projectsArray, "categories": categoryArray, "account": account, "page": page}
     return render(request, 'hub/DIYHUB.html', context)
 
-def createPart(name, cat=1):
+def createPart(name, cat="General"):
     part = Parts()
     part.name = name
-    cat = PartCategories.objects.filter(id=cat).first()
+    cat = PartCategories.objects.filter(name=cat).first()
     if cat:
         part.category = cat
     part.save()
@@ -275,6 +275,11 @@ def createProject(request, projectID=0):
     for part in result:
         categories.append({"name": part.name})
     context["categories"] = categories
+    partCats = PartCategories.objects.all()
+    partCategories = []
+    for cat in partCats:
+        partCategories.append({"name": cat.name})
+    context["partCategories"] = partCategories
     return render(request, 'hub/newCreateProject.html', context)
 
 @ensure_csrf_cookie
@@ -342,18 +347,21 @@ def linkProject(request, projectID=0):
                 f.write(base64.b64decode(imgData))
         partIDs = []
         parts = request.POST.get("parts")
+        partsWithoutCats = parts
         parts = parts.split(",") if parts else []
         print("parts: " + str(parts))
         partNames = []
         for part in parts:
             partObj = None
-            partName = part.split(" x ")[1]
+            partNameSplit = part.split(" x ")[1] if " x " in part else part
+            partName, partCat = partNameSplit.split(" -cat=")
+            partsWithoutCats = partsWithoutCats.replace(" -cat=" + partCat, "")
             try:
                 partObj = Parts.objects.get(name__exact=partName)
             except Parts.DoesNotExist:
                 partObj = None
                 print("Does Not Exist. Creating Part")
-                partObj = createPart(partName) # create part if not found
+                partObj = createPart(partName, partCat) # create part if not found
             if partObj:
                 partIDs.append(partObj.id)
                 partNames.append(partName)
@@ -361,7 +369,7 @@ def linkProject(request, projectID=0):
 
         form.name = request.POST.get("name")
         form.desc = request.POST.get("desc")
-        form.parts = str(request.POST.get("parts"))
+        form.parts = partsWithoutCats
         imgURL = imgURL.replace("/opt/bitnami/apps/django/django_projects/", "")
         imgURL = imgURL[imgURL.find("projects/"):] if imgURL else ""
         form.imgPath = imgURL
@@ -391,6 +399,11 @@ def linkProject(request, projectID=0):
     for part in result:
         categories.append({"name": part.name})
     context["categories"] = categories
+    partCats = PartCategories.objects.all()
+    partCategories = []
+    for cat in partCats:
+        partCategories.append({"name": cat.name})
+    context["partCategories"] = partCategories
     return render(request, 'hub/linkProject.html', context)
 
 

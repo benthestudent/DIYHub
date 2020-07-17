@@ -134,9 +134,10 @@ function addStep() {
 function addPart() {
 			console.log("add part button");
 				// add <i class="fa fa-pencil pencil" id="editPart" style="font-size:24px"></i> for editing
-				let part = "<div class=\"border rounded border-primary d-inline-flex align-items-sm-center addedPart\" style=\"width: 100%;padding: 1%;border-color: #575757;\"><input style=\"width: 10%;margin-right: 1%;padding: 5px;\" class=\"border rounded border-secondary\" type=\"text\" name=\"quantity\" value=\"" + $("#quantity").val() + "\" readonly><input style=\"width: 80%;margin-right: 1%;padding: 5px;\" class=\"border rounded border-secondary\" type=\"text\" name=\"part\" id=\"part\" value=\"" + $("#part").val() + "\" readonly><i class=\"fa fa-trash-o trash right\" style=\"font-size:24px\"></i></div>";
+				let part = "<div class=\"border rounded border-primary d-inline-flex align-items-sm-center addedPart\" style=\"width: 100%;padding: 1%;border-color: #575757;\"><input style=\"width: 10%;margin-right: 1%;padding: 5px;\" class=\"border rounded border-secondary\" type=\"text\" name=\"quantity\" value=\"" + $("#quantity").val() + "\" readonly><input style=\"width: 70%;margin-right: 1%;padding: 5px;\" class=\"border rounded border-secondary\" type=\"text\" name=\"part\" id=\"part\" value=\"" + $("#part").val() + "\" readonly><input style=\"width: 10%;margin-right: 1%;padding: 5px;\" class=\"border rounded border-secondary\" type=\"text\" name=\"part\" id=\"part\" value=\"" + $("#partCat").val() + "\" readonly><i class=\"fa fa-trash-o trash right\" style=\"font-size:24px\"></i></div>";
 				$("#quantity").val("");
 				$("#part").val("");
+				$("#partCat").val("General");
 				$('#partsDefault').remove();
 				$(".supplies-container").append(part);
 
@@ -233,24 +234,24 @@ function getProjectData() {
 	var url = $(location).attr('href');
     var partsOfUrl = url.split("/");
     var last_part = partsOfUrl[partsOfUrl.length-1];
-
 	$(".addedPart").each(function() {
-		let q = true
+		let q = 0
 		var quantity = 0;
 		var partName = "";
+		var category = "";
 		$(this).children("input").each(function() {
-			console.log("once");
-			if (q) {
+			if (q === 0) {
 				if (this.value) {
 					quantity = this.value
 				}
 
-				q = false;
-			}else {
+				q++;
+			}else if(q === 1) {
 				partName = this.value
 				if (!partName) {
 						partsCompleted = false;
 				}
+				q++;
 				// var partArray = partName.split(",");
 				// for(var i = 0; i < partArray.length; i++) {
 				// 	if (!partName) {
@@ -263,10 +264,13 @@ function getProjectData() {
 				// 	}
 				// }
 				// parts = parts.slice(0, -4) + ","
+
+			}else {
+				category = this.value;
 				if (quantity) {
-					parts += quantity + " x " + partName;
+					parts += quantity + " x " + partName + " -cat=" + category;
 				} else {
-					parts += partName;
+					parts += partName + " -cat=" + category;
 				}
 				parts += ",";
 			}
@@ -579,6 +583,7 @@ $(document).ready(function() {
 				}
 			});
 		}else {
+			$(this).html("Publish");
 			alert("You have not completely filled out your project. Go back and make sure you have a name, description, image, supplies, and steps");
 		}
 	});
@@ -609,6 +614,7 @@ $(document).ready(function() {
 				}
 			});
 		}else {
+			$(this).html("Link");
 			alert("You have not completely filled out your project. Go back and make sure you have a name, description, image, url, and supplies");
 		}
 	});
