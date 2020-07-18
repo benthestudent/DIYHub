@@ -384,7 +384,7 @@ function refreshProjects(projects, almost=false) {
         }else {
             styles = "<div class=\"overlay\">"
         }
-        var element = "<a href=\"dev/project/" + url + "\">\n" +
+        var element = "<a href=\"/project/" + url + "\">\n" +
             "      <div class=\"module\">\n" +
             "\t  <div class=\"container-grid\">\n" +
             "          <img src=\"static/" + projects["projects"][i].imgPath + "\" alt=\"ProjectImage\" >\n" +
