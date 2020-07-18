@@ -22,7 +22,7 @@ function removePartFromGarage(name, userID) {
     		headers: { "X-CSRFToken": getCookie("csrftoken") }
 		});
     $.ajax({
-			url: '/dev/removePartFromGarage',
+			url: '/removePartFromGarage',
 			data: data,
 			type: 'POST',
 			success: function(response) {

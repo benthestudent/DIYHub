@@ -37,7 +37,7 @@ function vote(element, type){
 		});
 		data = {"elementID": elementID, "type": type, "operation": operation};
 		$.ajax({
-			url: '/dev/upvote',
+			url: '/upvote',
 			data: data,
 			type: 'POST',
 			success: function(response) {
@@ -89,7 +89,7 @@ function createComment(element, type){
 		headers: { "X-CSRFToken": getCookie("csrftoken") }
 	});
 	$.ajax({
-				url: '/dev/addComment',
+				url: '/addComment',
 				data: data,
 				type: 'POST',
 				success: function(response) {

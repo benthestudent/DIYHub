@@ -16,7 +16,7 @@ function loadProjectsFromParts() {
 			headers: { "X-CSRFToken": getCookie("csrftoken") }
 		});
 		$.ajax({
-			url: '/dev/getProjects',
+			url: '/getProjects',
 			data: data,
 			type: 'POST',
 			success: function(response) {
@@ -41,7 +41,7 @@ function saveProfileImg() {
 		});
 		console.log(data);
         $.ajax({
-			url: '/dev/updateProfileImg',
+			url: '/updateProfileImg',
 			data: data,
 			type: 'POST',
 			success: function(response) {
@@ -64,9 +64,9 @@ function togglePartInGarage(name, userID, operation) {
 		});
 	let url = "";
 	if (operation === "add") {
-		url = '/dev/addPartFromGarage';
+		url = '/addPartFromGarage';
 	}else {
-		url = '/dev/removePartFromGarage';
+		url = '/removePartFromGarage';
 	}
     $.ajax({
 			url: url,
@@ -438,7 +438,7 @@ function vote(element, type){
 		});
 		data = {"elementID": elementID, "type": type, "operation": operation};
 		$.ajax({
-			url: '/dev/upvote',
+			url: '/upvote',
 			data: data,
 			type: 'POST',
 			success: function(response) {
@@ -479,7 +479,7 @@ function createComment(element, type){
 		headers: { "X-CSRFToken": getCookie("csrftoken") }
 	});
 	$.ajax({
-				url: '/dev/addComment',
+				url: '/addComment',
 				data: data,
 				type: 'POST',
 				success: function(response) {
@@ -536,13 +536,13 @@ $(document).ready(function() {
 			});
 			console.log(JSON.stringify(data))
 			$.ajax({
-						url: '/dev/create',
+						url: '/create',
 						data: data,
 						type: 'POST',
 						success: function(response) {
 							console.log(response.text);
 							if (response.indexOf("//www.") === -1) {
-								document.location.href = "/dev/create/" + response;
+								document.location.href = "/create/" + response;
 							} else {
 								window.location.href = response;
 					}
@@ -565,13 +565,13 @@ $(document).ready(function() {
 			});
 			console.log(JSON.stringify(data))
 			$.ajax({
-				url: '/dev/create',
+				url: '/create',
 				data: data,
 				type: 'POST',
 				success: function (response) {
 					console.log(response);
 					if (response.indexOf("//www.") === -1) {
-						document.location.href = "/dev/project/" + response;
+						document.location.href = "/project/" + response;
 					} else {
 						window.location.href = response;
 					}
@@ -599,7 +599,7 @@ $(document).ready(function() {
 			});
 			console.log(JSON.stringify(data))
 			$.ajax({
-				url: '/dev/link',
+				url: '/link',
 				data: data,
 				type: 'POST',
 				success: function (response) {
@@ -634,7 +634,7 @@ $(document).ready(function() {
 			$("#part").after(" <datalist id=\"partsList\"></datalist>");
 		}
 		$.ajax({
-			url: '/dev/getParts',
+			url: '/getParts',
 			data: {"search": $("#part").val()},
 			success: function (response) {
 				parts = JSON.parse(response)
@@ -658,7 +658,7 @@ $(document).ready(function() {
 			$("#category").after(" <datalist id=\"categories\"></datalist>");
 		}
 		$.ajax({
-			url: '/dev/getCategories',
+			url: '/getCategories',
 			data: {"search": $("#category").val()},
 			success: function (response) {
 				cats = JSON.parse(response)
@@ -680,7 +680,7 @@ $(document).ready(function() {
 
 	$("#category").focus(function () {
 		$.ajax({
-			url: '/dev/getCategories',
+			url: '/getCategories',
 			data: {},
 			success: function (response) {
 				cats = JSON.parse(response)

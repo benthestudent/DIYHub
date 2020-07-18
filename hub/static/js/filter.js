@@ -22,9 +22,9 @@ $(document).ready(function() {
 function filterProjects(method, projectsPerPage=25, userID=false) {
     let url;
     if (userID){
-        url = "/dev/filterProjects/" + method + "/" + userID + "/" + projectsPerPage.toString();
+        url = "/filterProjects/" + method + "/" + userID + "/" + projectsPerPage.toString();
     }else {
-        url = "/dev/filterProjects/" + method + "/" + projectsPerPage.toString();
+        url = "/filterProjects/" + method + "/" + projectsPerPage.toString();
     }
     $.get(url).done(function (data) {
         refreshProjects(JSON.parse(data));
