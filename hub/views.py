@@ -221,21 +221,22 @@ def createProject(request, projectID=0):
                 f.write(base64.b64decode(imgData))
         partIDs = []
         parts = request.POST.get("parts")
+
+        partsWithoutCats = parts
         parts = parts.split(",") if parts else []
         print("parts: " + str(parts))
         partNames = []
         for part in parts:
             partObj = None
-            if " x " in part:
-                partName = part.split(" x ")[1]
-            else:
-                partName = part
+            partNameSplit = part.split(" x ")[1] if " x " in part else part
+            partName, partCat = partNameSplit.split(" -cat=")
+            partsWithoutCats = partsWithoutCats.replace(" -cat=" + partCat, "")
             try:
                 partObj = Parts.objects.get(name__exact=partName)
             except Parts.DoesNotExist:
                 partObj = None
                 print("Does Not Exist. Creating Part")
-                partObj = createPart(partName) # create part if not found
+                partObj = createPart(partName, partCat) # create part if not found
             if partObj:
                 partIDs.append(partObj.id)
                 partNames.append(partName)
@@ -245,7 +246,7 @@ def createProject(request, projectID=0):
         form.desc = request.POST.get("desc")
         form.difficulty = request.POST.get("difficulty")
         form.steps = str(request.POST.get("steps"))
-        form.parts = str(request.POST.get("parts"))
+        form.parts = partsWithoutCats
         imgURL = imgURL.replace("/opt/bitnami/apps/django/django_projects/", "")
         imgURL = imgURL[imgURL.find("projects/"):] if imgURL else ""
         form.imgPath = imgURL
