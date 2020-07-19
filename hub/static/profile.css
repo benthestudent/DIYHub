@@ -49,6 +49,12 @@ main {
 	.module {
 		height: auto !important;
 	}
+	.garage-list li {
+		justify-content: space-around;
+	}
+	.garage-list button {
+		padding: 10px;
+	}
 }
 
 .info-container {
@@ -218,7 +224,6 @@ main {
 	background-color: #037F8C;
 	color: white;
 	border-radius: 3px;
-	display: flex;
 	justify-content: center;
 	align-items: center;
 }
