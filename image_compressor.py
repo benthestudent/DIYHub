@@ -1,4 +1,4 @@
 import os
-IMG_DIRECTORY = './hub/static/img/optimized'
+IMG_DIRECTORY = './'
 os.system('optimize-images ' + str(IMG_DIRECTORY))
 
