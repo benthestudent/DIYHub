@@ -107,7 +107,7 @@ body {
 	.navigation ul {
 		flex-direction: row;
 		justify-content: center;
-		
+
 	}
 	.navigation #active {
 		margin: 15px 0;
@@ -133,7 +133,7 @@ body {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
-	width: 20%;
+	width: 25%;
 	z-index: 1;
 	height: 100vh;
 }
@@ -157,7 +157,7 @@ body {
 	padding: 0;
 	position: relative;
 	float: right;
-	width: 79.5%;
+	width: 74.5%;
 	max-height: 100vh;
 	overflow: auto;
 	/* Supports Grid */
@@ -387,24 +387,24 @@ body {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		max-height: 300px;
+		max-height: 70vh;
 		align-self: center;
 	}
 	.grid {
 		width: 95%;
 		justify-content: center;
-		
+
 	}
 	.grid-makable {
 		width: 95%;
-		
+
 	}
 	.grid-almost-makable {
 		width: 95%;
 	}
 }
 
-#searchbar { 
+#searchbar {
   width: 100%; /* Full-width */
   font-size: 13px; /* Increase font-size */
   padding: 12px 20px 12px 20px; /* Add some padding */
