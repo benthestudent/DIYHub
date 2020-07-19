@@ -13,7 +13,7 @@
       <input type="text" placeholder="username" name="username" id="register-username" class="valid"/>
       <input type="password" placeholder="password" name="password" id="register-password" class="valid"/>
       <input type="text" placeholder="email address" name="email" id="register-email" class="valid"/>
-       <p style="margin-bottom: 5px;"><input id="agree-to-ppp" type="checkbox" style="width: initial; margin: initial" /> I agree to the diyhub.io Privacy Policy</p>
+       <p style="margin-bottom: 5px;"><input id="agree-to-ppp" type="checkbox" style="margin-bottom: 10px;font-size: 12px;align-items: center;display: flex;justify-content: space-around;" /> I agree to the diyhub.io Privacy Policy</p>
       <button type="button" id="create-account-button">create</button>
       <p class="message">Already registered? <a href="#">Sign In</a></p>
         {% csrf_token %}
@@ -37,11 +37,11 @@
     </div>
 </div>
 
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
-	<script src="../js/popper.min.js"></script> 
+	<script src="../js/popper.min.js"></script>
 	<script src="../js/bootstrap-4.4.1.js"></script>
 	  <script>
 	  $('.message a').click(function(){
