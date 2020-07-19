@@ -147,6 +147,12 @@ body {
     padding: 10px 0;
     padding-bottom: 0;
 }
+#logo {
+	display: none;
+}
+.header {
+    padding-top: 20px;
+}
 }
 
 .profile {
