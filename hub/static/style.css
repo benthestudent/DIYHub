@@ -189,7 +189,6 @@ body {
 	padding: 0;
 	position: relative;
 	float: right;
-	max-height: 100vh;
 	overflow: auto;
 	/* Supports Grid */
 	display: grid;
