@@ -575,3 +575,10 @@ a.edit-button{
 .invisible {
   display: none;
 }
+
+#Account form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
