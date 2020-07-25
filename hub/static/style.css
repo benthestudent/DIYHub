@@ -392,6 +392,7 @@ body {
 	.grid {
 		width: 95%;
 		justify-content: center;
+		max-height: 100%;
 
 	}
 	.grid-makable {
