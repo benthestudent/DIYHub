@@ -1761,9 +1761,6 @@ p.hero-subtitle {
   box-shadow: inset 0px 0px 14px 0px rgba(0,0,0,0.75);
 }
 
-.save-btn-group button {
-    margin: 20px;
-}
 .save-btn-group {
   display: flex;
   flex-direction: column;
