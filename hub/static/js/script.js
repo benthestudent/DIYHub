@@ -132,7 +132,10 @@ function addStep() {
 }
 
 function addPart() {
-			console.log("add part button");
+	if($("#part").val().includes(" and ") || $("#part").val().includes(" or ") || $("#part").val().includes("optional"))
+			alert("Please input only one item per part (no 'and' or 'or' in part names). If the part is optional, don't include it in the parts list, but feel free to mention it in a step. If a part has an alternative, pick the best option and list alternatives in the steps.");
+	else {
+		console.log("add part button");
 				// add <i class="fa fa-pencil pencil" id="editPart" style="font-size:24px"></i> for editing
 				let part = "<div class=\"border rounded border-primary d-inline-flex align-items-sm-center addedPart\" style=\"width: 100%;padding: 1%;border-color: #575757;\"><input style=\"width: 10%;margin-right: 1%;padding: 5px;\" class=\"border rounded border-secondary\" type=\"text\" name=\"quantity\" value=\"" + $("#quantity").val() + "\" readonly><input style=\"width: 70%;margin-right: 1%;padding: 5px;\" class=\"border rounded border-secondary\" type=\"text\" name=\"part\" id=\"part\" value=\"" + $("#part").val() + "\" readonly><input style=\"width: 10%;margin-right: 1%;padding: 5px;\" class=\"border rounded border-secondary\" type=\"text\" name=\"part\" id=\"part\" value=\"" + $("#partCat").val() + "\" readonly><i class=\"fa fa-trash-o trash right\" style=\"font-size:24px\"></i></div>";
 				$("#quantity").val("");
@@ -140,8 +143,9 @@ function addPart() {
 				$("#partCat").val("General");
 				$('#partsDefault').remove();
 				$(".supplies-container").append(part);
+	}
+	return false;
 
-			return false;
 }
 
 
@@ -337,21 +341,35 @@ function getCookie(name) {
 }
 
 function readURL(input, imageElement) {
+	let fileTypes = ['jpg', 'jpeg', 'png'];  //acceptable file types
 	var imgData;
     if (input.files && input.files[0]) {
-        var reader = new FileReader();
+    	var extension = input.files[0].name.split('.').pop().toLowerCase(),  //file extension from input file
+			isSuccess = fileTypes.indexOf(extension) > -1;  //is extension in acceptable types
 
-        reader.onload = function (e) {
-        	$(imageElement).attr('src', e.target.result);
-        	imgData = e.target.result;
-			if (imageElement === "#profileImg") {
-				saveProfileImg();
+        if (isSuccess) {
+			var reader = new FileReader();
+
+			reader.onload = function (e) {
+				$(imageElement).attr('src', e.target.result);
+				imgData = e.target.result;
+				if (imageElement === "#profileImg") {
+					saveProfileImg();
+				}else { //for project image
+					$('#projectImg').removeClass("invisible");
+					$(".cont").removeClass("center");
+				}
 			}
+
+			reader.readAsDataURL(input.files[0]);
+		}
+        else {
+        	alert("Please select an image of type jpg, png, or jpeg.");
         }
 
-        reader.readAsDataURL(input.files[0]);
-    }else {
-    	alert("No Image")
+    }
+	else {
+    	alert("No Image");
 	}
 
 }
@@ -621,8 +639,7 @@ $(document).ready(function() {
 
 	$("#files").change(function() {
 		$('#projectImg').attr('src', readURL(this, "#projectImg"));
-		$('#projectImg').removeClass("invisible");
-		$(".cont").removeClass("center");
+
 	});
 
 	$("#profile_files").change(function() {

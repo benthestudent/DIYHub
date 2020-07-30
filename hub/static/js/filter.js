@@ -77,6 +77,6 @@ function refreshProjects(projects) {
             "    </div>" +
             "      </a>";
         console.log(element);
-        $(".grid").append(element);
+        $(".grid-makable").append(element);
     }
 }

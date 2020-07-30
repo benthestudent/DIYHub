@@ -666,11 +666,11 @@ def getProjectsByParts(request):
 
 def discovery(request):
     page = "discover"
-    projects = Project.objects.filter(published=1)
+    projects = Project.objects.filter(published=1)[0:25]
     projectsArray = []
     account = {"id": request.user.id, "name": request.user.username, "img": request.user.profilePicturePath} if request.user.is_authenticated else None
     projectsArray = getProjectsFromQuery(projects)
-    context = {"projects": projectsArray, "account": account, "page": page}
+    context = {"projects": projectsArray, "account": account, "page": page, "filterable": True}
     return render(request, 'hub/discovery.html', context)
 
 def getProjectsFromQuery(projects):
@@ -681,7 +681,7 @@ def getProjectsFromQuery(projects):
             shortDesc = desc[:150] + "... " if len(desc) > 150 else desc
             print("debug: getting the shorter desc: {}".format(shortDesc))
             projectsArray.append(
-                {"name": project.name, "desc": desc, "shortDesc": shortDesc ,"imgPath": project.imgPath, "url": project.url,
+                {"name": project.name, "desc": desc, "shortDesc": shortDesc ,"imgPath": project.imgPath, "url": project.url, "id": project.id,
                  "difficulty": project.difficulty, "upvotes": Upvote.objects.filter(project=project).count(), "views": project.views, "published": project.published})
 
     return projectsArray

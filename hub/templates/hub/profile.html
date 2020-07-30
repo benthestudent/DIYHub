@@ -78,7 +78,8 @@
       <div class="module">
 	  <div class="container-grid">
         {% if "http" in project.url %}
-          <a href="{{ project.url }}">
+            <a href="{% url 'external_project' %}?url={{ project.url }}">
+
         {% elif project.url %}
           {% if project.published == 1 %}
               <a href="{% url 'project' project.url %}">
@@ -90,8 +91,8 @@
           <img src="{% static '' %}{{ project.imgPath }}" alt="ProjectImage" onerror="this.onerror=null;this.src='{% static 'img/ProjectImage.png' %}';">
           <div class="overlay">
               <h1>{{ project.name }}</h1>
-              {% if project.published == 1  and not "http" in project.url and project.url %}
-              <a class="edit-button" href="{% url 'createProject' project.url %}">Edit</a>
+              {% if project.published == 1 and project.id >= 1%}
+              <a class="edit-button" href="{% url 'createProject' project.id %}">Edit</a>
               {% endif %}
           </div>
       </a>
