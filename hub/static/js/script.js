@@ -405,7 +405,7 @@ function refreshProjects(projects, almost=false) {
         var element = "<a href=\"/project/" + url + "\">\n" +
             "      <div class=\"module\">\n" +
             "\t  <div class=\"container-grid\">\n" +
-            "          <img src=\"static/" + projects["projects"][i].imgPath + "\" alt=\"ProjectImage\" >\n" +
+            "          <img src=\"static/" + projects["projects"][i].imgPath + "\" alt=\"ProjectImage\"  onerror=\"this.onerror=null;this.src='https://s3-us-west-2.amazonaws.com/diyhub.io/ProjectImage.png';\">\n" +
             styles +
             "              <h1>" + projects["projects"][i].name + "</h1>\n" +
             "              <p>" + projects["projects"][i].shortDesc + "</p>\n" +

@@ -115,7 +115,7 @@
       <a href="{% url 'project' project.url %}">
       <div class="module-upvoted">
 	  <div class="container-grid">
-          <img src="{% static '' %}{{ project.imgPath }}" alt="ProjectImage">
+          <img src="{% static '' %}{{ project.imgPath }}" alt="ProjectImage" onerror="this.onerror=null;this.src='https://s3-us-west-2.amazonaws.com/diyhub.io/ProjectImage.png';">
           <div class="overlay">
               <h1>{{ project.name }}</h1>
               <p>{{ project.shortDesc }}</p>

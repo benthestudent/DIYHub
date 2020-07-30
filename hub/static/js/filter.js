@@ -21,11 +21,13 @@ $(document).ready(function() {
 
 function filterProjects(method, projectsPerPage=25, userID=false) {
     let url;
-    if (userID){
-        url = "/filterProjects/" + method + "/" + userID + "/" + projectsPerPage.toString();
-    }else {
-        url = "/filterProjects/" + method + "/" + projectsPerPage.toString();
-    }
+    // the following lines are if there is a userID in the filter but i don't think thats actually ever used
+    // if (userID){
+    //     url = "/filterProjects/" + method + "/" + userID + "/" + projectsPerPage.toString();
+    // }else {
+    //     url = "/filterProjects/" + method + "/" + projectsPerPage.toString();
+    // }
+    url = "/filterProjects/" + method + "/" + projectsPerPage.toString();
     $.get(url).done(function (data) {
         refreshProjects(JSON.parse(data));
     });
@@ -68,10 +70,11 @@ function refreshProjects(projects) {
         var element = "<a href=\"project/" + projects["projects"][i].url + "\">\n" +
             "      <div class=\"module\">\n" +
             "\t  <div class=\"container-grid\">\n" +
-            "          <img src=\"/static/" + projects["projects"][i].imgPath + "\" alt=\"ProjectImage\">\n" +
+            "          <img src=\"/static/" + projects["projects"][i].imgPath + "\" alt=\"ProjectImage\" onerror=\"this.onerror=null;this.src='https://s3-us-west-2.amazonaws.com/diyhub.io/ProjectImage.png';\">\n" +
             styles +
             "              <h1>" + projects["projects"][i].name + "</h1>\n" +
             "              <p>" + projects["projects"][i].shortDesc + "</p>\n" +
+            "<span>" + projects["projects"][i].views + "<i class=\"fa fa-eye\"></i> <span id=\"projectUpvoteCounter\">" + projects["projects"][i].upvotes + "</span> <i class=\"fa fa-thumbs-up\"></i></span>" +
             "          </div>\n" +
             "</div>" +
             "    </div>" +
