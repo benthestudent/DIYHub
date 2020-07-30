@@ -25,12 +25,14 @@ body {
   padding-top: 52px;
 }
 
-<<<<<<< Updated upstream
-=======
+
 .grid-makable {
 	padding-top: 50px;
 }
->>>>>>> Stashed changes
+
+.grid-makable a {
+    height: 300px;
+}
 
 .grid a {
 	height: 300px;
