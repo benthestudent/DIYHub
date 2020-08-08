@@ -21,7 +21,7 @@ import os
 import operator
 import datetime
 from urllib.parse import quote, unquote, quote_plus
-SITE_URL = "http://diyhub.io"
+SITE_URL = "https://diyhub.io"
 def index(request):
     page = "search"
     projects = Project.objects.filter(published=1).exclude(id=1)
@@ -705,7 +705,7 @@ def forgotPassword(request):
                 user.passwd_reset_token_timestamp = timezone.now()
                 user.save()
                 mail_context = {
-                    'protocol': 'http',
+                    'protocol': 'https',
                     'domain': 'diyhub.io',
                     'uid': user.id,
                     'token': token
