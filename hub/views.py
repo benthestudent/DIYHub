@@ -695,7 +695,6 @@ def getProjectsFromQuery(projects):
         for project in projects:
             desc = "<p>" + re.sub('<[^<]+?>', '', project.desc) + "</p>"
             shortDesc = desc[:150] + "... " if len(desc) > 150 else desc
-            print("debug: getting the shorter desc: {}".format(shortDesc))
             projectsArray.append(
                 {"name": project.name, "desc": desc, "shortDesc": shortDesc ,"imgPath": project.imgPath, "url": project.url, "id": project.id,
                  "difficulty": project.difficulty, "upvotes": Upvote.objects.filter(project=project).count(), "views": project.views, "published": project.published})
@@ -767,7 +766,6 @@ def formatSteps(steps):
         name = steps[i].split("<div class='stepDesc'>")[0]
         name = name.replace("<h2>", "") if name else name
         name = name.replace("</h2><hr>", "") if name else name
-        print(steps[i].split("<div class='stepDesc'>"))
         desc = steps[i].split("<div class='stepDesc'>")[1]
         desc = desc[:-6] if len(desc) > 6 else desc
 
