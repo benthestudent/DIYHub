@@ -280,6 +280,7 @@ body {
 	border-radius: 2px;
 	object-fit: contain;
 	overflow: hidden;
+	width: 100%;
 }
 .divider {
 	width: 100%;

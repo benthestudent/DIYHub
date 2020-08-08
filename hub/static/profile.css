@@ -57,7 +57,12 @@ main {
 	.garage-list button {
 		padding: 10px;
 	}
+	#Account form {
+		display: flex;
+	}
 }
+
+
 
 .info-container {
 	display: inline-block !important;
@@ -578,9 +583,9 @@ a.edit-button{
 }
 
 #Account form {
-    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 	width: 100%;
 }
+
