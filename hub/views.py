@@ -170,9 +170,13 @@ def createProject(request, projectID=0):
             for part in parts:
                 part = part.split(" x ")
                 if len(part) == 2:
-                    partsArray.append({"quantity": part[0], "name": part[1]})
+                    cat = Parts.objects.filter(name=part[1]).first().category.name
+                    cat = cat if cat is not None else "General"
+                    partsArray.append({"quantity": part[0], "name": part[1], "category": cat})
                 elif len(part) == 1:
-                    partsArray.append({"quantity": "", "name": part[0]})
+                    cat = Parts.objects.filter(name=part[0]).first().category.name
+                    cat = cat if cat is not None else "General"
+                    partsArray.append({"quantity": "", "name": part[0], "category": cat})
             steps = formatSteps(project.steps) if project.steps else []
             context["project"] = {
                 "name": project.name,
