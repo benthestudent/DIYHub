@@ -173,7 +173,7 @@ def createProject(request, projectID=0):
                     partsArray.append({"quantity": part[0], "name": part[1]})
                 elif len(part) == 1:
                     partsArray.append({"quantity": "", "name": part[0]})
-            steps = formatSteps(project.steps)
+            steps = formatSteps(project.steps) if project.steps else []
             context["project"] = {
                 "name": project.name,
                 "desc": project.desc,
