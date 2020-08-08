@@ -9,6 +9,6 @@ hub/migrations/0003_user_garage.py
 
 hub/migrations/0001_initial.py
 
-venv
+venv/
 
-elijahvenv
+elijahvenv/
