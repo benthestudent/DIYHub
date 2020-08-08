@@ -21,7 +21,9 @@ import os
 import operator
 import datetime
 from urllib.parse import quote, unquote, quote_plus
-SITE_URL = "http://diyhub.io"
+SITE_URL = "https://diyhub.io"
+from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup
 def index(request):
     page = "search"
     projects = Project.objects.filter(published=1).exclude(id=1)
@@ -168,10 +170,14 @@ def createProject(request, projectID=0):
             for part in parts:
                 part = part.split(" x ")
                 if len(part) == 2:
-                    partsArray.append({"quantity": part[0], "name": part[1]})
+                    cat = Parts.objects.filter(name=part[1]).first().category.name
+                    cat = cat if cat is not None else "General"
+                    partsArray.append({"quantity": part[0], "name": part[1], "category": cat})
                 elif len(part) == 1:
-                    partsArray.append({"quantity": "", "name": part[0]})
-            steps = formatSteps(project.steps)
+                    cat = Parts.objects.filter(name=part[0]).first().category.name
+                    cat = cat if cat is not None else "General"
+                    partsArray.append({"quantity": "", "name": part[0], "category": cat})
+            steps = formatSteps(project.steps) if project.steps else []
             context["project"] = {
                 "name": project.name,
                 "desc": project.desc,
@@ -243,7 +249,12 @@ def createProject(request, projectID=0):
         print("partIDs: " + str(partIDs))
 
         form.name = request.POST.get("name")
-        form.desc = request.POST.get("desc")
+        soup = BeautifulSoup(request.POST.get("desc"), "lxml")
+        for tag in soup():
+            for attribute in ["style"]:
+                del tag[attribute]
+        desc = soup.p if soup.p and "style" in request.POST.get("desc") else request.POST.get("desc")
+        form.desc = desc
         form.difficulty = request.POST.get("difficulty")
         form.steps = str(request.POST.get("steps"))
         form.parts = partsWithoutCats
@@ -369,7 +380,12 @@ def linkProject(request, projectID=0):
         print("partIDs: " + str(partIDs))
 
         form.name = request.POST.get("name")
-        form.desc = request.POST.get("desc")
+        soup = BeautifulSoup(request.POST.get("desc"), "lxml")
+        for tag in soup():
+            for attribute in ["style"]:
+                del tag[attribute]
+        desc = soup.p if soup.p and "style" in request.POST.get("desc") else request.POST.get("desc")
+        form.desc = desc
         form.parts = partsWithoutCats
         imgURL = imgURL.replace("/opt/bitnami/apps/django/django_projects/", "")
         imgURL = imgURL[imgURL.find("projects/"):] if imgURL else ""
@@ -705,7 +721,7 @@ def forgotPassword(request):
                 user.passwd_reset_token_timestamp = timezone.now()
                 user.save()
                 mail_context = {
-                    'protocol': 'http',
+                    'protocol': 'https',
                     'domain': 'diyhub.io',
                     'uid': user.id,
                     'token': token

@@ -302,6 +302,7 @@ function getProjectData() {
 	var url = $("#projectUrl").val();
 	console.log(img);
 	completed = 0;
+	console.log("name:" + projectName + " desc:" + projectDesc + " diff:" + difficulty + " parts:" + parts + " partsCompleted:" + partsCompleted + " steps:"+ steps + " img:" + img + " cat:" + category);
 	if (projectName && projectDesc && difficulty && parts && partsCompleted && steps && img && category) {
 		completed = 1;
 	}
