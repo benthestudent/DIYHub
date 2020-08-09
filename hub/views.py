@@ -158,6 +158,7 @@ def profile(request, username=None):
 
 @ensure_csrf_cookie
 def createProject(request, projectID=0):
+    print("CREATING PROJECT")
     page = "create"
     account = {"id": request.user.id, "name": request.user.username, "img": request.user.profilePicturePath} if request.user.is_authenticated else None
     context = {"account": account, "page": page}

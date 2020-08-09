@@ -584,7 +584,7 @@ $(document).ready(function() {
 			});
 			console.log(JSON.stringify(data))
 			$.ajax({
-				url: 'https://diyhub.io/create',
+				url: '/create',
 				data: data,
 				type: 'POST',
 				success: function (response) {
