@@ -300,5 +300,5 @@ a.project-link:hover {
 }
 
 .information-container span, .information-container p, .information-container a, .information-container h1, .information-container h2, .information-container h3, .information-container h4, .information-container h5, .information-container h6 {
-	background-color: transparent;
+	background-color: transparent !important;
 }
