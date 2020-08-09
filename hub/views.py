@@ -48,9 +48,7 @@ def index(request):
     return render(request, 'hub/DIYHUB.html', context)
 
 def handler404(request, *args, **argv):
-    response = render_to_response('hub/404_page.html', {}, context_instance=RequestContext(request))
-    response.status_code = 404
-    return response
+    return render(request, 'hub/404_page.html')
 
 def createPart(name, cat="General"):
     part = Parts()
