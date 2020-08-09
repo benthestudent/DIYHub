@@ -15,10 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from hub import views
+from django.http import HttpResponse
+
 
 urlpatterns = [
     path('', include('hub.urls')),
     path('admin/', admin.site.urls),
 ]
 
-handler404 = 'hub.views.error_404_view'
+handler404 = views.handler_404
+handler500 = views.handler_500
