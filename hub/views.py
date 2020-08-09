@@ -23,7 +23,6 @@ import datetime
 from urllib.parse import quote, unquote, quote_plus
 SITE_URL = "https://diyhub.io"
 from bs4 import BeautifulSoup
-from bs4 import BeautifulSoup
 def index(request):
     page = "search"
     projects = Project.objects.filter(published=1).exclude(id=1)
@@ -250,12 +249,17 @@ def createProject(request, projectID=0):
         print("partIDs: " + str(partIDs))
 
         form.name = request.POST.get("name")
-        #soup = BeautifulSoup(request.POST.get("desc"), "lxml")
-        #for tag in soup():
-        #    for attribute in ["style"]:
-        #        del tag[attribute]
-        #desc = soup.p if soup.p and "style" in request.POST.get("desc") else request.POST.get("desc")
-        desc = request.POST.get("desc")
+        soup = BeautifulSoup(request.POST.get("desc"), "lxml")
+        print("soup: " + soup)
+        for tag in soup():
+            print("tag: "+ str(tag))
+            for attribute in ["style"]:
+                print("deleting style attr")
+                del tag[attribute]
+        print("soup: " + soup)
+        desc = soup.p if soup.p and "style" in request.POST.get("desc") else request.POST.get("desc")
+        #desc = request.POST.get("desc")
+        print("desc: " + desc)
         form.desc = desc
         form.difficulty = request.POST.get("difficulty")
         form.steps = str(request.POST.get("steps"))
