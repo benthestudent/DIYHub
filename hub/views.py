@@ -1,5 +1,6 @@
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, render_to_response
+from django.template import RequestContext
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.urls import reverse
 import re
@@ -22,7 +23,6 @@ import operator
 import datetime
 from urllib.parse import quote, unquote, quote_plus
 SITE_URL = "https://diyhub.io"
-from bs4 import BeautifulSoup
 def index(request):
     page = "search"
     projects = Project.objects.filter(published=1).exclude(id=1)
@@ -46,6 +46,11 @@ def index(request):
                 categoryArray.append({"name": category.name, "parts": partsArray})
     context = {"projects": projectsArray, "categories": categoryArray, "account": account, "page": page}
     return render(request, 'hub/DIYHUB.html', context)
+
+def handler404(request, *args, **argv):
+    response = render_to_response('hub/404_page.html', {}, context_instance=RequestContext(request))
+    response.status_code = 404
+    return response
 
 def createPart(name, cat="General"):
     part = Parts()
@@ -249,16 +254,7 @@ def createProject(request, projectID=0):
         print("partIDs: " + str(partIDs))
 
         form.name = request.POST.get("name")
-        soup = BeautifulSoup(request.POST.get("desc"), "lxml")
-        print("soup: " + soup)
-        for tag in soup():
-            print("tag: "+ str(tag))
-            for attribute in ["style"]:
-                print("deleting style attr")
-                del tag[attribute]
-        print("soup: " + soup)
-        desc = soup.p if soup.p and "style" in request.POST.get("desc") else request.POST.get("desc")
-        #desc = request.POST.get("desc")
+        desc = request.POST.get("desc")
         print("desc: " + desc)
         form.desc = desc
         form.difficulty = request.POST.get("difficulty")

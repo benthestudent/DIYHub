@@ -298,3 +298,7 @@ a.project-link:hover {
 	background-color: #037F8C;
 	border-color: #037F8C;
 }
+
+.information-container span, .information-container p, .information-container a, .information-container h1, .information-container h2, .information-container h3, .information-container h4, .information-container h5, .information-container h6 {
+	background-color: transparent;
+}
