@@ -47,7 +47,7 @@ def index(request):
     context = {"projects": projectsArray, "categories": categoryArray, "account": account, "page": page}
     return render(request, 'hub/DIYHUB.html', context)
 
-def handler404(request, *args, **argv):
+def error_404_view(request, exception):
     return render(request, 'hub/404_page.html')
 
 def createPart(name, cat="General"):
