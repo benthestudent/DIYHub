@@ -250,11 +250,12 @@ def createProject(request, projectID=0):
         print("partIDs: " + str(partIDs))
 
         form.name = request.POST.get("name")
-        soup = BeautifulSoup(request.POST.get("desc"), "lxml")
-        for tag in soup():
-            for attribute in ["style"]:
-                del tag[attribute]
-        desc = soup.p if soup.p and "style" in request.POST.get("desc") else request.POST.get("desc")
+        #soup = BeautifulSoup(request.POST.get("desc"), "lxml")
+        #for tag in soup():
+        #    for attribute in ["style"]:
+        #        del tag[attribute]
+        #desc = soup.p if soup.p and "style" in request.POST.get("desc") else request.POST.get("desc")
+        desc = request.POST.get("desc")
         form.desc = desc
         form.difficulty = request.POST.get("difficulty")
         form.steps = str(request.POST.get("steps"))
