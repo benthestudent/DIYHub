@@ -388,3 +388,7 @@ body {
 	z-index: 200;
 	background: #1b262c;
 }
+
+.module {
+	width: 100%;
+}
