@@ -24,13 +24,6 @@ import datetime
 from urllib.parse import quote, unquote, quote_plus
 
 SITE_URL = "https://diyhub.io"
-<<<<<<< Updated upstream
-=======
-from bs4 import BeautifulSoup
-from bs4 import BeautifulSoup
-
-
->>>>>>> Stashed changes
 def index(request):
     page = "search"
     projects = Project.objects.filter(published=1).exclude(id=1)
