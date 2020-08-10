@@ -22,12 +22,21 @@ import os
 import operator
 import datetime
 from urllib.parse import quote, unquote, quote_plus
+
 SITE_URL = "https://diyhub.io"
+<<<<<<< Updated upstream
+=======
+from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup
+
+
+>>>>>>> Stashed changes
 def index(request):
     page = "search"
     projects = Project.objects.filter(published=1).exclude(id=1)
     projectsArray = []
-    account = {"id": request.user.id, "name": request.user.username, "img": request.user.profilePicturePath} if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username,
+               "img": request.user.profilePicturePath} if request.user.is_authenticated else None
     projectsArray = getProjectsFromQuery(projects)
     first_project = Project.objects.filter(id=1)
     projectsArray.insert(0, getProjectsFromQuery(first_project)[0])
@@ -35,18 +44,20 @@ def index(request):
     categories = PartCategories.objects.all()
     if categories:
         for category in categories:
-            if category.id != 0: # category 0 will be unset category, meaning part must be reviewed
+            if category.id != 0:  # category 0 will be unset category, meaning part must be reviewed
                 partsArray = []
                 parts = Parts.objects.filter(category=category)
                 if parts:
                     for part in parts:
                         partObj = {"name": part.name, "url": part.url}
-                        partObj["checked"] = "checked" if request.user.is_authenticated and request.user.garage.all().first() and part in request.user.garage.all() else ""
+                        partObj[
+                            "checked"] = "checked" if request.user.is_authenticated and request.user.garage.all().first() and part in request.user.garage.all() else ""
                         partsArray.append(partObj)
                 categoryArray.append({"name": category.name, "parts": partsArray})
     context = {"projects": projectsArray, "categories": categoryArray, "account": account, "page": page}
     return render(request, 'hub/DIYHUB.html', context)
 
+<<<<<<< Updated upstream
 def handler_404(request, exception, template_name='hub/404.html'):
     response = render(request, template_name)
     response.status_code = 404
@@ -55,6 +66,8 @@ def handler_500(request, template_name='hub/500.html'):
     response = render(request, template_name)
     response.status_code = 500
     return response
+=======
+>>>>>>> Stashed changes
 
 def createPart(name, cat="General"):
     part = Parts()
@@ -64,6 +77,7 @@ def createPart(name, cat="General"):
         part.category = cat
     part.save()
     return part
+
 
 def loginAndRegister(request, slug="login"):
     context = {}
@@ -102,9 +116,11 @@ def logout(request):
     lgout(request)
     return redirect("index")
 
+
 @ensure_csrf_cookie
 def profile(request, username=None):
-    account = {"id": request.user.id, "name": request.user.username, "img": request.user.profilePicturePath} if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username,
+               "img": request.user.profilePicturePath} if request.user.is_authenticated else None
     user = request.user if request.user.is_authenticated else None
     user = User.objects.filter(username=username).first() if username is not None else user
     upvotedProjectsArray = []
@@ -115,13 +131,16 @@ def profile(request, username=None):
         if request.method == "POST" and not user_by_name:
             user = request.user
             if request.POST.get("oldPassword") and request.POST.get("newPassword") and request.POST.get("newPassword1"):
-                if check_password(request.POST.get("oldPassword"), user.password) and request.POST.get("newPassword") == request.POST.get("newPassword1"):
+                if check_password(request.POST.get("oldPassword"), user.password) and request.POST.get(
+                        "newPassword") == request.POST.get("newPassword1"):
                     user.set_password(request.POST.get("newPassword"))
                     user.save()
                     message = {"text": "Password Saved", "color": "green"}
                     print("Password Saved")
                 else:
-                    message = {"text": "Password Change Failed. Old Password is incorrect or new passwords do not match", "color": "red"}
+                    message = {
+                        "text": "Password Change Failed. Old Password is incorrect or new passwords do not match",
+                        "color": "red"}
                     print("error saving new password")
             else:
                 if request.POST.get("email"):
@@ -156,19 +175,22 @@ def profile(request, username=None):
             for upvote in upvotes:
                 project = upvote.project.all().first()
                 upvotedProjectsArray.append(
-                   {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url})
+                    {"name": project.name, "desc": project.desc, "imgPath": project.imgPath, "url": project.url})
     else:
         return redirect("loginAndRegister")
-    context = {"user": userObj, "projects": projectsArray, "upvotedProjects": upvotedProjectsArray, "message": message, "account": account, "filterable": True}
+    context = {"user": userObj, "projects": projectsArray, "upvotedProjects": upvotedProjectsArray, "message": message,
+               "account": account, "filterable": True}
     if user_by_name:
         return render(request, 'hub/profilePage.html', context)
     return render(request, 'hub/profile.html', context)
+
 
 @ensure_csrf_cookie
 def createProject(request, projectID=0):
     print("CREATING PROJECT")
     page = "create"
-    account = {"id": request.user.id, "name": request.user.username, "img": request.user.profilePicturePath} if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username,
+               "img": request.user.profilePicturePath} if request.user.is_authenticated else None
     context = {"account": account, "page": page}
     if projectID and request.user.is_authenticated:
         project = Project.objects.filter(id=projectID, author=request.user).first()
@@ -222,7 +244,7 @@ def createProject(request, projectID=0):
         imgData = imgData.replace("data:image/jpeg;base64,", "") if imgData else imgData
         imgData = imgData.replace("data:image/png;base64,", "") if imgData else imgData
         imgURL = form.imgPath
-        if not 'static/' in str(imgData)[0:10] and imgData: # if img has a / in, its probably a domain
+        if not 'static/' in str(imgData)[0:10] and imgData:  # if img has a / in, its probably a domain
             projectPath = "projects/project_" + str(form.id)
             projectPath = "/opt/bitnami/apps/django/django_projects/static/" + projectPath
             # projectPath = staticfiles_storage.url(projectPath)
@@ -251,7 +273,7 @@ def createProject(request, projectID=0):
             except Parts.DoesNotExist:
                 partObj = None
                 print("Does Not Exist. Creating Part")
-                partObj = createPart(partName, partCat) # create part if not found
+                partObj = createPart(partName, partCat)  # create part if not found
             if partObj:
                 partIDs.append(partObj.id)
                 partNames.append(partName)
@@ -300,9 +322,11 @@ def createProject(request, projectID=0):
     context["partCategories"] = partCategories
     return render(request, 'hub/newCreateProject.html', context)
 
+
 @ensure_csrf_cookie
 def linkProject(request, projectID=0):
-    account = {"id": request.user.id, "name": request.user.username, "img": request.user.profilePicturePath} if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username,
+               "img": request.user.profilePicturePath} if request.user.is_authenticated else None
     context = {"account": account}
     if projectID and request.user.is_authenticated:
         project = Project.objects.filter(id=projectID, author=request.user).first()
@@ -351,7 +375,7 @@ def linkProject(request, projectID=0):
         imgData = imgData.replace("data:image/jpeg;base64,", "") if imgData else imgData
         imgData = imgData.replace("data:image/png;base64,", "") if imgData else imgData
         imgURL = form.imgPath
-        if not 'static/' in str(imgData)[0:10] and imgData: # if img has a / in, its probably a domain
+        if not 'static/' in str(imgData)[0:10] and imgData:  # if img has a / in, its probably a domain
             projectPath = "projects/project_" + str(form.id)
             projectPath = "/opt/bitnami/apps/django/django_projects/static/" + projectPath
             # projectPath = staticfiles_storage.url(projectPath)
@@ -379,7 +403,7 @@ def linkProject(request, projectID=0):
             except Parts.DoesNotExist:
                 partObj = None
                 print("Does Not Exist. Creating Part")
-                partObj = createPart(partName, partCat) # create part if not found
+                partObj = createPart(partName, partCat)  # create part if not found
             if partObj:
                 partIDs.append(partObj.id)
                 partNames.append(partName)
@@ -431,7 +455,8 @@ def linkProject(request, projectID=0):
 
 
 def project(request, slug=None):
-    account = {"id": request.user.id, "name": request.user.username, "img": request.user.profilePicturePath} if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username,
+               "img": request.user.profilePicturePath} if request.user.is_authenticated else None
     projectName = ""
     project = None
     external_url = None
@@ -487,10 +512,13 @@ def project(request, slug=None):
         repliesArray = []
         for reply in replies:
             replyUpvoted = True if Upvote.objects.filter(comment=reply).first() else False
-            repliesArray.append({"user": {"username": reply.user.username, "img": reply.user.profilePicturePath}, "body": reply.body, "upvotes": reply.upvotes, "commentID": reply.id,
-             "upvoted": replyUpvoted})
+            repliesArray.append(
+                {"user": {"username": reply.user.username, "img": reply.user.profilePicturePath}, "body": reply.body,
+                 "upvotes": reply.upvotes, "commentID": reply.id,
+                 "upvoted": replyUpvoted})
         commentArray.append(
-            {"user": {"username": comment.user.username, "img": comment.user.profilePicturePath}, "body": comment.body, "upvotes": comment.upvotes, "commentID": comment.id, "upvoted": upvoted, "replies": repliesArray})
+            {"user": {"username": comment.user.username, "img": comment.user.profilePicturePath}, "body": comment.body,
+             "upvotes": comment.upvotes, "commentID": comment.id, "upvoted": upvoted, "replies": repliesArray})
     commentArray.sort(key=operator.itemgetter('upvotes'), reverse=True)
     context['comments'] = commentArray
     print(context['comments'])
@@ -506,6 +534,7 @@ def project(request, slug=None):
             print("Error: multiple upvotes from user on one project")
             context['upvoted'] = True
     return render(request, 'hub/project.html', context)
+
 
 def getParts(request):
     parts = []
@@ -569,7 +598,7 @@ def addComment(request):
             comment = {"user": request.user.username, "body": request.POST.get("body"),
                        "staticPath": staticfiles_storage.url("projects/"), "commentID": form.id}
             return HttpResponse(json.dumps(comment))
-        return redirect("loginAndRegister") #CHECK# we need to make it so it redirects back
+        return redirect("loginAndRegister")  # CHECK# we need to make it so it redirects back
 
 
 def upvote(request):
@@ -579,9 +608,11 @@ def upvote(request):
     if not request.user.is_authenticated:
         return redirect("loginAndRegister")
     if operation == "downvote":
-        element = Comment.objects.filter(id=elementID).first() if (type == "comment") else Project.objects.filter(id=elementID).first()
+        element = Comment.objects.filter(id=elementID).first() if (type == "comment") else Project.objects.filter(
+            id=elementID).first()
         print(element)
-        vote = Upvote.objects.filter(user=request.user, comment=element).first() if (type == "comment") else Upvote.objects.filter(user=request.user, project=element).first()
+        vote = Upvote.objects.filter(user=request.user, comment=element).first() if (
+                    type == "comment") else Upvote.objects.filter(user=request.user, project=element).first()
         if vote:
             vote.delete()
             element.updateUpvotes()
@@ -615,6 +646,7 @@ def upvote(request):
     print("upvoted")
     return HttpResponse("upvoted")
 
+
 def filterProjects(request, userID=None, filter="popular", num_of_results=25, page=1, category=None):
     startOfResults = (page - 1) * num_of_results
     projects = None
@@ -627,9 +659,11 @@ def filterProjects(request, userID=None, filter="popular", num_of_results=25, pa
         projects = Project.objects.all()
     if filter == "most_liked":
         if category:
-            projects = projects.order_by("-upvotes").filter(category=category).exclude(published=0)[startOfResults:startOfResults+num_of_results]
+            projects = projects.order_by("-upvotes").filter(category=category).exclude(published=0)[
+                       startOfResults:startOfResults + num_of_results]
         else:
-            projects = projects.order_by("-upvotes").exclude(published=0)[startOfResults:startOfResults+num_of_results]
+            projects = projects.order_by("-upvotes").exclude(published=0)[
+                       startOfResults:startOfResults + num_of_results]
 
     if filter == "popular":
         if category:
@@ -641,8 +675,10 @@ def filterProjects(request, userID=None, filter="popular", num_of_results=25, pa
     projects = {"projects": getProjectsFromQuery(projects)}
     return HttpResponse(json.dumps(projects))
 
+
 def contact(request):
-    account = {"id": request.user.id, "name": request.user.username, "img": request.user.profilePicturePath} if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username,
+               "img": request.user.profilePicturePath} if request.user.is_authenticated else None
     context = {"account": account}
     if request.method == "POST":
         name = request.POST.get("name")
@@ -660,10 +696,13 @@ def contact(request):
         return render(request, 'hub/contact.html', context)
     return render(request, 'hub/contact.html', context)
 
+
 def about(request):
-    account = {"id": request.user.id, "name": request.user.username, "img": request.user.profilePicturePath} if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username,
+               "img": request.user.profilePicturePath} if request.user.is_authenticated else None
     context = {"account": account}
     return render(request, 'hub/about.html', context)
+
 
 def getProjectsByParts(request):
     projectsArray = []
@@ -677,7 +716,8 @@ def getProjectsByParts(request):
                 partQueryString += " " + part
             query = SearchQuery(partQueryString)
             vector = SearchVector('parts')
-            projectResults = Project.objects.annotate(rank=SearchRank(vector, query)).order_by('-rank').exclude(partNames__contained_by=parts).exclude(published=0)
+            projectResults = Project.objects.annotate(rank=SearchRank(vector, query)).order_by('-rank').exclude(
+                partNames__contained_by=parts).exclude(published=0)
             projects["almostProjects"] = getProjectsFromQuery(projectResults)
             projectResults = Project.objects.filter(partNames__contained_by=parts).exclude(published=0)
             print(parts)
@@ -686,14 +726,17 @@ def getProjectsByParts(request):
             print(projects)
     return HttpResponse(json.dumps(projects))
 
+
 def discovery(request):
     page = "discover"
     projects = Project.objects.filter(published=1)[0:25]
     projectsArray = []
-    account = {"id": request.user.id, "name": request.user.username, "img": request.user.profilePicturePath} if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username,
+               "img": request.user.profilePicturePath} if request.user.is_authenticated else None
     projectsArray = getProjectsFromQuery(projects)
     context = {"projects": projectsArray, "account": account, "page": page, "filterable": True}
     return render(request, 'hub/discovery.html', context)
+
 
 def getProjectsFromQuery(projects):
     projectsArray = []
@@ -702,15 +745,19 @@ def getProjectsFromQuery(projects):
             desc = "<p>" + re.sub('<[^<]+?>', '', project.desc) + "</p>"
             shortDesc = desc[:150] + "... " if len(desc) > 150 else desc
             projectsArray.append(
-                {"name": project.name, "desc": desc, "shortDesc": shortDesc ,"imgPath": project.imgPath, "url": project.url, "id": project.id,
-                 "difficulty": project.difficulty, "upvotes": Upvote.objects.filter(project=project).count(), "views": project.views, "published": project.published})
+                {"name": project.name, "desc": desc, "shortDesc": shortDesc, "imgPath": project.imgPath,
+                 "url": project.url, "id": project.id,
+                 "difficulty": project.difficulty, "upvotes": Upvote.objects.filter(project=project).count(),
+                 "views": project.views, "published": project.published})
 
     return projectsArray
+
 
 def removeElements(initial, elements):
     for element in elements:
         initial = initial.replace(element, "")
     return initial
+
 
 def forgotPassword(request):
     if request.method == "POST":
@@ -735,7 +782,8 @@ def forgotPassword(request):
                 plain_message = strip_tags(html_message)
                 fromEmail = 'diyhub.io@gmail.com'
                 toEmail = email
-                send_mail("Reset Password", plain_message, fromEmail, [toEmail], fail_silently=False, html_message=html_message)
+                send_mail("Reset Password", plain_message, fromEmail, [toEmail], fail_silently=False,
+                          html_message=html_message)
                 return render(request, "hub/forgotPassword_done.html")
             else:
                 print("Not a recognized email")
@@ -759,11 +807,14 @@ def resetPassword(request, uidb64=None, token=None):
                         login(request, user)
                         return render(request, "hub/resetPassword_complete.html")
                 else:
-                    return render(request, "hub/resetPassword.html", context={'validlink': True, 'uid': uidb64, 'token': token})
+                    return render(request, "hub/resetPassword.html",
+                                  context={'validlink': True, 'uid': uidb64, 'token': token})
     return render(request, 'hub/resetPassword.html', context={'validlink': False, 'uid': None, 'token': None})
+
 
 def comingSoon(request):
     return render(request, 'hub/comingSoon.html')
+
 
 def formatSteps(steps):
     steps = steps.split('<div class="steps-container">')[1:]
@@ -778,18 +829,24 @@ def formatSteps(steps):
         steps[i] = {"name": name, "desc": desc}
     return steps
 
+
 def gen_token():
     return rstr.xeger(r'[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20}')
 
+
 def privacyPolicy(request):
-    account = {"id": request.user.id, "name": request.user.username, "img": request.user.profilePicturePath} if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username,
+               "img": request.user.profilePicturePath} if request.user.is_authenticated else None
     context = {"account": account}
     return render(request, 'hub/privacyPolicy.html', context)
 
+
 def doNotSellMyInformation(request):
-    account = {"id": request.user.id, "name": request.user.username, "img": request.user.profilePicturePath} if request.user.is_authenticated else None
+    account = {"id": request.user.id, "name": request.user.username,
+               "img": request.user.profilePicturePath} if request.user.is_authenticated else None
     context = {"account": account}
     return render(request, 'hub/doNotSellMyInformation.html', context)
+
 
 def getPartsInGarage(user):
     partsInGarage = {}
@@ -800,6 +857,7 @@ def getPartsInGarage(user):
             partsInGarage[str(part.category.name)].append(part.name)
     print(partsInGarage)
     return partsInGarage
+
 
 def removePartFromGarage(request):
     if request.method == "POST":
@@ -817,6 +875,7 @@ def removePartFromGarage(request):
                     except:
                         return HttpResponse("There was a problem removing the part")
     return HttpResponse("error")
+
 
 def addPartFromGarage(request):
     if request.method == "POST":
