@@ -50,7 +50,6 @@ def index(request):
     context = {"projects": projectsArray, "categories": categoryArray, "account": account, "page": page}
     return render(request, 'hub/DIYHUB.html', context)
 
-<<<<<<< Updated upstream
 def handler_404(request, exception, template_name='hub/404.html'):
     response = render(request, template_name)
     response.status_code = 404
@@ -59,9 +58,6 @@ def handler_500(request, template_name='hub/500.html'):
     response = render(request, template_name)
     response.status_code = 500
     return response
-=======
->>>>>>> Stashed changes
-
 def createPart(name, cat="General"):
     part = Parts()
     part.name = name
